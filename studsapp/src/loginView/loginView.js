@@ -3,9 +3,7 @@ import {
     StyleSheet, 
     Dimensions,
     TextInput,
-    Text,
     Image,
-    TouchableHighlight,
     KeyboardAvoidingView,
     Platform
 } from 'react-native';
