@@ -6,7 +6,9 @@ import {
     TextInput,
     Text,
     Image,
-    TouchableHighlight
+    TouchableHighlight,
+    KeyboardAvoidingView,
+    Platform
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -38,7 +40,7 @@ class Login extends React.Component {
     render() {
         let imageSource = '../../static/images/logo.png';
         return (
-            <View style={styles.top}>
+            <KeyboardAvoidingView style={styles.top} behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
                 <Image source={require(imageSource)} style={styles.logo} />
                 <TextInput
                     placeholder={'Email'}
@@ -58,7 +60,7 @@ class Login extends React.Component {
                     onSubmitEditing={() => { alert('Logged in!'); }}
                 />
                 <Button text={'Login'} onPress={() => { alert('Logged in!'); }}/>
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }
