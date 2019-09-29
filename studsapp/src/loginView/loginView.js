@@ -2,7 +2,6 @@ import React from 'react';
 import { 
     StyleSheet, 
     Dimensions,
-    View, 
     TextInput,
     Text,
     Image,
@@ -11,6 +10,7 @@ import {
     Platform
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Button from '../generalComponents/button';
 
 class LoginView extends React.Component {
     render() {
@@ -18,20 +18,6 @@ class LoginView extends React.Component {
             <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.top}>
                 <Login/>
             </LinearGradient>
-        );
-    }
-}
-
-class Button extends React.Component {
-    render() {
-        return (
-            <TouchableHighlight 
-                onPress={this.props.onPress}
-                style={styles.button}
-                underlayColor='rgba(255,255,255,0.3)'
-            >
-                <Text style={styles.buttonText}>{this.props.text}</Text>
-            </TouchableHighlight>
         );
     }
 }
@@ -85,20 +71,6 @@ const styles = StyleSheet.create({
         height: 50,
         marginVertical: 5,
         color: '#fac882'
-    },
-    button: {
-        backgroundColor: 'hsla(0,0%,100%,.1)',
-        borderRadius: 100,
-        paddingVertical: 12,
-        paddingHorizontal: 50,
-        borderWidth: 3,
-        borderColor: '#fac882',
-        marginVertical: 5
-    },
-    buttonText: {
-        color: '#fac882',
-        fontWeight: 'bold',
-        textTransform: 'uppercase'
     }
 });
 
