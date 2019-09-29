@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import loginReducer from '../loginView/store/reducer'
 
 const defaultState = {
     status: 'LOADING...'
@@ -12,5 +13,5 @@ const rootReducer = (state = defaultState, action) => {
 };
 
 export default combineReducers({
-    root: rootReducer
+    login: loginReducer
 });

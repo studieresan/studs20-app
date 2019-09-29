@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import LoginView from '../loginView/loginViewContainer';
 
 class AppNavigator extends React.Component {
     render() {
         return (
-            <View>
-                <Text>{this.props.status}</Text>
-            </View>
+            <LoginView/>
         );
     }
 }
