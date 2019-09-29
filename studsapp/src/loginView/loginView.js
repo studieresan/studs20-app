@@ -42,7 +42,7 @@ class Login extends React.Component {
                 <Image source={require(imageSource)} style={styles.logo} />
                 <TextInput
                     placeholder={'Email'}
-                    placeholderTextColor={'#ccc'}
+                    placeholderTextColor={'#c4a57a'}
                     style={styles.input}
                     returnKeyType={'next'}
                     onSubmitEditing={() => { this.passwordInput.focus(); }}
@@ -50,7 +50,7 @@ class Login extends React.Component {
                 />
                 <TextInput
                     placeholder={'Lösenord'}
-                    placeholderTextColor={'#ccc'}
+                    placeholderTextColor={'#c4a57a'}
                     secureTextEntry={true}
                     style={styles.input}
                     ref={(input) => { this.passwordInput = input; }}
@@ -78,10 +78,11 @@ const styles = StyleSheet.create({
     input: {
         width: 2*window.width/3,
         borderWidth: 1,
-        borderColor: 'white',
+        borderColor: '#fac882',
+        borderRadius: 2,
         height: 50,
         marginVertical: 5,
-        color: 'white'
+        color: '#fac882'
     },
     button: {
         backgroundColor: 'hsla(0,0%,100%,.1)',
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: '#fac882',
+        fontWeight: 'bold',
         textTransform: 'uppercase'
     }
 });
