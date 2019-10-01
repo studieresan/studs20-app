@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginView from 'src/containers/loginView/loginViewContainer';
+import LoginView from 'studsapp/containers/loginView/loginViewContainer';
 
 class AppNavigator extends React.Component {
     render() {

@@ -8,7 +8,7 @@ import {
     Platform
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Button from 'src/generalComponents/button';
+import Button from 'studsapp/generalComponents/button';
 
 class LoginView extends React.Component {
     render() {
@@ -22,7 +22,7 @@ class LoginView extends React.Component {
 
 class Login extends React.Component {
     render() {
-        let imageSource = 'static/images/logo.png';
+        let imageSource = 'studsapp/static/images/logo.png';
         return (
             <KeyboardAvoidingView style={styles.top} behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
                 <Image source={require(imageSource)} style={styles.logo} />
