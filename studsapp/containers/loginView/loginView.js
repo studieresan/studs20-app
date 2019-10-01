@@ -8,10 +8,12 @@ import {
     Platform,
     Keyboard,
     Text,
-    View
+    View,
+    ActivityIndicator
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Button from 'studsapp/generalComponents/button';
+import { status } from 'studsapp/store/constants';
 
 const imageSource = 'studsapp/static/images/logo.png';
 
@@ -30,15 +32,53 @@ class LoginView extends React.Component {
         return regex.test(email);
     }
 
+    componentWillReceiveProps(newProps) {
+        switch(newProps.login.status) {
+            case status.LOADING:
+                this.setState({ errorMessage: '' });
+                break;
+            case status.SUCCESS:
+                if(newProps.login.data.success) {
+                    this.setState({ errorMessage: '' });
+                    //TODO: Go to main view
+                } else {
+                    this.setState({ errorMessage: 'Email or password is incorrect.' });
+                }
+                break;
+            case status.ERROR:
+                this.setState({ errorMessage: newProps.login.error });
+                break;
+        }
+    }
+
     login = () => {
         Keyboard.dismiss();
+
+        //First validate email
         if(this.validateEmail(this.state.email)) {
-            this.props.attemptLogin(this.state.email, this.state.password);
-            this.setState({ errorMessage: '' });
+            //Then validate password
+            if(this.state.password.length > 0) {
+                this.props.attemptLogin(this.state.email, this.state.password);
+            } else {
+                this.setState({ errorMessage: 'Please enter a password.' });
+            }
         } else {
             this.setState({ errorMessage: 'Please enter a valid email address.' });
         }
     }
+
+    renderButton = () => {
+        if(this.props.login.status === status.LOADING) {
+            return(
+                <View style={{marginVertical: 5}}>
+                    <ActivityIndicator size='large' color='#fac882' />
+                </View>
+            );
+        }
+        return(
+            <Button text={'Login'} onPress={() => this.login()} />
+        );
+    };
 
     render() {
         return (
@@ -66,7 +106,7 @@ class LoginView extends React.Component {
                         onChangeText={(password) => this.setState({ password })}
                         value={this.state.password}
                     />
-                    <Button text={'Login'} onPress={() => this.login()} />
+                    {this.renderButton()}
                     <View>
                         <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
                     </View>
@@ -99,9 +139,9 @@ const styles = StyleSheet.create({
         color: '#fac882'
     },
     errorMessage: {
-        marginVertical: 5,
         color: 'red',
-        fontSize: 16
+        fontSize: 16,
+        marginVertical: 5,
     }
 });
 
