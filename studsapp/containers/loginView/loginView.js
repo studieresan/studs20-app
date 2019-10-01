@@ -5,46 +5,70 @@ import {
     TextInput,
     Image,
     KeyboardAvoidingView,
-    Platform
+    Platform,
+    Keyboard,
+    Text
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Button from 'studsapp/generalComponents/button';
 
+const imageSource = 'studsapp/static/images/logo.png';
+
 class LoginView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: '',
+            password: '',
+            errorMessage: ''
+        };
+    }
+
+    validateEmail = (email) => {
+        const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(email);
+    }
+
+    login = () => {
+        Keyboard.dismiss();
+        if(this.validateEmail(this.state.email)) {
+            this.props.attemptLogin(this.state.email, this.state.password);
+            this.setState({ errorMessage: '' });
+        } else {
+            this.setState({ errorMessage: 'Please enter a valid email address.' });
+        }
+    }
+
     render() {
         return (
             <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.top}>
-                <Login/>
+                <KeyboardAvoidingView style={styles.top} behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
+                    <Image source={require(imageSource)} style={styles.logo} />
+                    <TextInput
+                        placeholder={'Email'}
+                        placeholderTextColor={'#c4a57a'}
+                        style={styles.input}
+                        returnKeyType={'next'}
+                        onSubmitEditing={() => { this.passwordInput.focus(); }}
+                        blurOnSubmit={false}
+                        onChangeText={(email) => this.setState({ email })}
+                        value={this.state.email}
+                    />
+                    <TextInput
+                        placeholder={'Password'}
+                        placeholderTextColor={'#c4a57a'}
+                        secureTextEntry={true}
+                        style={styles.input}
+                        ref={(input) => { this.passwordInput = input; }}
+                        returnKeyType={'go'}
+                        onSubmitEditing={() => this.login()}
+                        onChangeText={(password) => this.setState({ password })}
+                        value={this.state.password}
+                    />
+                    <Button text={'Login'} onPress={() => this.login()} />
+                    <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+                </KeyboardAvoidingView>
             </LinearGradient>
-        );
-    }
-}
-
-class Login extends React.Component {
-    render() {
-        let imageSource = 'studsapp/static/images/logo.png';
-        return (
-            <KeyboardAvoidingView style={styles.top} behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
-                <Image source={require(imageSource)} style={styles.logo} />
-                <TextInput
-                    placeholder={'Email'}
-                    placeholderTextColor={'#c4a57a'}
-                    style={styles.input}
-                    returnKeyType={'next'}
-                    onSubmitEditing={() => { this.passwordInput.focus(); }}
-                    blurOnSubmit={false}
-                />
-                <TextInput
-                    placeholder={'Lösenord'}
-                    placeholderTextColor={'#c4a57a'}
-                    secureTextEntry={true}
-                    style={styles.input}
-                    ref={(input) => { this.passwordInput = input; }}
-                    returnKeyType={'go'}
-                    onSubmitEditing={() => { alert('Logged in!'); }}
-                />
-                <Button text={'Login'} onPress={() => { alert('Logged in!'); }}/>
-            </KeyboardAvoidingView>
         );
     }
 }
@@ -70,6 +94,11 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         marginVertical: 5,
         color: '#fac882'
+    },
+    errorMessage: {
+        marginVertical: 5,
+        color: 'red',
+        fontSize: 16
     }
 });
 
