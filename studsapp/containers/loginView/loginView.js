@@ -7,7 +7,8 @@ import {
     KeyboardAvoidingView,
     Platform,
     Keyboard,
-    Text
+    Text,
+    View
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Button from 'studsapp/generalComponents/button';
@@ -66,7 +67,9 @@ class LoginView extends React.Component {
                         value={this.state.password}
                     />
                     <Button text={'Login'} onPress={() => this.login()} />
-                    <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+                    <View>
+                        <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+                    </View>
                 </KeyboardAvoidingView>
             </LinearGradient>
         );
