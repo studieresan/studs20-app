@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import loginReducer from '../loginView/store/reducer'
+import loginReducer from './global/login/reducer'
 
 const defaultState = {
     status: 'LOADING...'
