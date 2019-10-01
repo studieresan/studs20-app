@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
         borderColor: '#fac882',
         borderRadius: 2,
         height: 50,
+        paddingLeft: 5,
         marginVertical: 5,
         color: '#fac882'
     }
