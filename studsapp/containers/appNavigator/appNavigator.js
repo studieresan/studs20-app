@@ -1,12 +1,11 @@
-import React from 'react';
+import { createSwitchNavigator } from 'react-navigation';
 import LoginView from 'studsapp/containers/loginView/loginViewContainer';
 
-class AppNavigator extends React.Component {
-    render() {
-        return (
-            <LoginView/>
-        );
+export default createSwitchNavigator (
+    {
+        Login: LoginView
+    },
+    {
+        initialRouteName: 'Login'
     }
-}
-
-export default AppNavigator;
+);
