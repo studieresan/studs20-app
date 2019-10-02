@@ -32,22 +32,24 @@ class LoginView extends React.Component {
         return regex.test(email);
     }
 
-    componentWillReceiveProps(newProps) {
-        switch(newProps.login.status) {
-            case status.LOADING:
-                this.setState({ errorMessage: '' });
-                break;
-            case status.SUCCESS:
-                if(newProps.login.data.success) {
+    componentDidUpdate(prevProps) {
+        if(this.props !== prevProps) {
+            switch (this.props.login.status) {
+                case status.LOADING:
                     this.setState({ errorMessage: '' });
-                    //TODO: Go to main view
-                } else {
-                    this.setState({ errorMessage: 'Email or password is incorrect.' });
-                }
-                break;
-            case status.ERROR:
-                this.setState({ errorMessage: newProps.login.error });
-                break;
+                    break;
+                case status.SUCCESS:
+                    if (this.props.login.data.success) {
+                        this.setState({ errorMessage: '' });
+                        //TODO: Go to main view
+                    } else {
+                        this.setState({ errorMessage: 'Email or password is incorrect.' });
+                    }
+                    break;
+                case status.ERROR:
+                    this.setState({ errorMessage: this.props.login.error });
+                    break;
+            }
         }
     }
 
@@ -70,13 +72,18 @@ class LoginView extends React.Component {
     renderButton = () => {
         if(this.props.login.status === status.LOADING) {
             return(
-                <View style={{marginVertical: 5}}>
-                    <ActivityIndicator size='large' color='#fac882' />
+                <View style={styles.buttonView}>
+                    <View style={{paddingVertical: 10}}>
+                        <ActivityIndicator size='large' color='#fac882' />
+                    </View>
                 </View>
             );
         }
         return(
-            <Button text={'Login'} onPress={() => this.login()} />
+            <View style={styles.buttonView}>
+                <Button text={'Login'} onPress={() => this.login()} />
+                <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+            </View>
         );
     };
 
@@ -107,9 +114,6 @@ class LoginView extends React.Component {
                         value={this.state.password}
                     />
                     {this.renderButton()}
-                    <View>
-                        <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-                    </View>
                 </KeyboardAvoidingView>
             </LinearGradient>
         );
@@ -142,6 +146,10 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 16,
         marginVertical: 5,
+    },
+    buttonView: {
+       height: 75,
+       marginVertical: 5 
     }
 });
 

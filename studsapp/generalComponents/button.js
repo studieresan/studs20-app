@@ -2,7 +2,8 @@ import React from 'react';
 import { 
     StyleSheet,
     Text,
-    TouchableHighlight
+    TouchableHighlight,
+    Dimensions
 } from 'react-native';
 
 export default class Button extends React.Component {
@@ -19,6 +20,7 @@ export default class Button extends React.Component {
     }
 }
 
+const window = Dimensions.get('window');
 const styles = StyleSheet.create({
     button: {
         backgroundColor: 'hsla(0,0%,100%,.1)',
@@ -27,7 +29,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 50,
         borderWidth: 3,
         borderColor: '#fac882',
-        marginVertical: 5
+        marginVertical: 5,
+        alignSelf: 'center'
     },
     buttonText: {
         color: '#fac882',
