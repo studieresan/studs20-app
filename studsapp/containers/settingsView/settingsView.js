@@ -15,7 +15,6 @@ class SettingsView extends React.Component {
         this.props.navigation.navigate('Login');
     }
 
-    //TODO: Actual stuff
     render() {
         return (
             <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.wrapper}>
