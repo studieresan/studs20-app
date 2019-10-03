@@ -12,6 +12,7 @@ import { removeData } from 'studsapp/utils/storage';
 class SettingsView extends React.Component {
     logOut = () => {
         removeData('token');
+        this.props.removeLoginToken();
         this.props.navigation.navigate('Login');
     }
 
