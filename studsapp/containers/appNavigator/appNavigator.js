@@ -25,19 +25,16 @@ const LoggedInNavigator = createBottomTabNavigator(
                 }
 
                 // You can return any component that you like here!
-                return <Icon name={iconName} size={25} color={tintColor} />;
+                return <Icon name={iconName} size={35} color={tintColor} />;
             }
         }),
         tabBarOptions: {
             activeTintColor: '#011660',
             inactiveTintColor: '#c4a57a',
-            tabStyle: {
-                borderRightWidth: 1,
-                borderLeftWidth: 1,
-                borderColor: '#c4a57a'
-            },
             style: {
                 backgroundColor: '#fac882',
+                borderTopWidth: 2,
+                borderColor: '#c4a57a'
             },
             showLabel: false
         }
