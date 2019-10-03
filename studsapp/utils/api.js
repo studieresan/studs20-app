@@ -1,3 +1,5 @@
+import { retrieveData } from 'studsapp/utils/storage';
+
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:5040';
 const LOGIN = '/login';
 
@@ -5,7 +7,12 @@ const STATUS_OK = 200;
 const STATUS_NOT_OK = 300;
 
 const credentials = {credentials: 'include'};
-const authorizationHeader = {}; //TODO
+const authorizationHeader = async () => {
+    const token = await retrieveData('token');
+    return {
+        Authorization: `Bearer ${token}`
+    };
+};
 const jsonHeader = {'Content-Type': 'application/json'};
 
 const checkStatus = (response) => {

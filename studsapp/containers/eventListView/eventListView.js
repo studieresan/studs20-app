@@ -3,7 +3,7 @@ import {
     StyleSheet, 
     Dimensions,
     View,
-    ActivityIndicator
+    Text
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -17,7 +17,7 @@ class EventListView extends React.Component {
         return (
             <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.top}>
                 <View>
-                    <ActivityIndicator size='large' color='#fac882'/>
+                    <Text>{this.props.login.data.token}</Text>
                 </View>
             </LinearGradient>
         );
