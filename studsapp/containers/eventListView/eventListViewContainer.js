@@ -3,7 +3,7 @@ import EventListView from './eventListView'
 
 const mapStateToProps = (state) => {
     return {
-        events: []
+        
     };
 };
 

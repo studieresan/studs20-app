@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         attemptLogin: (email, password) => dispatch(attemptLogin(email, password))
-    }
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginView);

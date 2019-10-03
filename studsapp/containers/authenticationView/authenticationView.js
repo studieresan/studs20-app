@@ -3,28 +3,29 @@ import {
     StyleSheet, 
     Dimensions,
     View,
-    Text
+    ActivityIndicator
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Button from 'studsapp/generalComponents/button';
-import { removeData } from 'studsapp/utils/storage';
+import { retrieveData } from 'studsapp/utils/storage';
 
-class EventListView extends React.Component {
-    constructor(props) {
-        super(props);
+class AuthenticationView extends React.Component {
+    componentDidMount() {
+        this._findTokenAndNavigate();
     }
 
-    logOut = () => {
-        removeData('token');
-        this.props.navigation.navigate('Login');
+    _findTokenAndNavigate = async () => {
+        const token = await retrieveData('token');
+        if(token) {
+            this.props.setLoginToken(token);
+        }
+        this.props.navigation.navigate(token ? 'LoggedIn' : 'Login');
     }
 
-    //TODO: Actual stuff
     render() {
         return (
             <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.top}>
                 <View>
-                    <Button text={'Log out'} onPress={() => this.logOut()} />
+                    <ActivityIndicator size='large' color='#fac882'/>
                 </View>
             </LinearGradient>
         );
@@ -40,4 +41,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default EventListView;
+export default AuthenticationView;

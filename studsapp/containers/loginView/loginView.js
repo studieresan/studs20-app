@@ -14,6 +14,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Button from 'studsapp/generalComponents/button';
 import { status } from 'studsapp/store/constants';
+import { storeData } from 'studsapp/utils/storage';
 
 const imageSource = 'studsapp/static/images/logo.png';
 
@@ -41,6 +42,7 @@ class LoginView extends React.Component {
                 case status.SUCCESS:
                     if (this.props.login.data.success) {
                         this.setState({ errorMessage: '' });
+                        this._storeToken(this.props.login.data.token);
                         this.props.navigation.navigate('LoggedIn');
                     } else {
                         this.setState({ errorMessage: 'Email or password is incorrect.' });
@@ -52,6 +54,11 @@ class LoginView extends React.Component {
             }
         }
     }
+
+    _storeToken = async (token) => {
+        const success = await storeData('token', token);
+        return success;
+    } 
 
     login = () => {
         Keyboard.dismiss();
