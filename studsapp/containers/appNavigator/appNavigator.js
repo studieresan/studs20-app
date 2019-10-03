@@ -3,11 +3,13 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import LoginView from 'studsapp/containers/loginView/loginViewContainer';
 import EventListView from 'studsapp/containers/eventListView/eventListViewContainer';
 import AuthenticationView from 'studsapp/containers/authenticationView/authenticationViewContainer';
+import SettingsView from 'studsapp/containers/settingsView/settingsViewContainer';
 
 //TODO: Styling of tabs
 const LoggedInNavigator = createBottomTabNavigator(
     {
-        EventList: EventListView
+        EventList: EventListView,
+        Settings: SettingsView
     }
 );
 
