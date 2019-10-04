@@ -15,6 +15,7 @@ const imageSource = 'studsapp/static/images/logo.png';
 class SettingsView extends React.Component {
     logOut = () => {
         removeData('token');
+        this.props.removeLoginToken();
         this.props.navigation.navigate('Login');
     }
 

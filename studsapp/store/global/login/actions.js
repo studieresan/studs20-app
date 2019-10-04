@@ -1,7 +1,8 @@
 import {
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
-    LOGIN_ERROR
+    LOGIN_ERROR,
+    LOGIN_INITIAL
 } from './constants'; 
 
 import { attemptLogin as apiLogin } from 'studsapp/utils/api';
@@ -19,6 +20,10 @@ export const loginSuccess = (result) => ({
 export const loginError = (errorString) => ({
     type: LOGIN_ERROR,
     payload: errorString
+});
+
+export const loginInitial = () => ({
+    type: LOGIN_INITIAL
 });
 
 //thunks

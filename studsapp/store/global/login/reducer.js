@@ -1,7 +1,8 @@
 import {
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
-    LOGIN_ERROR
+    LOGIN_ERROR,
+    LOGIN_INITIAL
 } from './constants'; 
 
 import { status } from 'studsapp/store/constants';
@@ -25,7 +26,11 @@ const reducer = (state = defaultState, action) => {
             return {
                 status: status.ERROR,
                 error: action.payload
-            }
+            };
+        case LOGIN_INITIAL:
+            return {
+                status: status.INITIAL
+            };
         default:
             return state;
     }
