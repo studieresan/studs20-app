@@ -4,5 +4,5 @@ import eventListReducer from 'studsapp/store/global/eventList/reducer';
 
 export default combineReducers({
     login: loginReducer,
-    eventList: eventListReducer
+    events: eventListReducer
 });
