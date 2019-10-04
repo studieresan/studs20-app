@@ -8,13 +8,11 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Button from 'studsapp/generalComponents/button';
-import { removeData } from 'studsapp/utils/storage';
 
 const imageSource = 'studsapp/static/images/logo.png';
 
 class SettingsView extends React.Component {
     logOut = () => {
-        removeData('token');
         this.props.removeLoginToken();
         this.props.navigation.navigate('Login');
     }

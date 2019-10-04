@@ -10,73 +10,45 @@ import {
     ActivityIndicator
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { status } from 'studsapp/store/constants';
+import { status, isLoading, isError, isInitial } from 'studsapp/store/constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const imageSource = 'studsapp/static/images/logo.png';
 
 class EventListView extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            errorMessage: '',
-            listData: []
-        };
-    }
-
     componentDidMount() {
         this.props.getEvents();
     }
 
     getEventsToList = () => {
-        let eventList = [];
-        let events = this.props.events.data.events;
+        const events = this.props.events.data;
 
-        for(let i = 0; i < events.length; ++i) {
-            let name = events[i].companyName;
-            let date = events[i].date;
-            eventList.push({key: i.toString(), name, date});
-        }
+        const eventList = Object.keys(events).map(key => {
+            return events[key];
+        });
 
-        return eventList;
+        return eventList.sort((a, b) => a.date < b.date);
     };
 
-    componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            switch (this.props.events.status) {
-                case status.LOADING:
-                    this.setState({ errorMessage: '', listData: [] });
-                    break;
-                case status.SUCCESS:
-                    let events = this.getEventsToList();
-                    this.setState({ errorMessage: '', listData: events })
-                    break;
-                case status.ERROR:
-                    this.setState({ errorMessage: this.props.events.error, listData: [] });
-                    break;
-            }
-        }
-    }
-
-    _renderBottom = () => {
-        if(this.props.events.status === status.LOADING) {
+    renderBottom = () => {
+        if (isLoading(this.props.events) || isInitial(this.props.events)) {
             return (
                 <View style={{padding: 50}}>
                     <ActivityIndicator size='large' color='#fac882' />
                 </View>
             );
-        } else if(this.props.events.status === status.ERROR) {
+        } else if (isError(this.props.events)) {
             return (
                 <View style={{ padding: 50 }}>
-                    <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+                    <Text style={styles.errorMessage}>{this.props.events.error}</Text>
                 </View>
             );
         }
 
         return (
             <FlatList
-                data={this.state.listData.sort((a, b) => a.date < b.date)}
-                keyExtractor={item => item.key}
+                data={this.getEventsToList()}
+                keyExtractor={item => item.id}
                 renderItem={({ item }) =>
                     <TouchableHighlight
                         style={styles.event}
@@ -84,7 +56,7 @@ class EventListView extends React.Component {
                         underlayColor='rgba(255,255,255,0.3)'
                     >
                         <View style={styles.row}>
-                            <Text style={styles.eventText}>{item.name}</Text>
+                            <Text style={styles.eventText}>{item.companyName}</Text>
                             <Icon name='ios-arrow-forward' size={20} style={styles.eventArrow} />
                         </View>
                     </TouchableHighlight>
@@ -102,7 +74,7 @@ class EventListView extends React.Component {
                     <Text style={styles.title}>Events</Text>
                 </View>
                 <View style={styles.bottom}>
-                    {this._renderBottom()}
+                    {this.renderBottom()}
                 </View>
             </LinearGradient>
         );

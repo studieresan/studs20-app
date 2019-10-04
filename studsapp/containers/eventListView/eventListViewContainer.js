@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import EventListView from './eventListView'
-import { getEvents } from 'studsapp/store/global/eventList/actions';
+import { getEvents } from 'studsapp/store/eventList/actions';
 
 const mapStateToProps = (state) => {
     return {
-        events: state.global.events
+        events: state.events
     };
 };
 

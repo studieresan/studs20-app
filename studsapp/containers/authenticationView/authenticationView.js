@@ -10,10 +10,10 @@ import { retrieveData } from 'studsapp/utils/storage';
 
 class AuthenticationView extends React.Component {
     componentDidMount() {
-        this._findTokenAndNavigate();
+        this.findTokenAndNavigate();
     }
 
-    _findTokenAndNavigate = async () => {
+    findTokenAndNavigate = async () => {
         const token = await retrieveData('token');
         if(token) {
             this.props.setLoginToken(token);

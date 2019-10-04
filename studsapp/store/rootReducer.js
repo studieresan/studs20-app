@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import globalReducer from 'studsapp/store/global/reducer'
+import globalReducer from 'studsapp/store/global/reducer';
+import eventReducer from 'studsapp/store/eventList/reducer';
 
 export default combineReducers({
-    global: globalReducer
+    global: globalReducer,
+    events: eventReducer
 });

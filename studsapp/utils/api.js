@@ -120,5 +120,10 @@ export const fetchEvents = () => {
         .then(events => events.map(event => ( {
             ...event, 
             date: new Date(event.date)
-        })));
+        })))
+        .then(events => {
+            const eventMap = {};
+            events.forEach(event => eventMap[event.id] = event);
+            return eventMap;
+        });
 };
