@@ -3,28 +3,31 @@ import {
     StyleSheet, 
     Dimensions,
     View,
-    Text
+    Text,
+    Image
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Button from 'studsapp/generalComponents/button';
-import { removeData } from 'studsapp/utils/storage';
+
+const imageSource = 'studsapp/static/images/logo.png';
 
 class SettingsView extends React.Component {
     logOut = () => {
-        removeData('token');
         this.props.removeLoginToken();
         this.props.navigation.navigate('Login');
     }
 
-    //TODO: Actual stuff
     render() {
         return (
             <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.wrapper}>
                 <View style={styles.top}>
+                    <Image source={require(imageSource)} style={styles.logo} />
                     <Text style={styles.title}>Settings</Text>
                 </View>
                 <View style={styles.middle}>
-                    <Button text={'Log out'} onPress={() => this.logOut()} />
+                    <View style={{padding: 40}}>
+                        <Button text={'Log out'} onPress={() => this.logOut()} />
+                    </View>
                 </View>
                 <View style={styles.bottom}>
                     <Text style={styles.version}>Studs App Version 0.0.1</Text>
@@ -42,15 +45,23 @@ const styles = StyleSheet.create({
     },
     title: {
         color: '#fac882',
-        fontSize: 40
+        fontSize: 30,
+        textAlign: 'center'
+    },
+    logo: {
+        alignSelf: 'center',
+        height: window.height / 12,
+        resizeMode: 'contain',
     },
     top: {
         flex: 0.25,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        width: window.width,
+        borderBottomWidth: 1,
+        borderBottomColor: '#1c436a',
     },
     middle: {
         flex: 0.7,
-        padding: 40
     },
     bottom: {
         flex: 0.05,

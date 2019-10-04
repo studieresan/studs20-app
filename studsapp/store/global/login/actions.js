@@ -6,6 +6,7 @@ import {
 } from './constants'; 
 
 import { attemptLogin as apiLogin } from 'studsapp/utils/api';
+import { removeData } from 'studsapp/utils/storage';
 
 //actions
 export const loginRequest = () => ({
@@ -27,6 +28,11 @@ export const loginInitial = () => ({
 });
 
 //thunks
+export const setInitialLoginState = () => dispatch => {
+    removeData('token')
+        .then(result => dispatch(loginInitial()));
+}
+
 export const attemptLogin = (email, password) => dispatch => {
     dispatch(loginRequest());
     apiLogin({email, password})

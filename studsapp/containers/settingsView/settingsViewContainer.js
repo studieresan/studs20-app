@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import SettingsView from './settingsView'
-import { loginInitial } from 'studsapp/store/global/login/actions';
+import { setInitialLoginState } from 'studsapp/store/global/login/actions';
 
 const mapStateToProps = (state) => {
     return {
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        removeLoginToken: () => dispatch(loginInitial())
+        removeLoginToken: () => dispatch(setInitialLoginState())
     };
 };
 
