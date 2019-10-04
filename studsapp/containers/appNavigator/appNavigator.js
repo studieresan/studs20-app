@@ -5,12 +5,14 @@ import LoginView from 'studsapp/containers/loginView/loginViewContainer';
 import EventListView from 'studsapp/containers/eventListView/eventListViewContainer';
 import AuthenticationView from 'studsapp/containers/authenticationView/authenticationViewContainer';
 import SettingsView from 'studsapp/containers/settingsView/settingsViewContainer';
+import MemberListView from 'studsapp/containers/memberListView/memberListViewContainer';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //TODO: Styling of tabs
 const LoggedInNavigator = createBottomTabNavigator(
     {
         Events: EventListView,
+        Members: MemberListView,
         Settings: SettingsView
     },
     {
@@ -22,6 +24,8 @@ const LoggedInNavigator = createBottomTabNavigator(
                     iconName = 'ios-calendar';
                 } else if (routeName === 'Settings') {
                     iconName = 'ios-settings';
+                } else if (routeName === 'Members') {
+                    iconName = 'ios-contacts';
                 }
 
                 // You can return any component that you like here!
