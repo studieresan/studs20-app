@@ -1,0 +1,3 @@
+export const MEMBER_REQUEST = 'MEMBER_REQUEST';
+export const MEMBER_SUCCESS = 'MEMBER_SUCCESS';
+export const MEMBER_ERROR = 'MEMBER_ERROR';

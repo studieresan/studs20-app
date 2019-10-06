@@ -7,6 +7,7 @@ import EventListView from 'studsapp/containers/eventListView/eventListViewContai
 import EventView from 'studsapp/containers/eventView/eventViewContainer';
 import AuthenticationView from 'studsapp/containers/authenticationView/authenticationViewContainer';
 import SettingsView from 'studsapp/containers/settingsView/settingsViewContainer';
+import MemberListView from 'studsapp/containers/memberListView/memberListViewContainer';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const EventsNavigator = createStackNavigator(
@@ -25,6 +26,7 @@ const EventsNavigator = createStackNavigator(
 const LoggedInNavigator = createBottomTabNavigator(
     {
         Events: EventsNavigator,
+        Members: MemberListView,
         Settings: SettingsView
     },
     {
@@ -36,6 +38,8 @@ const LoggedInNavigator = createBottomTabNavigator(
                     iconName = 'ios-calendar';
                 } else if (routeName === 'Settings') {
                     iconName = 'ios-settings';
+                } else if (routeName === 'Members') {
+                    iconName = 'ios-contacts';
                 }
 
                 // You can return any component that you like here!

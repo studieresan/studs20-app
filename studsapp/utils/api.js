@@ -127,3 +127,37 @@ export const fetchEvents = () => {
             return eventMap;
         });
 };
+
+const USER_PROFILE_FIELDS = `
+  memberType
+  email
+  firstName
+  lastName
+  phone
+  picture
+  allergies
+  master
+  position
+  linkedIn
+  github
+  picture
+  companyName
+`
+
+export const fetchUsers = () => {
+    const query = `{
+        studsUsers: users(memberType: studs_member) {
+        id,
+        profile { ${USER_PROFILE_FIELDS} }
+        }
+    }`;
+    return executeGraphQLRequest(query)
+        .then(result => {
+            return result.data.studsUsers;
+        })
+        .then(members => {
+            const memberMap = {};
+            members.forEach(member => memberMap[member.id] = member);
+            return memberMap;
+        });
+};
