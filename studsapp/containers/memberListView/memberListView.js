@@ -10,7 +10,7 @@ import {
     Linking
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { isLoading, isInitial, isError } from 'studsapp/store/constants';
+import { isSuccess, isLoading, isInitial, isError } from 'studsapp/store/constants';
 
 const imageSource = 'studsapp/static/images/logo.png';
 
@@ -34,54 +34,6 @@ class MemberListView extends React.Component {
         });
     };
 
-    renderBottom = () => {
-        if (isLoading(this.props.members) || isInitial(this.props.members)) {
-            return (
-                <View style={{ padding: 50 }}>
-                    <ActivityIndicator size='large' color='#fac882' />
-                </View>
-            );
-        } else if (isError(this.props.members)) {
-            return (
-                <View style={{ padding: 50 }}>
-                    <Text style={styles.errorMessage}>{this.props.members.error}</Text>
-                </View>
-            );
-        }
-
-        return (
-            <FlatList
-                data={this.getMembersToList()}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) =>
-                    <View style={styles.member}>
-                        <View style={styles.memberName}>
-                            <Text style={styles.memberNameText}>{item.profile.firstName + ' ' + item.profile.lastName}</Text>
-                        </View>
-                        <View style={styles.memberInfo}>
-                            <Text 
-                                onPress={() => {
-                                    Linking.openURL('mailto:' + item.profile.email);
-                                }}
-                                style={styles.memberInfoText}
-                            >
-                                {item.profile.email}
-                            </Text>
-                            <Text 
-                                onPress={() => {
-                                    Linking.openURL('tel:' + item.profile.phone);
-                                }}
-                                style={styles.memberInfoText}
-                            >
-                                {item.profile.phone}
-                            </Text>
-                        </View>
-                    </View>
-                }
-            />
-        );
-    }
-
     render() {
         return (
             <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.wrapper}>
@@ -91,7 +43,47 @@ class MemberListView extends React.Component {
                     <Text style={styles.title}>Members</Text>
                 </View>
                 <View style={styles.bottom}>
-                    {this.renderBottom()}
+                    {(isLoading(this.props.members) || isInitial(this.props.members)) &&
+                        <View style={{ padding: 50 }}>
+                            <ActivityIndicator size='large' color='#fac882' />
+                        </View>
+                    }
+                    {isError(this.props.members) &&
+                        <View style={{ padding: 50 }}>
+                            <Text style={styles.errorMessage}>{this.props.members.error}</Text>
+                        </View>
+                    }
+                    {isSuccess(this.props.members) &&
+                        <FlatList
+                            data={this.getMembersToList()}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item }) =>
+                                <View style={styles.member}>
+                                    <View style={styles.memberName}>
+                                        <Text style={styles.memberNameText}>{item.profile.firstName + ' ' + item.profile.lastName}</Text>
+                                    </View>
+                                    <View style={styles.memberInfo}>
+                                        <Text
+                                            onPress={() => {
+                                                Linking.openURL('mailto:' + item.profile.email);
+                                            }}
+                                            style={styles.memberInfoText}
+                                        >
+                                            {item.profile.email}
+                                        </Text>
+                                        <Text
+                                            onPress={() => {
+                                                Linking.openURL('tel:' + item.profile.phone);
+                                            }}
+                                            style={styles.memberInfoText}
+                                        >
+                                            {item.profile.phone}
+                                        </Text>
+                                    </View>
+                                </View>
+                            }
+                        />
+                    }
                 </View>
             </LinearGradient>
         );
@@ -150,7 +142,13 @@ const styles = StyleSheet.create({
         color: '#fac882',
         textAlign: 'right',
         textDecorationLine: 'underline'
-    }
+    },
+    errorMessage: {
+        color: 'red',
+        fontSize: 16,
+        marginVertical: 5,
+        textAlign: 'center'
+    },
 });
 
 export default MemberListView;
