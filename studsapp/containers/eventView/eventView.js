@@ -6,15 +6,28 @@ import {
     Text,
     TouchableHighlight,
     Image,
+    Linking,
+    ScrollView
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Button from 'studsapp/generalComponents/button';
 
 const imageSource = 'studsapp/static/images/logo.png';
 
 class EventView extends React.Component {
     getEvent = () => {
         return this.props.events.data[this.props.navigation.getParam('eventID')];
+    }
+
+    getDate = () => {
+        const event = this.getEvent();
+        const year = event.date.getFullYear();
+        const month = event.date.getMonth();
+        const monthString = month < 10 ? '0' + month : month;
+        const day = event.date.getDate();
+        const dayString = day < 10 ? '0' + day : day;
+        return year + '-' + monthString + '-' + dayString;
     }
 
     render() {
@@ -32,6 +45,42 @@ class EventView extends React.Component {
                     </TouchableHighlight>
                 </View>
                 <View style={styles.bottom}>
+                    <View style={styles.location}>
+                        <View style={{ flex: 0.8 }}>
+                            {/*TODO: Map */}
+                        </View>
+                        <View style={styles.locationText}>
+                            <Text style={styles.whenInformation}>{this.getEvent().location}</Text>
+                            <Text style={styles.whenInformation}>{this.getDate()}</Text>
+                        </View>
+                    </View>
+                    {this.getEvent().privateDescription.length > 0 &&
+                        <View style={styles.description}>
+                            <ScrollView>
+                                <Text style={styles.descriptionText}>{this.getEvent().privateDescription}</Text>
+                            </ScrollView>
+                        </View>
+                    }
+                    {(this.getEvent().beforeSurveys.length > 0 || this.getEvent().afterSurveys.length > 0) &&
+                        <View style={styles.forms}>
+                            {this.getEvent().beforeSurveys.length > 0 &&
+                                <Button
+                                    text={'Pre-event form'}
+                                    onPress={() => {
+                                        Linking.openURL(this.getEvent().beforeSurveys[0]);
+                                    }}
+                                />
+                            }
+                            {this.getEvent().afterSurveys.length > 0 &&
+                                <Button
+                                    text={'Post-event form'}
+                                    onPress={() => {
+                                        Linking.openURL(this.getEvent().afterSurveys[0]);
+                                    }}
+                                />
+                            }
+                        </View>
+                    }
                 </View>
             </LinearGradient>
         );
@@ -64,7 +113,7 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         alignItems: 'center'
-    },  
+    },
     top: {
         flex: 0.25,
         justifyContent: 'center',
@@ -74,6 +123,32 @@ const styles = StyleSheet.create({
     },
     bottom: {
         flex: 0.75,
+        justifyContent: 'space-evenly',
+        alignItems: 'stretch'
+    },
+    location: {
+        flex: 0.4,
+        alignItems: 'center',
+        marginBottom: 5
+    },
+    locationText: {
+        flex: 0.2,
+        alignItems: 'center'
+    },
+    whenInformation: {
+        fontSize: 16,
+        color: '#fac882'
+    },
+    forms: {
+        flex: 0.25
+    },
+    description: {
+        flex: 0.35,
+        marginBottom: 5
+    },
+    descriptionText: {
+        padding: 20,
+        color: '#fac882'
     }
 });
 
