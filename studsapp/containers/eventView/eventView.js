@@ -46,13 +46,9 @@ class EventView extends React.Component {
                 </View>
                 <View style={styles.bottom}>
                     <View style={styles.location}>
-                        <View style={{ flex: 0.8 }}>
-                            {/*TODO: Map */}
-                        </View>
-                        <View style={styles.locationText}>
-                            <Text style={styles.whenInformation}>{this.getEvent().location}</Text>
-                            <Text style={styles.whenInformation}>{this.getDate()}</Text>
-                        </View>
+                        {/*TODO: Map */}
+                        <Text style={styles.whenInformation}>{this.getEvent().location}</Text>
+                        <Text style={styles.whenInformation}>{this.getDate()}</Text>
                     </View>
                     {this.getEvent().privateDescription.length > 0 &&
                         <View style={styles.description}>
@@ -123,17 +119,13 @@ const styles = StyleSheet.create({
     },
     bottom: {
         flex: 0.75,
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
         alignItems: 'stretch'
     },
     location: {
         flex: 0.4,
         alignItems: 'center',
         marginBottom: 5
-    },
-    locationText: {
-        flex: 0.2,
-        alignItems: 'center'
     },
     whenInformation: {
         fontSize: 16,
