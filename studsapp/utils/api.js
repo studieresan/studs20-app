@@ -1,24 +1,25 @@
 import { retrieveData } from 'studsapp/utils/storage';
+import { apiBaseURL, mapboxToken } from 'studsapp/utils/config';
 
-const BASE_URL = process.env.API_BASE_URL || 'https://studs18-overlord.herokuapp.com';//'http://localhost:5040';
+const BASE_URL = apiBaseURL;
 const LOGIN = '/login';
 const GRAPHQL = '/graphql';
 
 const STATUS_OK = 200;
 const STATUS_NOT_OK = 300;
 
-const credentials = {credentials: 'include'};
+const credentials = { credentials: 'include' };
 const authorizationHeader = async () => {
     const token = await retrieveData('token');
     return {
         Authorization: `Bearer ${token}`
     };
 };
-const jsonHeader = {'Content-Type': 'application/json'};
-const graphQLHeader = {'Content-Type': 'application/graphql'};
+const jsonHeader = { 'Content-Type': 'application/json' };
+const graphQLHeader = { 'Content-Type': 'application/graphql' };
 
 const checkStatus = (response) => {
-    if(response.status >= STATUS_OK && response.status < STATUS_NOT_OK) {
+    if (response.status >= STATUS_OK && response.status < STATUS_NOT_OK) {
         return response;
     } else {
         throw response;
@@ -74,11 +75,11 @@ const executeGraphQLRequest = async (query) => {
         },
         body: query
     })
-    .then(checkStatus)
-    .then(response => response.json());
+        .then(checkStatus)
+        .then(response => response.json());
 };
-    
-const executeLoginRequest = (body) => 
+
+const executeLoginRequest = (body) =>
     fetch(BASE_URL + LOGIN, {
         method: 'POST',
         ...credentials,
@@ -87,8 +88,8 @@ const executeLoginRequest = (body) =>
         },
         body: JSON.stringify(body)
     })
-    .then(checkStatus)
-    .then(response =>  response.json());
+        .then(checkStatus)
+        .then(response => response.json());
 
 export const attemptLogin = (body) => {
     return executeLoginRequest(body);
@@ -109,23 +110,36 @@ const EVENT_FIELDS = `
   responsible
 `;
 
-export const fetchEvents = () => {
+export const fetchEvents = async () => {
     const query = `query {
         allEvents {
             ${EVENT_FIELDS}
         }
     }`;
-    return executeGraphQLRequest(query)
-        .then(result => result.data.allEvents)
-        .then(events => events.map(event => ( {
-            ...event, 
-            date: new Date(event.date)
-        })))
-        .then(events => {
-            const eventMap = {};
-            events.forEach(event => eventMap[event.id] = event);
-            return eventMap;
-        });
+    const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+    const geocodingService = mbxGeocoding({
+        accessToken: mapboxToken
+    });
+    const result = await executeGraphQLRequest(query);
+    let events = result.data.allEvents;
+    events = events.map(event => ({
+        ...event,
+        date: new Date(event.date)
+    }));
+    events = await Promise.all(events.map(async (event) => {
+        const coordinatesResponse = await geocodingService.forwardGeocode({
+            query: event.location,
+            limit: 1,
+        }).send();
+        const coordinates = coordinatesResponse.body.features[0].geometry.coordinates;
+        return {
+            ...event,
+            coordinates: coordinates
+        };
+    }));
+    const eventMap = {};
+    events.forEach(event => eventMap[event.id] = event);
+    return eventMap;
 };
 
 const USER_PROFILE_FIELDS = `

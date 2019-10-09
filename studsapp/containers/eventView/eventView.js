@@ -12,6 +12,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from 'studsapp/generalComponents/button';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
 const imageSource = 'studsapp/static/images/logo.png';
 
@@ -46,7 +47,19 @@ class EventView extends React.Component {
                 </View>
                 <View style={styles.bottom}>
                     <View style={styles.location}>
-                        {/*TODO: Map */}
+                        <View style={{ width: window.width, height: window.height / 5 }}>
+                            <MapboxGL.MapView style={{ flex: 1 }}>
+                                <MapboxGL.Camera defaultSettings={{
+                                    centerCoordinate: this.getEvent().coordinates,
+                                    zoomLevel: 13
+                                }} />
+                                <MapboxGL.PointAnnotation
+                                    id={'location'}
+                                    title={this.getEvent().location}
+                                    coordinate={this.getEvent().coordinates}
+                                />
+                            </MapboxGL.MapView>
+                        </View>
                         <Text style={styles.whenInformation}>{this.getEvent().location}</Text>
                         <Text style={styles.whenInformation}>{this.getDate()}</Text>
                     </View>

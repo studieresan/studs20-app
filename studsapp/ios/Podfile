@@ -38,6 +38,8 @@ target 'studsapp' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
+
   target 'studsappTests' do
     inherit! :search_paths
     # Pods for testing
