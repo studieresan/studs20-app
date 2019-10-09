@@ -7,7 +7,8 @@ import {
     TouchableHighlight,
     Image,
     Linking,
-    ScrollView
+    ScrollView,
+    Platform
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -31,6 +32,14 @@ class EventView extends React.Component {
         return year + '-' + monthString + '-' + dayString;
     }
 
+    openMap = () => {
+        const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+        const location = this.getEvent().location;
+        const url = scheme + location;
+
+        Linking.openURL(url);
+    }
+
     render() {
         return (
             <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.wrapper}>
@@ -47,18 +56,31 @@ class EventView extends React.Component {
                 </View>
                 <View style={styles.bottom}>
                     <View style={styles.location}>
-                        <View style={{ width: window.width, height: window.height / 5 }}>
-                            <MapboxGL.MapView style={{ flex: 1 }}>
-                                <MapboxGL.Camera defaultSettings={{
-                                    centerCoordinate: this.getEvent().coordinates,
-                                    zoomLevel: 13
-                                }} />
-                                <MapboxGL.PointAnnotation
-                                    id={'location'}
-                                    title={this.getEvent().location}
-                                    coordinate={this.getEvent().coordinates}
-                                />
-                            </MapboxGL.MapView>
+                        <View style={styles.mapContainer}>
+                            <TouchableHighlight
+                                onPress={() => this.openMap()}
+                                underlayColor='rgba(255,255,255,0.0)'
+                                style={styles.map}
+                            >
+                                <MapboxGL.MapView
+                                    style={styles.map}
+                                    zoomEnabled={false}
+                                    scrollEnabled={false}
+                                    pitchEnabled={false}
+                                    rotateEnabled={false}
+                                >
+                                    <MapboxGL.Camera defaultSettings={{
+                                        centerCoordinate: this.getEvent().coordinates,
+                                        zoomLevel: 13
+                                    }} />
+                                    <MapboxGL.PointAnnotation
+                                        id={'location'}
+                                        title={this.getEvent().location}
+                                        coordinate={this.getEvent().coordinates}
+                                    />
+                                </MapboxGL.MapView>
+                            </TouchableHighlight>
+
                         </View>
                         <Text style={styles.whenInformation}>{this.getEvent().location}</Text>
                         <Text style={styles.whenInformation}>{this.getDate()}</Text>
@@ -139,6 +161,13 @@ const styles = StyleSheet.create({
         flex: 0.4,
         alignItems: 'center',
         marginBottom: 5
+    },
+    mapContainer: {
+        width: window.width,
+        height: window.height / 5
+    },
+    map: {
+        flex: 1
     },
     whenInformation: {
         fontSize: 16,
