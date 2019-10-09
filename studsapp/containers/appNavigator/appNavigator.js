@@ -2,7 +2,6 @@ import React from 'react';
 import { createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { mapboxToken } from 'studsapp/utils/config';
 import LoginView from 'studsapp/containers/loginView/loginViewContainer';
 import EventListView from 'studsapp/containers/eventListView/eventListViewContainer';
 import EventView from 'studsapp/containers/eventView/eventViewContainer';
@@ -10,9 +9,6 @@ import AuthenticationView from 'studsapp/containers/authenticationView/authentic
 import SettingsView from 'studsapp/containers/settingsView/settingsViewContainer';
 import MemberListView from 'studsapp/containers/memberListView/memberListViewContainer';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-import MapboxGL from '@react-native-mapbox-gl/maps';
-MapboxGL.setAccessToken(mapboxToken);
 
 const EventsNavigator = createStackNavigator(
     {
