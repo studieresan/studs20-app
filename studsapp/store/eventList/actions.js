@@ -27,7 +27,6 @@ export const getEvents = () => dispatch => {
     fetchEvents()
         .then(result => dispatch(fetchEventsSuccess(result)))
         .catch(error => {
-            console.log(error);
             dispatch(fetchEventsError('Unexpected error when retrieving event information. Please try again.'));
         });
 };
