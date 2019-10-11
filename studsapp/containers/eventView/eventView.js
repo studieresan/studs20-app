@@ -93,7 +93,7 @@ class EventView extends React.Component {
                         </View>
                     }
                     {(this.getEvent().beforeSurveys.length > 0 || this.getEvent().afterSurveys.length > 0) &&
-                        <View style={styles.forms}>
+                        <View>
                             {this.getEvent().beforeSurveys.length > 0 &&
                                 <Button
                                     text={'Pre-event form'}
@@ -154,11 +154,9 @@ const styles = StyleSheet.create({
     },
     bottom: {
         flex: 0.75,
-        justifyContent: 'space-between',
         alignItems: 'stretch'
     },
     location: {
-        flex: 0.4,
         alignItems: 'center',
         marginBottom: 5
     },
@@ -173,11 +171,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#fac882'
     },
-    forms: {
-        flex: 0.25
-    },
     description: {
-        flex: 0.35,
+        flex: 1,
         marginBottom: 5
     },
     descriptionText: {
