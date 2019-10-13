@@ -1,22 +1,36 @@
 import React from 'react';
 import { createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import LoginView from 'studsapp/containers/loginView/loginViewContainer';
 import EventListView from 'studsapp/containers/eventListView/eventListViewContainer';
+import EventView from 'studsapp/containers/eventView/eventViewContainer';
 import AuthenticationView from 'studsapp/containers/authenticationView/authenticationViewContainer';
 import SettingsView from 'studsapp/containers/settingsView/settingsViewContainer';
 import MemberListView from 'studsapp/containers/memberListView/memberListViewContainer';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-//TODO: Styling of tabs
+const EventsNavigator = createStackNavigator(
+    {
+        EventList: EventListView,
+        Event: EventView
+    },
+    {
+        initialRouteName: 'EventList',
+        defaultNavigationOptions: {
+            header: null
+        }
+    }
+);
+
 const LoggedInNavigator = createBottomTabNavigator(
     {
-        Events: EventListView,
+        Events: EventsNavigator,
         Members: MemberListView,
         Settings: SettingsView
     },
     {
-        defaultNavigationOptions: ({navigation}) => ({
+        defaultNavigationOptions: ({ navigation }) => ({
             tabBarIcon: ({ focused, horizontal, tintColor }) => {
                 const { routeName } = navigation.state;
                 let iconName;
@@ -45,9 +59,9 @@ const LoggedInNavigator = createBottomTabNavigator(
     }
 );
 
-export default createSwitchNavigator (
+export default createSwitchNavigator(
     {
-        Authentication: AuthenticationView, 
+        Authentication: AuthenticationView,
         Login: LoginView,
         LoggedIn: LoggedInNavigator
     },
