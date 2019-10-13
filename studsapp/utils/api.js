@@ -97,17 +97,14 @@ export const attemptLogin = (body) => {
 
 const EVENT_FIELDS = `
   id
-  companyName
-  schedule
+  company {
+      name
+  }
   privateDescription
-  publicDescription
   date
   beforeSurveys
   afterSurveys
   location
-  pictures
-  published
-  responsible
 `;
 
 export const fetchEvents = async () => {
@@ -126,6 +123,10 @@ export const fetchEvents = async () => {
         ...event,
         date: new Date(event.date)
     }));
+    events = events.map(event => ({
+        ...event,
+        companyName: event.company.name
+    }));
     events = await Promise.all(events.map(async (event) => {
         const coordinatesResponse = await geocodingService.forwardGeocode({
             query: event.location,
@@ -143,24 +144,16 @@ export const fetchEvents = async () => {
 };
 
 const USER_PROFILE_FIELDS = `
-  memberType
+  userRole
   email
   firstName
   lastName
   phone
-  picture
-  allergies
-  master
-  position
-  linkedIn
-  github
-  picture
-  companyName
-`
+`;
 
 export const fetchUsers = () => {
     const query = `{
-        studsUsers: users(memberType: studs_member) {
+        studsUsers: users {
         id,
         profile { ${USER_PROFILE_FIELDS} }
         }

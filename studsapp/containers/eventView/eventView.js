@@ -14,22 +14,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from 'studsapp/generalComponents/button';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import { getDate } from 'studsapp/utils/utilityFunctions';
 
 const imageSource = 'studsapp/static/images/logo.png';
 
 class EventView extends React.Component {
     getEvent = () => {
         return this.props.events.data[this.props.navigation.getParam('eventID')];
-    }
-
-    getDate = () => {
-        const event = this.getEvent();
-        const year = event.date.getFullYear();
-        const month = event.date.getMonth();
-        const monthString = month < 10 ? '0' + month : month;
-        const day = event.date.getDate();
-        const dayString = day < 10 ? '0' + day : day;
-        return year + '-' + monthString + '-' + dayString;
     }
 
     openMap = () => {
@@ -41,11 +32,12 @@ class EventView extends React.Component {
     }
 
     render() {
+        const event = this.getEvent();
         return (
             <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.wrapper}>
                 <View style={styles.top}>
                     <Image source={require(imageSource)} style={styles.logo} />
-                    <Text style={styles.title}>{this.getEvent().companyName}</Text>
+                    <Text style={styles.title}>{event.companyName}</Text>
                     <TouchableHighlight
                         onPress={() => this.props.navigation.goBack()}
                         underlayColor='rgba(255,255,255,0.0)'
@@ -70,43 +62,43 @@ class EventView extends React.Component {
                                     rotateEnabled={false}
                                 >
                                     <MapboxGL.Camera defaultSettings={{
-                                        centerCoordinate: this.getEvent().coordinates,
+                                        centerCoordinate: event.coordinates,
                                         zoomLevel: 13
                                     }} />
                                     <MapboxGL.PointAnnotation
                                         id={'location'}
-                                        title={this.getEvent().location}
-                                        coordinate={this.getEvent().coordinates}
+                                        title={event.location}
+                                        coordinate={event.coordinates}
                                     />
                                 </MapboxGL.MapView>
                             </TouchableHighlight>
 
                         </View>
-                        <Text style={styles.whenInformation}>{this.getEvent().location}</Text>
-                        <Text style={styles.whenInformation}>{this.getDate()}</Text>
+                        <Text style={styles.whenInformation}>{event.location}</Text>
+                        <Text style={styles.whenInformation}>{getDate(event.date)}</Text>
                     </View>
-                    {this.getEvent().privateDescription.length > 0 &&
+                    {event.privateDescription.length > 0 &&
                         <View style={styles.description}>
                             <ScrollView>
-                                <Text style={styles.descriptionText}>{this.getEvent().privateDescription}</Text>
+                                <Text style={styles.descriptionText}>{event.privateDescription}</Text>
                             </ScrollView>
                         </View>
                     }
-                    {(this.getEvent().beforeSurveys.length > 0 || this.getEvent().afterSurveys.length > 0) &&
+                    {(event.beforeSurveys.length > 0 || event.afterSurveys.length > 0) &&
                         <View>
-                            {this.getEvent().beforeSurveys.length > 0 &&
+                            {event.beforeSurveys.length > 0 &&
                                 <Button
                                     text={'Pre-event form'}
                                     onPress={() => {
-                                        Linking.openURL(this.getEvent().beforeSurveys[0]);
+                                        Linking.openURL(event.beforeSurveys[0]);
                                     }}
                                 />
                             }
-                            {this.getEvent().afterSurveys.length > 0 &&
+                            {event.afterSurveys.length > 0 &&
                                 <Button
                                     text={'Post-event form'}
                                     onPress={() => {
-                                        Linking.openURL(this.getEvent().afterSurveys[0]);
+                                        Linking.openURL(event.afterSurveys[0]);
                                     }}
                                 />
                             }
