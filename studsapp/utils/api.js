@@ -153,14 +153,14 @@ const USER_PROFILE_FIELDS = `
 
 export const fetchUsers = () => {
     const query = `{
-        studsUsers: users {
-        id,
-        profile { ${USER_PROFILE_FIELDS} }
+        users {
+            id,
+            profile { ${USER_PROFILE_FIELDS} }
         }
     }`;
     return executeGraphQLRequest(query)
         .then(result => {
-            return result.data.studsUsers;
+            return result.data.users;
         })
         .then(members => {
             const memberMap = {};
