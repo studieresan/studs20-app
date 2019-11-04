@@ -1,12 +1,14 @@
 import React from 'react';
-import { 
-    StyleSheet, 
+import {
+    StyleSheet,
     Dimensions,
     View,
-    ActivityIndicator
+    ActivityIndicator,
+    ImageBackground
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { retrieveData } from 'studsapp/utils/storage';
+
+const backgroundSource = 'studsapp/static/images/background.png';
 
 class AuthenticationView extends React.Component {
     componentDidMount() {
@@ -15,7 +17,7 @@ class AuthenticationView extends React.Component {
 
     findTokenAndNavigate = async () => {
         const token = await retrieveData('token');
-        if(token) {
+        if (token) {
             this.props.setLoginToken(token);
         }
         this.props.navigation.navigate(token ? 'LoggedIn' : 'Login');
@@ -23,11 +25,11 @@ class AuthenticationView extends React.Component {
 
     render() {
         return (
-            <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.top}>
+            <ImageBackground source={require(backgroundSource)} style={styles.top}>
                 <View>
-                    <ActivityIndicator size='large' color='#fac882'/>
+                    <ActivityIndicator size='large' color='#fff' />
                 </View>
-            </LinearGradient>
+            </ImageBackground>
         );
     }
 }

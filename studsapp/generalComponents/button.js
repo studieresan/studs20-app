@@ -1,5 +1,5 @@
 import React from 'react';
-import { 
+import {
     StyleSheet,
     Text,
     TouchableHighlight,
@@ -9,10 +9,10 @@ import {
 export default class Button extends React.Component {
     render() {
         return (
-            <TouchableHighlight 
+            <TouchableHighlight
                 onPress={this.props.onPress}
                 style={styles.button}
-                underlayColor='rgba(255,255,255,0.3)'
+                underlayColor='#8ad0d2'
             >
                 <Text style={styles.buttonText}>{this.props.text}</Text>
             </TouchableHighlight>
@@ -23,18 +23,18 @@ export default class Button extends React.Component {
 const window = Dimensions.get('window');
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: 'hsla(0,0%,100%,.1)',
+        backgroundColor: '#387677',
         borderRadius: 100,
         paddingVertical: 12,
         paddingHorizontal: 50,
         borderWidth: 3,
-        borderColor: '#fac882',
+        borderColor: '#fff',
         marginVertical: 5,
         alignSelf: 'center'
     },
     buttonText: {
-        color: '#fac882',
-        fontWeight: 'bold',
+        color: '#fff',
+        fontFamily: 'Raleway-Bold',
         textTransform: 'uppercase'
     }
 });
