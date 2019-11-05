@@ -1,18 +1,19 @@
 import React from 'react';
-import { 
-    StyleSheet, 
+import {
+    StyleSheet,
     Dimensions,
     View,
     Text,
     Image,
     ActivityIndicator,
     FlatList,
-    Linking
+    Linking,
+    ImageBackground
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { isSuccess, isLoading, isInitial, isError } from 'studsapp/store/constants';
 
-const imageSource = 'studsapp/static/images/logo.png';
+const imageSource = 'studsapp/static/images/logo-small.png';
+const backgroundSource = 'studsapp/static/images/background.png';
 
 class MemberListView extends React.Component {
     componentDidMount() {
@@ -27,7 +28,7 @@ class MemberListView extends React.Component {
         });
 
         return memberList.sort((a, b) => {
-            if(a.profile.lastName.localeCompare(b.profile.lastName) === 0) {
+            if (a.profile.lastName.localeCompare(b.profile.lastName) === 0) {
                 return a.profile.firstName.localeCompare(b.profile.firstName);
             }
             return a.profile.lastName.localeCompare(b.profile.lastName);
@@ -36,8 +37,7 @@ class MemberListView extends React.Component {
 
     render() {
         return (
-            <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.wrapper}>
-
+            <ImageBackground source={require(backgroundSource)} style={styles.wrapper}>
                 <View style={styles.top}>
                     <Image source={require(imageSource)} style={styles.logo} />
                     <Text style={styles.title}>Members</Text>
@@ -45,7 +45,7 @@ class MemberListView extends React.Component {
                 <View style={styles.bottom}>
                     {(isLoading(this.props.members) || isInitial(this.props.members)) &&
                         <View style={{ padding: 50 }}>
-                            <ActivityIndicator size='large' color='#fac882' />
+                            <ActivityIndicator size='large' color='#fff' />
                         </View>
                     }
                     {isError(this.props.members) &&
@@ -85,7 +85,7 @@ class MemberListView extends React.Component {
                         />
                     }
                 </View>
-            </LinearGradient>
+            </ImageBackground>
         );
     }
 }
@@ -97,9 +97,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        color: '#fac882',
+        color: '#fff',
         fontSize: 30,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Raleway-Black'
     },
     logo: {
         alignSelf: 'center',
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: window.width,
         borderBottomWidth: 1,
-        borderBottomColor: '#1c436a',
+        borderBottomColor: '#b3d4d6'
     },
     bottom: {
         flex: 0.75,
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     member: {
         width: window.width,
         borderBottomWidth: 1,
-        borderBottomColor: '#1c436a',
+        borderBottomColor: '#b3d4d6',
         paddingVertical: 15,
         flexDirection: 'row',
     },
@@ -134,17 +135,18 @@ const styles = StyleSheet.create({
         paddingRight: 15
     },
     memberNameText: {
-        color: '#fac882',
+        color: '#fff',
         fontSize: 16,
-        fontWeight: 'bold'
+        fontFamily: 'Raleway-Bold'
     },
     memberInfoText: {
-        color: '#fac882',
+        color: '#fff',
         textAlign: 'right',
-        textDecorationLine: 'underline'
+        textDecorationLine: 'underline',
+        fontFamily: 'Raleway-Regular'
     },
     errorMessage: {
-        color: 'red',
+        color: '#fff',
         fontSize: 16,
         marginVertical: 5,
         textAlign: 'center'
