@@ -46,7 +46,7 @@ class LoginView extends React.Component {
                         this.storeToken(this.props.login.data.token);
                         this.props.navigation.navigate('LoggedIn');
                     } else {
-                        this.setState({ errorMessage: 'Email or password is incorrect.' });
+                        this.setState({ errorMessage: 'Email-addressen eller lösenordet är ogiltigt.' });
                     }
                     break;
                 case status.ERROR:
@@ -70,10 +70,10 @@ class LoginView extends React.Component {
             if (this.state.password.length > 0) {
                 this.props.attemptLogin(this.state.email, this.state.password);
             } else {
-                this.setState({ errorMessage: 'Please enter a password.' });
+                this.setState({ errorMessage: 'Fyll i ett lösenord.' });
             }
         } else {
-            this.setState({ errorMessage: 'Please enter a valid email address.' });
+            this.setState({ errorMessage: 'Fyll i en email-address.' });
         }
     }
 
@@ -89,7 +89,7 @@ class LoginView extends React.Component {
         }
         return (
             <View style={styles.buttonView}>
-                <Button text={'Login'} onPress={() => this.login()} />
+                <Button text={'Logga in'} onPress={() => this.login()} />
                 <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
             </View>
         );
@@ -111,7 +111,7 @@ class LoginView extends React.Component {
                         value={this.state.email}
                     />
                     <TextInput
-                        placeholder={'Password'}
+                        placeholder={'Lösenord'}
                         placeholderTextColor={'#fff'}
                         secureTextEntry={true}
                         style={styles.input}
@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         marginVertical: 5,
+        textAlign: 'center',
         fontFamily: 'Raleway-Regular'
     },
     buttonView: {

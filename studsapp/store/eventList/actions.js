@@ -27,6 +27,6 @@ export const getEvents = () => dispatch => {
     fetchEvents()
         .then(result => dispatch(fetchEventsSuccess(result)))
         .catch(error => {
-            dispatch(fetchEventsError('Unexpected error when retrieving event information. Please try again.'));
+            dispatch(fetchEventsError('Oväntat fel vid hämtning av eventinformation.'));
         });
 };

@@ -89,7 +89,7 @@ class EventView extends React.Component {
                         <View>
                             {event.beforeSurveys.length > 0 &&
                                 <Button
-                                    text={'Pre-event form'}
+                                    text={'Pre-eventformulär'}
                                     onPress={() => {
                                         Linking.openURL(event.beforeSurveys[0]);
                                     }}
@@ -97,7 +97,7 @@ class EventView extends React.Component {
                             }
                             {event.afterSurveys.length > 0 &&
                                 <Button
-                                    text={'Post-event form'}
+                                    text={'Post-eventformulär'}
                                     onPress={() => {
                                         Linking.openURL(event.afterSurveys[0]);
                                     }}

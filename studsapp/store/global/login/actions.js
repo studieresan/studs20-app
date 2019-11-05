@@ -3,7 +3,7 @@ import {
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     LOGIN_INITIAL
-} from './constants'; 
+} from './constants';
 
 import { attemptLogin as apiLogin } from 'studsapp/utils/api';
 import { removeData } from 'studsapp/utils/storage';
@@ -35,13 +35,13 @@ export const setInitialLoginState = () => dispatch => {
 
 export const attemptLogin = (email, password) => dispatch => {
     dispatch(loginRequest());
-    apiLogin({email, password})
+    apiLogin({ email, password })
         .then(result => dispatch(loginSuccess({ success: true, token: result.token })))
         .catch(error => {
-            if(error.status === 401) {
-                dispatch(loginSuccess({success: false}));
+            if (error.status === 401) {
+                dispatch(loginSuccess({ success: false }));
             } else {
-                dispatch(loginError('Unexpected error when logging in. Please try again.'));
+                dispatch(loginError('Oväntat fel vid inloggning. Vänligen försök igen.'));
             }
         });
 };

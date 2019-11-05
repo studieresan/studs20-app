@@ -73,7 +73,7 @@ class EventListView extends React.Component {
             <ImageBackground source={require(backgroundSource)} style={styles.wrapper}>
                 <View style={styles.top}>
                     <Image source={require(imageSource)} style={styles.logo} />
-                    <Text style={styles.title}>Events</Text>
+                    <Text style={styles.title}>Event</Text>
                 </View>
                 <View style={styles.bottom}>
                     {this.renderBottom()}
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         marginVertical: 5,
+        textAlign: 'center',
         fontFamily: 'Raleway-Regular'
     },
     eventArrow: {

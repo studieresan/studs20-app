@@ -23,15 +23,15 @@ class SettingsView extends React.Component {
             <ImageBackground source={require(backgroundSource)} style={styles.wrapper}>
                 <View style={styles.top}>
                     <Image source={require(imageSource)} style={styles.logo} />
-                    <Text style={styles.title}>Settings</Text>
+                    <Text style={styles.title}>Inställningar</Text>
                 </View>
                 <View style={styles.middle}>
                     <View style={{ padding: 40 }}>
-                        <Button text={'Log out'} onPress={() => this.logOut()} />
+                        <Button text={'Logga ut'} onPress={() => this.logOut()} />
                     </View>
                 </View>
                 <View style={styles.bottom}>
-                    <Text style={styles.version}>Studs App Version 0.0.1</Text>
+                    <Text style={styles.version}>Studs App Version 1.0.0</Text>
                 </View>
             </ImageBackground>
         );
