@@ -8,15 +8,16 @@ import {
     Image,
     Linking,
     ScrollView,
-    Platform
+    Platform,
+    ImageBackground
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from 'studsapp/generalComponents/button';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { getDate } from 'studsapp/utils/utilityFunctions';
 
-const imageSource = 'studsapp/static/images/logo.png';
+const imageSource = 'studsapp/static/images/logo-small.png';
+const backgroundSource = 'studsapp/static/images/background.png'
 
 class EventView extends React.Component {
     getEvent = () => {
@@ -34,7 +35,7 @@ class EventView extends React.Component {
     render() {
         const event = this.getEvent();
         return (
-            <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.wrapper}>
+            <ImageBackground source={require(backgroundSource)} style={styles.wrapper}>
                 <View style={styles.top}>
                     <Image source={require(imageSource)} style={styles.logo} />
                     <Text style={styles.title}>{event.companyName}</Text>
@@ -105,7 +106,7 @@ class EventView extends React.Component {
                         </View>
                     }
                 </View>
-            </LinearGradient>
+            </ImageBackground>
         );
     }
 }
@@ -117,9 +118,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        color: '#fac882',
+        color: '#fff',
         fontSize: 30,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Raleway-Black'
     },
     logo: {
         alignSelf: 'center',
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     backArrow: {
-        color: '#fac882'
+        color: '#fff'
     },
     backArrowButton: {
         position: 'absolute',
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: window.width,
         borderBottomWidth: 1,
-        borderBottomColor: '#1c436a',
+        borderBottomColor: '#b3d4d6',
     },
     bottom: {
         flex: 0.75,
@@ -161,7 +163,8 @@ const styles = StyleSheet.create({
     },
     whenInformation: {
         fontSize: 16,
-        color: '#fac882'
+        color: '#fff',
+        fontFamily: 'Raleway-Regular'
     },
     description: {
         flex: 1,
@@ -169,7 +172,8 @@ const styles = StyleSheet.create({
     },
     descriptionText: {
         padding: 20,
-        color: '#fac882'
+        color: '#fff',
+        fontFamily: 'Raleway-Regular'
     }
 });
 
