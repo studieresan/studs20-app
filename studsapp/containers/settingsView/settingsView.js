@@ -1,15 +1,16 @@
 import React from 'react';
-import { 
-    StyleSheet, 
+import {
+    StyleSheet,
     Dimensions,
     View,
     Text,
-    Image
+    Image,
+    ImageBackground
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import Button from 'studsapp/generalComponents/button';
 
-const imageSource = 'studsapp/static/images/logo.png';
+const imageSource = 'studsapp/static/images/logo-small.png';
+const backgroundSource = 'studsapp/static/images/background.png';
 
 class SettingsView extends React.Component {
     logOut = () => {
@@ -19,20 +20,20 @@ class SettingsView extends React.Component {
 
     render() {
         return (
-            <LinearGradient colors={['#011660', '#002365', '#002f68', '#08396a', '#1c436a']} style={styles.wrapper}>
+            <ImageBackground source={require(backgroundSource)} style={styles.wrapper}>
                 <View style={styles.top}>
                     <Image source={require(imageSource)} style={styles.logo} />
                     <Text style={styles.title}>Settings</Text>
                 </View>
                 <View style={styles.middle}>
-                    <View style={{padding: 40}}>
+                    <View style={{ padding: 40 }}>
                         <Button text={'Log out'} onPress={() => this.logOut()} />
                     </View>
                 </View>
                 <View style={styles.bottom}>
                     <Text style={styles.version}>Studs App Version 0.0.1</Text>
                 </View>
-            </LinearGradient>
+            </ImageBackground>
         );
     }
 }
@@ -44,9 +45,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        color: '#fac882',
+        color: '#fff',
         fontSize: 30,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Raleway-Black'
     },
     logo: {
         alignSelf: 'center',
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: window.width,
         borderBottomWidth: 1,
-        borderBottomColor: '#1c436a',
+        borderBottomColor: '#b3d4d6',
     },
     middle: {
         flex: 0.7,
@@ -67,8 +69,9 @@ const styles = StyleSheet.create({
         flex: 0.05,
     },
     version: {
-        color: '#fac882',
-        fontSize: 12
+        color: '#fff',
+        fontSize: 12,
+        fontFamily: 'Raleway-Regular'
     }
 });
 
