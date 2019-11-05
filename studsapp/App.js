@@ -13,7 +13,7 @@ MapboxGL.setAccessToken(mapboxToken);
 export default class App extends React.Component {
     componentDidMount() {
         MapboxGL.setTelemetryEnabled(false);
-        changeNavigationBarColor('#fac882', true);
+        changeNavigationBarColor('#8ad0d2', true);
     }
 
     render() {
@@ -22,7 +22,8 @@ export default class App extends React.Component {
             <Provider store={createStore()}>
                 <View style={{ flex: 1 }}>
                     <StatusBar
-                        backgroundColor="#011660"
+                        backgroundColor="#rgba(255, 255, 255, 0)"
+                        translucent
                         barStyle="light-content"
                     />
                     <AppContainer />
