@@ -47,12 +47,10 @@ const LoggedInNavigator = createBottomTabNavigator(
             }
         }),
         tabBarOptions: {
-            activeTintColor: '#011660',
-            inactiveTintColor: '#c4a57a',
+            activeTintColor: '#387677',
+            inactiveTintColor: '#76a5a7',
             style: {
-                backgroundColor: '#fac882',
-                borderTopWidth: 2,
-                borderColor: '#c4a57a'
+                backgroundColor: '#8ad0d2'
             },
             showLabel: false
         }
