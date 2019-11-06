@@ -22,7 +22,7 @@ export default class App extends React.Component {
             <Provider store={createStore()}>
                 <View style={{ flex: 1 }}>
                     <StatusBar
-                        backgroundColor="#rgba(255, 255, 255, 0)"
+                        backgroundColor="rgba(255, 255, 255, 0)"
                         translucent
                         barStyle="light-content"
                     />
