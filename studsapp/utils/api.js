@@ -145,7 +145,6 @@ export const fetchEvents = async () => {
 
 const USER_PROFILE_FIELDS = `
   userRole
-  email
   firstName
   lastName
   phone
