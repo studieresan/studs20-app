@@ -27,6 +27,6 @@ export const getMembers = () => dispatch => {
     fetchUsers()
         .then(result => dispatch(fetchMembersSuccess(result)))
         .catch(error => {
-            dispatch(fetchMembersError('Unexpected error when retrieving member information. Please try again.'));
+            dispatch(fetchMembersError('Oväntat fel vid hämtning av medlemsinformation.'));
         });
 };
