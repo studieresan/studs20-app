@@ -8,9 +8,11 @@ import {
     ActivityIndicator,
     FlatList,
     Linking,
-    ImageBackground
+    ImageBackground,
+    TouchableHighlight
 } from 'react-native';
 import { isSuccess, isLoading, isInitial, isError } from 'studsapp/store/constants';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const imageSource = 'studsapp/static/images/logo-small.png';
 const backgroundSource = 'studsapp/static/images/background.png';
@@ -63,22 +65,13 @@ class MemberListView extends React.Component {
                                         <Text style={styles.memberNameText}>{item.profile.firstName + ' ' + item.profile.lastName}</Text>
                                     </View>
                                     <View style={styles.memberInfo}>
-                                        <Text
-                                            onPress={() => {
-                                                Linking.openURL('mailto:' + item.profile.email);
-                                            }}
-                                            style={styles.memberInfoText}
+                                        <TouchableHighlight
+                                            onPress={() => Linking.openURL('tel:' + item.profile.phone)}
+                                            underlayColor='rgba(255,255,255,0.0)'
+                                            style={styles.callIconButton}
                                         >
-                                            {item.profile.email}
-                                        </Text>
-                                        <Text
-                                            onPress={() => {
-                                                Linking.openURL('tel:' + item.profile.phone);
-                                            }}
-                                            style={styles.memberInfoText}
-                                        >
-                                            {item.profile.phone}
-                                        </Text>
+                                            <Icon name='ios-call' size={30} style={styles.callIcon} />
+                                        </TouchableHighlight>
                                     </View>
                                 </View>
                             }
@@ -132,18 +125,18 @@ const styles = StyleSheet.create({
     memberInfo: {
         alignSelf: 'center',
         flex: 0.6,
-        paddingRight: 15
+        paddingRight: 30
     },
     memberNameText: {
         color: '#fff',
         fontSize: 16,
         fontFamily: 'Raleway-Bold'
     },
-    memberInfoText: {
-        color: '#fff',
-        textAlign: 'right',
-        textDecorationLine: 'underline',
-        fontFamily: 'Raleway-Regular'
+    callIcon: {
+        color: '#fff'
+    },
+    callIconButton: {
+        alignItems: 'flex-end'
     },
     errorMessage: {
         color: '#fff',
