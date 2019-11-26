@@ -9,12 +9,14 @@ import {
     Linking,
     ScrollView,
     Platform,
-    ImageBackground
+    ImageBackground,
+    ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from 'studsapp/generalComponents/button';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { getDate } from 'studsapp/utils/utilityFunctions';
+import { isSuccess, isUpdating, isError } from 'studsapp/store/constants';
 
 const imageSource = 'studsapp/static/images/logo-small.png';
 const backgroundSource = 'studsapp/static/images/background.png'
@@ -47,65 +49,79 @@ class EventView extends React.Component {
                         <Icon name='ios-arrow-round-back' size={60} style={styles.backArrow} />
                     </TouchableHighlight>
                 </View>
-                <View style={styles.bottom}>
-                    <View style={styles.location}>
-                        <View style={styles.mapContainer}>
-                            <TouchableHighlight
-                                onPress={() => this.openMap()}
-                                underlayColor='rgba(255,255,255,0.0)'
-                                style={styles.map}
-                            >
-                                <MapboxGL.MapView
-                                    style={styles.map}
-                                    zoomEnabled={false}
-                                    scrollEnabled={false}
-                                    pitchEnabled={false}
-                                    rotateEnabled={false}
-                                >
-                                    <MapboxGL.Camera defaultSettings={{
-                                        centerCoordinate: event.coordinates,
-                                        zoomLevel: 13
-                                    }} />
-                                    <MapboxGL.PointAnnotation
-                                        id={'location'}
-                                        title={event.location}
-                                        coordinate={event.coordinates}
-                                    />
-                                </MapboxGL.MapView>
-                            </TouchableHighlight>
-
-                        </View>
-                        <Text style={styles.whenInformation}>{event.location}</Text>
-                        <Text style={styles.whenInformation}>{getDate(event.date)}</Text>
+                {isUpdating(this.props.events) &&
+                    <View style={{ padding: 50 }}>
+                        <ActivityIndicator size='large' color='#fff' />
                     </View>
-                    {event.privateDescription.length > 0 &&
-                        <View style={styles.description}>
-                            <ScrollView>
-                                <Text style={styles.descriptionText}>{event.privateDescription}</Text>
-                            </ScrollView>
+                }
+                {isError(this.props.events) &&
+                    <View style={{ padding: 50 }}>
+                        <Text style={styles.errorMessage}>{this.props.events.error}</Text>
+                    </View>
+                }
+                {isSuccess(this.props.events) &&
+                    <View style={styles.bottom}>
+                        <View style={styles.location}>
+                            <View style={styles.mapContainer}>
+                                <TouchableHighlight
+                                    onPress={() => this.openMap()}
+                                    underlayColor='rgba(255,255,255,0.0)'
+                                    style={styles.map}
+                                >
+                                    <MapboxGL.MapView
+                                        style={styles.map}
+                                        zoomEnabled={false}
+                                        scrollEnabled={false}
+                                        pitchEnabled={false}
+                                        rotateEnabled={false}
+                                    >
+                                        <MapboxGL.Camera defaultSettings={{
+                                            centerCoordinate: event.coordinates,
+                                            zoomLevel: 13
+                                        }} />
+                                        <MapboxGL.PointAnnotation
+                                            id={'location'}
+                                            title={event.location}
+                                            coordinate={event.coordinates}
+                                        />
+                                    </MapboxGL.MapView>
+                                </TouchableHighlight>
+
+                            </View>
+                            <Text style={styles.whenInformation}>{event.location}</Text>
+                            <Text style={styles.whenInformation}>{getDate(event.date)}</Text>
                         </View>
-                    }
-                    {(event.beforeSurveys.length > 0 || event.afterSurveys.length > 0) &&
-                        <View>
-                            {event.beforeSurveys.length > 0 &&
-                                <Button
-                                    text={'Pre-eventformulär'}
-                                    onPress={() => {
-                                        Linking.openURL(event.beforeSurveys[0]);
-                                    }}
-                                />
-                            }
-                            {event.afterSurveys.length > 0 &&
-                                <Button
-                                    text={'Post-eventformulär'}
-                                    onPress={() => {
-                                        Linking.openURL(event.afterSurveys[0]);
-                                    }}
-                                />
-                            }
-                        </View>
-                    }
-                </View>
+                        {
+                            event.privateDescription.length > 0 &&
+                            <View style={styles.description}>
+                                <ScrollView>
+                                    <Text style={styles.descriptionText}>{event.privateDescription}</Text>
+                                </ScrollView>
+                            </View>
+                        }
+                        {
+                            (event.beforeSurveys.length > 0 || event.afterSurveys.length > 0) &&
+                            <View>
+                                {event.beforeSurveys.length > 0 &&
+                                    <Button
+                                        text={'Pre-eventformulär'}
+                                        onPress={() => {
+                                            Linking.openURL(event.beforeSurveys[0]);
+                                        }}
+                                    />
+                                }
+                                {event.afterSurveys.length > 0 &&
+                                    <Button
+                                        text={'Post-eventformulär'}
+                                        onPress={() => {
+                                            Linking.openURL(event.afterSurveys[0]);
+                                        }}
+                                    />
+                                }
+                            </View>
+                        }
+                    </View>
+                }
             </ImageBackground>
         );
     }
@@ -174,7 +190,14 @@ const styles = StyleSheet.create({
         padding: 20,
         color: '#fff',
         fontFamily: 'Raleway-Regular'
-    }
+    },
+    errorMessage: {
+        color: '#fff',
+        fontSize: 16,
+        marginVertical: 5,
+        textAlign: 'center',
+        fontFamily: 'Raleway-Regular'
+    },
 });
 
 export default EventView;

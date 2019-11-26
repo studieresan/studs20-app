@@ -79,6 +79,21 @@ const executeGraphQLRequest = async (query) => {
         .then(response => response.json());
 };
 
+const executeGraphQLMutation = async (query) => {
+    const authorization = await authorizationHeader();
+    return fetch(BASE_URL + GRAPHQL, {
+        method: 'POST',
+        ...credentials,
+        headers: {
+            ...authorization,
+            ...jsonHeader
+        },
+        body: query
+    })
+        .then(checkStatus)
+        .then(response => response.json());
+};
+
 const executeLoginRequest = (body) =>
     fetch(BASE_URL + LOGIN, {
         method: 'POST',
@@ -100,11 +115,7 @@ const EVENT_FIELDS = `
   company {
       name
   }
-  privateDescription
   date
-  beforeSurveys
-  afterSurveys
-  location
 `;
 
 export const fetchEvents = async () => {
@@ -113,10 +124,6 @@ export const fetchEvents = async () => {
             ${EVENT_FIELDS}
         }
     }`;
-    const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
-    const geocodingService = mbxGeocoding({
-        accessToken: mapboxToken
-    });
     const result = await executeGraphQLRequest(query);
     let events = result.data.allEvents;
     events = events.map(event => ({
@@ -127,21 +134,57 @@ export const fetchEvents = async () => {
         ...event,
         companyName: event.company.name
     }));
-    events = await Promise.all(events.map(async (event) => {
-        const coordinatesResponse = await geocodingService.forwardGeocode({
-            query: event.location,
-            limit: 1,
-        }).send();
-        const coordinates = coordinatesResponse.body.features[0].geometry.coordinates;
-        return {
-            ...event,
-            coordinates: coordinates
-        };
-    }));
     const eventMap = {};
     events.forEach(event => eventMap[event.id] = event);
     return eventMap;
 };
+
+const EVENT_DETAILS_FIELDS = `
+    id
+    privateDescription
+    beforeSurveys
+    afterSurveys
+    location
+    notCheckedInUsers {
+        id
+    }
+    checkedInUsers {
+        id
+    }
+`;
+
+export const fetchEventDetails = async (eventId) => {
+    const query = `query {
+        event (eventId: "${eventId}") {
+            ${EVENT_DETAILS_FIELDS}
+        }
+    }`;
+    const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+    const geocodingService = mbxGeocoding({
+        accessToken: mapboxToken
+    });
+    const result = await executeGraphQLRequest(query);
+    const event = result.data.event;
+    const coordinatesResponse = await geocodingService.forwardGeocode({
+        query: event.location,
+        limit: 1,
+    }).send();
+    const coordinates = coordinatesResponse.body.features[0].geometry.coordinates;
+    return {
+        ...event,
+        coordinates: coordinates
+    };
+};
+
+//TODO: Expand to redux
+export const checkIn = async (eventID) => {
+    const mutation = `
+        mutation {
+            checkIn(eventId: ${eventID})
+        }
+    `;
+    const result = await executeGraphQLMutation(mutation);
+}
 
 const USER_PROFILE_FIELDS = `
   userRole

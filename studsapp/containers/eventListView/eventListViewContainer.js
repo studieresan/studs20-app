@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import EventListView from './eventListView'
-import { getEvents } from 'studsapp/store/eventList/actions';
+import { getEvents, getEventDetails } from 'studsapp/store/eventList/actions';
 
 const mapStateToProps = (state) => {
     return {
@@ -10,7 +10,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getEvents: () => dispatch(getEvents())
+        getEvents: () => dispatch(getEvents()),
+        getEventDetails: (eventId) => dispatch(getEventDetails(eventId))
     }
 };
 

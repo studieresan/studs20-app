@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import EventView from './eventView'
+import EventView from './eventView';
+import { getEventDetails } from 'studsapp/store/eventList/actions';
 
 const mapStateToProps = (state) => {
     return {
@@ -9,6 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        getEventDetails: (eventId) => dispatch(getEventDetails(eventId))
     }
 };
 
