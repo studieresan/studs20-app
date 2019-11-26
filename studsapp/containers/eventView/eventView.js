@@ -15,7 +15,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from 'studsapp/generalComponents/button';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import { getDate } from 'studsapp/utils/utilityFunctions';
+import { getDate, minuteDifference } from 'studsapp/utils/utilityFunctions';
 import { isSuccess, isUpdating, isError } from 'studsapp/store/constants';
 
 const imageSource = 'studsapp/static/images/logo-small.png';
@@ -91,6 +91,23 @@ class EventView extends React.Component {
                             <Text style={styles.whenInformation}>{event.location}</Text>
                             <Text style={styles.whenInformation}>{getDate(event.date)}</Text>
                         </View>
+                        {true/*minuteDifference(event.date, Date.now()) <= 60*/ &&
+                            <TouchableHighlight
+                                style={styles.checkIn}
+                                onPress={() => {
+                                    this.props.navigation.navigate('CheckIn', {
+                                        eventID: this.props.navigation.getParam('eventID')
+                                    });
+                                }
+                                }
+                                underlayColor='rgba(255,255,255,0.3)'
+                            >
+                                <View style={styles.row}>
+                                    <Text style={styles.checkInText}>{'Incheckning'}</Text>
+                                    <Icon name='ios-arrow-forward' size={20} style={styles.checkInArrow} />
+                                </View>
+                            </TouchableHighlight>
+                        }
                         {
                             event.privateDescription.length > 0 &&
                             <View style={styles.description}>
@@ -181,6 +198,29 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#fff',
         fontFamily: 'Raleway-Regular'
+    },
+    checkIn: {
+        width: window.width,
+        borderBottomWidth: 1,
+        borderBottomColor: '#b3d4d6',
+        borderTopWidth: 1,
+        borderTopColor: '#b3d4d6',
+        paddingVertical: 15,
+        paddingLeft: 30,
+    },
+    row: {
+        flexDirection: 'row'
+    },
+    checkInText: {
+        color: '#fff',
+        fontSize: 20,
+        flex: 0.9,
+        fontFamily: 'Raleway-Regular'
+    },
+    checkInArrow: {
+        color: '#fff',
+        flex: 0.1,
+        paddingTop: 2
     },
     description: {
         flex: 1,
