@@ -95,7 +95,7 @@ class EventView extends React.Component {
                             <Text style={styles.whenInformation}>{event.location}</Text>
                             <Text style={styles.whenInformation}>{getDate(event.date)}</Text>
                         </View>
-                        {true/*minuteDifference(event.date, Date.now()) <= 60*/ &&
+                        {minuteDifference(event.date, Date.now()) <= 60 &&
                             <TouchableHighlight
                                 style={styles.checkIn}
                                 onPress={() => {
