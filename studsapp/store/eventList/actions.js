@@ -6,7 +6,7 @@ import {
     EVENTS_UPDATE_SUCCESS
 } from './constants';
 
-import { fetchEvents, fetchEventDetails, fetchCheckInDetails } from 'studsapp/utils/api';
+import { fetchEvents, fetchEventDetails, fetchCheckInDetails, postCheckIn } from 'studsapp/utils/api';
 
 //actions
 export const fetchEventsRequest = () => ({
@@ -62,3 +62,12 @@ export const getCheckInDetails = (eventId) => dispatch => {
             dispatch(fetchEventsError('Oväntat fel vid hämtning av eventinformation.'));
         })
 };
+
+export const checkIn = (eventId) => dispatch => {
+    return postCheckIn(eventId)
+        .then(result => result.data.checkIn)
+        .catch(error => {
+            console.log(error);
+            dispatch(fetchEventsError('Oväntat fel vid incheckning.'));
+        })
+}

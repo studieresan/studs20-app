@@ -79,21 +79,6 @@ const executeGraphQLRequest = async (query) => {
         .then(response => response.json());
 };
 
-const executeGraphQLMutation = async (query) => {
-    const authorization = await authorizationHeader();
-    return fetch(BASE_URL + GRAPHQL, {
-        method: 'POST',
-        ...credentials,
-        headers: {
-            ...authorization,
-            ...jsonHeader
-        },
-        body: query
-    })
-        .then(checkStatus)
-        .then(response => response.json());
-};
-
 const executeLoginRequest = (body) =>
     fetch(BASE_URL + LOGIN, {
         method: 'POST',
@@ -190,14 +175,14 @@ export const fetchCheckInDetails = async (eventId) => {
     return result.data.event;
 };
 
-//TODO: Expand to redux
-export const checkIn = async (eventID) => {
+export const postCheckIn = async (eventID) => {
     const mutation = `
         mutation {
-            checkIn(eventId: ${eventID})
+            checkIn(eventId: "${eventID}")
         }
     `;
-    const result = await executeGraphQLMutation(mutation);
+    const result = await executeGraphQLRequest(mutation);
+    return result;
 }
 
 const USER_PROFILE_FIELDS = `

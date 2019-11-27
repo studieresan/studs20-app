@@ -11,7 +11,7 @@ import {
     FlatList
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { isSuccess, isUpdating, isError, isLoading } from 'studsapp/store/constants';
+import { hasData, isSuccess, isUpdating, isError, isLoading } from 'studsapp/store/constants';
 import Button from 'studsapp/generalComponents/button';
 
 const imageSource = 'studsapp/static/images/logo-small.png';
@@ -39,6 +39,35 @@ class CheckInView extends React.Component {
         });
     };
 
+    hasCheckInData = () => {
+        const event = this.getEvent();
+        if (event !== undefined) {
+            return event.checkedInUsers !== undefined && event.notCheckedInUsers !== undefined;
+        }
+        return false;
+    }
+
+    checkIn = async (eventId) => {
+        const checkedIn = await this.props.checkIn(eventId);
+        if (checkedIn) {
+            await this.props.getCheckInDetails(eventId);
+        }
+    }
+
+    userCheckedIn = () => {
+        const event = this.getEvent();
+        const userID = this.getLoggedInUserID();
+        let foundUser = false;
+        if (this.hasCheckInData()) {
+            event.checkedInUsers.forEach(user => {
+                if (user.id === userID) {
+                    foundUser = true;
+                }
+            });
+        }
+        return foundUser;
+    }
+
     render() {
         const event = this.getEvent();
         return (
@@ -54,22 +83,21 @@ class CheckInView extends React.Component {
                         <Icon name='ios-arrow-round-back' size={60} style={styles.backArrow} />
                     </TouchableHighlight>
                 </View>
-                {(isUpdating(this.props.events) || isLoading(this.props.members)) &&
-                    <View style={{ padding: 50 }}>
-                        <ActivityIndicator size='large' color='#fff' />
-                    </View>
-                }
-                {isError(this.props.events) &&
-                    <View style={{ padding: 50 }}>
-                        <Text style={styles.errorMessage}>{this.props.events.error}</Text>
+                {(isLoading(this.props.members)) &&
+                    <View style={styles.bottom}>
+                        <View style={{ padding: 50 }}>
+                            <ActivityIndicator size='large' color='#fff' />
+                        </View>
                     </View>
                 }
                 {isError(this.props.members) &&
-                    <View style={{ padding: 50 }}>
-                        <Text style={styles.errorMessage}>{this.props.members.error}</Text>
+                    <View style={styles.bottom}>
+                        <View style={{ padding: 50 }}>
+                            <Text style={styles.errorMessage}>{this.props.members.error}</Text>
+                        </View>
                     </View>
                 }
-                {isSuccess(this.props.events) && isSuccess(this.props.members) &&
+                {hasData(this.props.events) && hasData(this.props.members) && this.hasCheckInData() &&
                     <View style={styles.bottom}>
                         <View style={styles.row}>
                             <View style={styles.notCheckedIn}>
@@ -119,14 +147,31 @@ class CheckInView extends React.Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={styles.buttonView}>
-                            <Button
-                                text={'Checka in'}
-                                onPress={() => {
-                                    //TODO: Check in API call
-                                }}
-                            />
-                        </View>
+                        {isUpdating(this.props.events) &&
+                            <View style={styles.buttonView}>
+                                <View style={{ padding: 50 }}>
+                                    <ActivityIndicator size='large' color='#fff' />
+                                </View>
+                            </View>
+                        }
+                        {isError(this.props.events) &&
+                            <View style={styles.buttonView}>
+                                <View style={{ padding: 50 }}>
+                                    <Text style={styles.errorMessage}>{this.props.events.error}</Text>
+                                </View>
+                            </View>
+                        }
+                        {isSuccess(this.props.events) && !this.userCheckedIn() &&
+                            <View style={styles.buttonView}>
+                                <Button
+                                    text={'Checka in'}
+                                    onPress={() => {
+                                        const event = this.getEvent();
+                                        this.checkIn(event.id);
+                                    }}
+                                />
+                            </View>
+                        }
                     </View>
                 }
             </ImageBackground>
@@ -188,10 +233,8 @@ const styles = StyleSheet.create({
     listTitle: {
         textAlign: 'center',
         color: '#fff',
-        fontFamily: 'RaleWay-Regular',
+        fontFamily: 'Raleway-Regular',
         fontSize: 18,
-        borderBottomWidth: 1,
-        borderBottomColor: '#fff',
         flex: 0.1,
         marginTop: 10
     },
@@ -214,18 +257,27 @@ const styles = StyleSheet.create({
     userCheckInText: {
         textAlign: 'center',
         color: '#fff',
-        fontFamily: 'Raleway-Bold'
+        fontFamily: 'Raleway-Bold',
+        fontSize: 14
     },
     checkInText: {
         textAlign: 'center',
         color: '#fff',
-        fontFamily: 'Raleway-Regular'
+        fontFamily: 'Raleway-Regular',
+        fontSize: 12
     },
     buttonView: {
         flex: 0.25,
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+    errorMessage: {
+        color: '#fff',
+        fontSize: 16,
+        marginVertical: 5,
+        textAlign: 'center',
+        fontFamily: 'Raleway-Regular'
+    },
 });
 
 export default CheckInView;

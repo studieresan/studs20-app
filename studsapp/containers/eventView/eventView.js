@@ -50,13 +50,17 @@ class EventView extends React.Component {
                     </TouchableHighlight>
                 </View>
                 {isUpdating(this.props.events) &&
-                    <View style={{ padding: 50 }}>
-                        <ActivityIndicator size='large' color='#fff' />
+                    <View style={styles.bottom}>
+                        <View style={{ padding: 50 }}>
+                            <ActivityIndicator size='large' color='#fff' />
+                        </View>
                     </View>
                 }
                 {isError(this.props.events) &&
-                    <View style={{ padding: 50 }}>
-                        <Text style={styles.errorMessage}>{this.props.events.error}</Text>
+                    <View style={styles.bottom}>
+                        <View style={{ padding: 50 }}>
+                            <Text style={styles.errorMessage}>{this.props.events.error}</Text>
+                        </View>
                     </View>
                 }
                 {isSuccess(this.props.events) &&

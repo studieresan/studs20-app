@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import CheckInView from './checkInView';
-import { getEventDetails } from 'studsapp/store/eventList/actions';
+import { getCheckInDetails, checkIn } from 'studsapp/store/eventList/actions';
 
 const mapStateToProps = (state) => {
     return {
@@ -12,7 +12,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getCheckInDetails: (eventId) => dispatch(getCheckInDetails(eventId))
+        getCheckInDetails: (eventId) => dispatch(getCheckInDetails(eventId)),
+        checkIn: (eventId) => dispatch(checkIn(eventId))
     }
 };
 
