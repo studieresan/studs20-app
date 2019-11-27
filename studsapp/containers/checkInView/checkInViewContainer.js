@@ -4,13 +4,15 @@ import { getEventDetails } from 'studsapp/store/eventList/actions';
 
 const mapStateToProps = (state) => {
     return {
-        events: state.events
+        events: state.events,
+        members: state.members,
+        login: state.global.login
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getEventDetails: (eventId) => dispatch(getEventDetails(eventId))
+        getCheckInDetails: (eventId) => dispatch(getCheckInDetails(eventId))
     }
 };
 

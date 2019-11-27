@@ -145,12 +145,6 @@ const EVENT_DETAILS_FIELDS = `
     beforeSurveys
     afterSurveys
     location
-    notCheckedInUsers {
-        id
-    }
-    checkedInUsers {
-        id
-    }
 `;
 
 export const fetchEventDetails = async (eventId) => {
@@ -174,6 +168,26 @@ export const fetchEventDetails = async (eventId) => {
         ...event,
         coordinates: coordinates
     };
+};
+
+const CHECK_IN_DETAILS = `
+    id
+    notCheckedInUsers {
+        id
+    }
+    checkedInUsers {
+        id
+    }
+`;
+
+export const fetchCheckInDetails = async (eventId) => {
+    const query = `query {
+        event (eventId: "${eventId}") {
+            ${CHECK_IN_DETAILS}
+        }
+    }`;
+    const result = await executeGraphQLRequest(query);
+    return result.data.event;
 };
 
 //TODO: Expand to redux

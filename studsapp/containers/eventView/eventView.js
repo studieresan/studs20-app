@@ -95,8 +95,15 @@ class EventView extends React.Component {
                             <TouchableHighlight
                                 style={styles.checkIn}
                                 onPress={() => {
+                                    const eventId = this.props.navigation.getParam('eventID');
+                                    this.props.getCheckInDetails(eventId);
+
+                                    if (!isSuccess(this.props.members)) {
+                                        this.props.getMembers();
+                                    }
+
                                     this.props.navigation.navigate('CheckIn', {
-                                        eventID: this.props.navigation.getParam('eventID')
+                                        eventID: eventId
                                     });
                                 }
                                 }
