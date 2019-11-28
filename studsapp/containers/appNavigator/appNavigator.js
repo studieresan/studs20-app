@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import LoginView from 'studsapp/containers/loginView/loginViewContainer';
 import EventListView from 'studsapp/containers/eventListView/eventListViewContainer';
 import EventView from 'studsapp/containers/eventView/eventViewContainer';
+import CheckInView from 'studsapp/containers/checkInView/checkInViewContainer';
 import AuthenticationView from 'studsapp/containers/authenticationView/authenticationViewContainer';
 import SettingsView from 'studsapp/containers/settingsView/settingsViewContainer';
 import MemberListView from 'studsapp/containers/memberListView/memberListViewContainer';
@@ -13,7 +14,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const EventsNavigator = createStackNavigator(
     {
         EventList: EventListView,
-        Event: EventView
+        Event: EventView,
+        CheckIn: CheckInView
     },
     {
         initialRouteName: 'EventList',

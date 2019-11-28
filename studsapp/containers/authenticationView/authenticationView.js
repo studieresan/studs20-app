@@ -17,10 +17,11 @@ class AuthenticationView extends React.Component {
 
     findTokenAndNavigate = async () => {
         const token = await retrieveData('token');
-        if (token) {
-            this.props.setLoginToken(token);
+        const id = await retrieveData('id');
+        if (token && id) {
+            this.props.setLoginDetails(token, id);
         }
-        this.props.navigation.navigate(token ? 'LoggedIn' : 'Login');
+        this.props.navigation.navigate(token && id ? 'LoggedIn' : 'Login');
     }
 
     render() {

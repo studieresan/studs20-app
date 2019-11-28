@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        removeLoginToken: () => dispatch(setInitialLoginState())
+        removeLoginDetails: () => dispatch(setInitialLoginState())
     };
 };
 

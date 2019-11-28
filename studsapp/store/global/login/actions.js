@@ -30,13 +30,14 @@ export const loginInitial = () => ({
 //thunks
 export const setInitialLoginState = () => dispatch => {
     removeData('token')
+        .then(result => removeData('id'))
         .then(result => dispatch(loginInitial()));
 }
 
 export const attemptLogin = (email, password) => dispatch => {
     dispatch(loginRequest());
     apiLogin({ email, password })
-        .then(result => dispatch(loginSuccess({ success: true, token: result.token })))
+        .then(result => dispatch(loginSuccess({ success: true, token: result.token, id: result.id })))
         .catch(error => {
             if (error.status === 401) {
                 dispatch(loginSuccess({ success: false }));

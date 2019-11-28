@@ -14,7 +14,7 @@ const backgroundSource = 'studsapp/static/images/background.png';
 
 class SettingsView extends React.Component {
     logOut = () => {
-        this.props.removeLoginToken();
+        this.props.removeLoginDetails();
         this.props.navigation.navigate('Login');
     }
 

@@ -23,10 +23,11 @@ export const fetchMembersError = (errorString) => ({
 
 //thunks
 export const getMembers = () => dispatch => {
-    dispatch(fetchMembersRequest);
+    dispatch(fetchMembersRequest());
     fetchUsers()
         .then(result => dispatch(fetchMembersSuccess(result)))
         .catch(error => {
+            console.log(error);
             dispatch(fetchMembersError('Oväntat fel vid hämtning av medlemsinformation.'));
         });
 };

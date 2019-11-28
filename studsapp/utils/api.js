@@ -100,11 +100,7 @@ const EVENT_FIELDS = `
   company {
       name
   }
-  privateDescription
   date
-  beforeSurveys
-  afterSurveys
-  location
 `;
 
 export const fetchEvents = async () => {
@@ -113,10 +109,6 @@ export const fetchEvents = async () => {
             ${EVENT_FIELDS}
         }
     }`;
-    const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
-    const geocodingService = mbxGeocoding({
-        accessToken: mapboxToken
-    });
     const result = await executeGraphQLRequest(query);
     let events = result.data.allEvents;
     events = events.map(event => ({
@@ -127,21 +119,71 @@ export const fetchEvents = async () => {
         ...event,
         companyName: event.company.name
     }));
-    events = await Promise.all(events.map(async (event) => {
-        const coordinatesResponse = await geocodingService.forwardGeocode({
-            query: event.location,
-            limit: 1,
-        }).send();
-        const coordinates = coordinatesResponse.body.features[0].geometry.coordinates;
-        return {
-            ...event,
-            coordinates: coordinates
-        };
-    }));
     const eventMap = {};
     events.forEach(event => eventMap[event.id] = event);
     return eventMap;
 };
+
+const EVENT_DETAILS_FIELDS = `
+    id
+    privateDescription
+    beforeSurveys
+    afterSurveys
+    location
+`;
+
+export const fetchEventDetails = async (eventId) => {
+    const query = `query {
+        event (eventId: "${eventId}") {
+            ${EVENT_DETAILS_FIELDS}
+        }
+    }`;
+    const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+    const geocodingService = mbxGeocoding({
+        accessToken: mapboxToken
+    });
+    const result = await executeGraphQLRequest(query);
+    const event = result.data.event;
+    const coordinatesResponse = await geocodingService.forwardGeocode({
+        query: event.location,
+        limit: 1,
+    }).send();
+    const coordinates = coordinatesResponse.body.features[0].geometry.coordinates;
+    return {
+        ...event,
+        coordinates: coordinates
+    };
+};
+
+const CHECK_IN_DETAILS = `
+    id
+    notCheckedInUsers {
+        id
+    }
+    checkedInUsers {
+        id
+    }
+`;
+
+export const fetchCheckInDetails = async (eventId) => {
+    const query = `query {
+        event (eventId: "${eventId}") {
+            ${CHECK_IN_DETAILS}
+        }
+    }`;
+    const result = await executeGraphQLRequest(query);
+    return result.data.event;
+};
+
+export const postCheckIn = async (eventID) => {
+    const mutation = `
+        mutation {
+            checkIn(eventId: "${eventID}")
+        }
+    `;
+    const result = await executeGraphQLRequest(mutation);
+    return result;
+}
 
 const USER_PROFILE_FIELDS = `
   userRole

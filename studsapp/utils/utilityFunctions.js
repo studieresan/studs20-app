@@ -4,5 +4,14 @@ export const getDate = (date) => {
     const monthString = month < 10 ? '0' + month : month;
     const day = date.getDate();
     const dayString = day < 10 ? '0' + day : day;
-    return year + '-' + monthString + '-' + dayString;
+    const hour = date.getHours();
+    const hourString = hour < 10 ? '0' + hour : hour;
+    const minute = date.getMinutes();
+    return year + '-' + monthString + '-' + dayString + " " + hourString + ":" + minute;
+}
+
+export const minuteDifference = (firstDate, secondDate) => {
+    const difference = firstDate - secondDate;
+    const minutes = Math.floor(difference / 1000 / 60);
+    return minutes;
 }

@@ -43,7 +43,7 @@ class LoginView extends React.Component {
                 case status.SUCCESS:
                     if (this.props.login.data.success) {
                         this.setState({ errorMessage: '' });
-                        this.storeToken(this.props.login.data.token);
+                        this.storeLoginDetails(this.props.login.data);
                         this.props.navigation.navigate('LoggedIn');
                     } else {
                         this.setState({ errorMessage: 'Email-addressen eller lösenordet är ogiltigt.' });
@@ -56,9 +56,10 @@ class LoginView extends React.Component {
         }
     }
 
-    storeToken = async (token) => {
-        const success = await storeData('token', token);
-        return success;
+    storeLoginDetails = async (data) => {
+        const tokenSuccess = await storeData('token', data.token);
+        const idSuccess = await storeData('id', data.id);
+        return tokenSuccess && idSuccess;
     }
 
     login = () => {

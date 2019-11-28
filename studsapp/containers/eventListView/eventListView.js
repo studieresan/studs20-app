@@ -53,9 +53,13 @@ class EventListView extends React.Component {
                 renderItem={({ item }) =>
                     <TouchableHighlight
                         style={styles.event}
-                        onPress={() => this.props.navigation.navigate('Event', {
-                            eventID: item.id
-                        })}
+                        onPress={() => {
+                            this.props.navigation.navigate('Event', {
+                                eventID: item.id
+                            });
+                            this.props.getEventDetails(item.id);
+                        }
+                        }
                         underlayColor='rgba(255,255,255,0.3)'
                     >
                         <View style={styles.row}>
