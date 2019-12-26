@@ -11,6 +11,7 @@ import {
     ImageBackground
 } from 'react-native';
 import { isLoading, isError, isInitial } from 'studsapp/store/constants';
+import { minuteDifference } from 'studsapp/utils/utilityFunctions';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const imageSource = 'studsapp/static/images/logo-small.png';
@@ -31,6 +32,25 @@ class EventListView extends React.Component {
         return eventList.sort((a, b) => a.date < b.date);
     };
 
+    getNextEvent = () => {
+        const events = this.getEventsToList();
+
+        let minimumMinuteDifference = Number.MAX_SAFE_INTEGER;
+        let nextEvent = undefined;
+        const date = Date.now();
+
+        //Find next event, but include events that were held up to a day before
+        events.forEach(event => {
+            const minutesUntilEvent = minuteDifference(event.date, date);
+            const oneDayInMinutes = 1440;
+            if (Math.abs(minutesUntilEvent) < Math.abs(minimumMinuteDifference) && minutesUntilEvent >= -oneDayInMinutes) {
+                minimumMinuteDifference = minutesUntilEvent;
+                nextEvent = event;
+            }
+        });
+        return nextEvent;
+    }
+
     renderBottom = () => {
         if (isLoading(this.props.events) || isInitial(this.props.events)) {
             return (
@@ -46,29 +66,53 @@ class EventListView extends React.Component {
             );
         }
 
+        const nextEvent = this.getNextEvent();
         return (
-            <FlatList
-                data={this.getEventsToList()}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) =>
+            <View style={styles.wrapper}>
+                <View style={styles.nextEventWrapper}>
+                    <Text style={styles.nextEventText}>{'Nästa event'}</Text>
                     <TouchableHighlight
-                        style={styles.event}
+                        style={styles.nextEvent}
                         onPress={() => {
                             this.props.navigation.navigate('Event', {
-                                eventID: item.id
+                                eventID: nextEvent.id
                             });
-                            this.props.getEventDetails(item.id);
+                            this.props.getEventDetails(nextEvent.id);
                         }
                         }
                         underlayColor='rgba(255,255,255,0.3)'
                     >
                         <View style={styles.row}>
-                            <Text style={styles.eventText}>{item.companyName}</Text>
+                            <Text style={styles.eventText}>{nextEvent.companyName}</Text>
                             <Icon name='ios-arrow-forward' size={20} style={styles.eventArrow} />
                         </View>
                     </TouchableHighlight>
-                }
-            />
+                </View>
+                <View style={styles.bottom}>
+                    <FlatList
+                        data={this.getEventsToList()}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) =>
+                            <TouchableHighlight
+                                style={styles.event}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Event', {
+                                        eventID: item.id
+                                    });
+                                    this.props.getEventDetails(item.id);
+                                }
+                                }
+                                underlayColor='rgba(255,255,255,0.3)'
+                            >
+                                <View style={styles.row}>
+                                    <Text style={styles.eventText}>{item.companyName}</Text>
+                                    <Icon name='ios-arrow-forward' size={20} style={styles.eventArrow} />
+                                </View>
+                            </TouchableHighlight>
+                        }
+                    />
+                </View>
+            </View>
         );
     }
 
@@ -113,6 +157,30 @@ const styles = StyleSheet.create({
     },
     bottom: {
         flex: 0.75,
+    },
+    nextEventWrapper: {
+        flex: 0.25,
+        width: window.width,
+        borderBottomWidth: 1,
+        borderBottomColor: '#b3d4d6',
+    },
+    nextEventText: {
+        color: '#fff',
+        fontSize: 20,
+        fontFamily: 'Raleway-Regular',
+        alignSelf: 'center',
+        textAlign: 'center',
+        marginTop: 10,
+        marginBottom: 10
+    },
+    nextEvent: {
+        width: window.width,
+        borderTopWidth: 1,
+        borderTopColor: '#b3d4d6',
+        borderBottomWidth: 1,
+        borderBottomColor: '#b3d4d6',
+        paddingVertical: 15,
+        paddingLeft: 30,
     },
     event: {
         width: window.width,
