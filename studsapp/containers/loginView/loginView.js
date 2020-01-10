@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: Platform.OS === 'android' ? 25 : 0
     },
     logo: {
         height: window.height / 4,
