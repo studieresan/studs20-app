@@ -8,7 +8,8 @@ import {
     Image,
     ImageBackground,
     ActivityIndicator,
-    FlatList
+    FlatList,
+    RefreshControl
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { hasData, isSuccess, isUpdating, isError, isLoading } from 'studsapp/store/constants';
@@ -31,6 +32,10 @@ class CheckInView extends React.Component {
 
     getEvent = () => {
         return this.props.events.data[this.props.navigation.getParam('eventID')];
+    }
+
+    getCheckInDetails = () => {
+        this.props.getCheckInDetails(this.props.navigation.getParam('eventID'));
     }
 
     getLoggedInUserID = () => {
@@ -131,6 +136,15 @@ class CheckInView extends React.Component {
                                                 }
                                             </View>
                                         }
+                                        refreshControl={
+                                            <RefreshControl
+                                                refreshing={false}
+                                                onRefresh={this.getCheckInDetails}
+                                                colors={['#387677']}
+                                                progressBackgroundColor={'#8ad0d2'}
+                                                tintColor={'#fff'}
+                                            />
+                                        }
                                     />
                                 </View>
                             </View>
@@ -153,6 +167,15 @@ class CheckInView extends React.Component {
                                                     </Text>
                                                 }
                                             </View>
+                                        }
+                                        refreshControl={
+                                            <RefreshControl
+                                                refreshing={false}
+                                                onRefresh={this.getCheckInDetails}
+                                                colors={['#387677']}
+                                                progressBackgroundColor={'#8ad0d2'}
+                                                tintColor={'#fff'}
+                                            />
                                         }
                                     />
                                 </View>

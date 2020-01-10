@@ -8,7 +8,8 @@ import {
     TouchableHighlight,
     Image,
     ActivityIndicator,
-    ImageBackground
+    ImageBackground,
+    RefreshControl
 } from 'react-native';
 import { isLoading, isError, isInitial } from 'studsapp/store/constants';
 import { minuteDifference } from 'studsapp/utils/utilityFunctions';
@@ -114,6 +115,15 @@ class EventListView extends React.Component {
                                     <Icon name='ios-arrow-forward' size={20} style={styles.eventArrow} />
                                 </View>
                             </TouchableHighlight>
+                        }
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={false}
+                                onRefresh={this.props.getEvents}
+                                colors={['#387677']}
+                                progressBackgroundColor={'#8ad0d2'}
+                                tintColor={'#fff'}
+                            />
                         }
                     />
                 </View>
