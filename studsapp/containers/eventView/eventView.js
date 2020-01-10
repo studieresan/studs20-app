@@ -22,6 +22,14 @@ const imageSource = 'studsapp/static/images/logo-small.png';
 const backgroundSource = 'studsapp/static/images/background.png'
 
 class EventView extends React.Component {
+    componentDidMount() {
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            if(isError(this.props.events)) {
+                this.props.getEventDetails(this.props.navigation.getParam('eventID'));
+            }
+        });
+    }
+
     getEvent = () => {
         return this.props.events.data[this.props.navigation.getParam('eventID')];
     }
