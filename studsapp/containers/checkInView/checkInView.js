@@ -18,6 +18,17 @@ const imageSource = 'studsapp/static/images/logo-small.png';
 const backgroundSource = 'studsapp/static/images/background.png'
 
 class CheckInView extends React.Component {
+    componentDidMount() {
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            if(isError(this.props.events)) {
+                this.props.getCheckInDetails(this.props.navigation.getParam('eventID'));
+            }
+            if(isError(this.props.members)) {
+                this.props.getMembers();
+            }
+        });
+    }
+
     getEvent = () => {
         return this.props.events.data[this.props.navigation.getParam('eventID')];
     }

@@ -20,6 +20,11 @@ const backgroundSource = 'studsapp/static/images/background.png';
 class MemberListView extends React.Component {
     componentDidMount() {
         this.props.getMembers();
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            if(isError(this.props.members)) {
+                this.props.getMembers();
+            }
+        });
     }
 
     getMembersToList = () => {

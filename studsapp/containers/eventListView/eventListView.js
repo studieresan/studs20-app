@@ -20,6 +20,11 @@ const backgroundSource = 'studsapp/static/images/background.png';
 class EventListView extends React.Component {
     componentDidMount() {
         this.props.getEvents();
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            if(isError(this.props.events)) {
+                this.props.getEvents();
+            }
+        });
     }
 
     getEventsToList = () => {
