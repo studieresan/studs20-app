@@ -9,7 +9,8 @@ import {
     FlatList,
     Linking,
     ImageBackground,
-    TouchableHighlight
+    TouchableHighlight,
+    RefreshControl
 } from 'react-native';
 import { isSuccess, isLoading, isInitial, isError } from 'studsapp/store/constants';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -79,6 +80,15 @@ class MemberListView extends React.Component {
                                         </TouchableHighlight>
                                     </View>
                                 </View>
+                            }
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={false}
+                                    onRefresh={this.props.getMembers}
+                                    colors={['#387677']}
+                                    progressBackgroundColor={'#8ad0d2'}
+                                    tintColor={'#fff'}
+                                />
                             }
                         />
                     }
