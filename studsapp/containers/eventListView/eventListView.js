@@ -45,11 +45,11 @@ class EventListView extends React.Component {
         let nextEvent = undefined;
         const date = Date.now();
 
-        //Find next event, but include events that were held up to a day before
+        //Find next event, but include events that started up to three hours before
         events.forEach(event => {
             const minutesUntilEvent = minuteDifference(event.date, date);
-            const oneDayInMinutes = 1440;
-            if (Math.abs(minutesUntilEvent) < Math.abs(minimumMinuteDifference) && minutesUntilEvent >= -oneDayInMinutes) {
+            const ThreeHoursInMinutes = 3*60;
+            if (Math.abs(minutesUntilEvent) < Math.abs(minimumMinuteDifference) && minutesUntilEvent >= -ThreeHoursInMinutes) {
                 minimumMinuteDifference = minutesUntilEvent;
                 nextEvent = event;
             }
