@@ -4,7 +4,7 @@ import {
     Dimensions,
     View,
     Text,
-    FlatList,
+    SectionList,
     TouchableHighlight,
     Image,
     ActivityIndicator,
@@ -35,8 +35,28 @@ class EventListView extends React.Component {
             return events[key];
         });
 
-        return eventList.sort((a, b) => a.date < b.date);
+        return eventList.sort((a, b) => a.date > b.date);
     };
+
+    getEventsToSectionList = () => {
+        const eventList = this.getEventsToList();
+
+        const date = Date.now();
+        const nextEvent = this.getNextEvent();
+
+        const pastEventList = eventList.filter(event => {
+            return minuteDifference(event.date, date) < 0 && event !== nextEvent;
+        });
+        const futureEventList = eventList.filter(event => {
+            return minuteDifference(event.date, date) >= 0 && event !== nextEvent;
+        });
+
+        const eventSections = [
+            {title: 'Framtida event', data: futureEventList},
+            {title: 'Tidigare event', data: pastEventList},
+        ];
+        return eventSections;
+    }
 
     getNextEvent = () => {
         const events = this.getEventsToList();
@@ -95,8 +115,8 @@ class EventListView extends React.Component {
                     </TouchableHighlight>
                 </View>
                 <View style={styles.bottom}>
-                    <FlatList
-                        data={this.getEventsToList()}
+                    <SectionList
+                        sections={this.getEventsToSectionList()}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) =>
                             <TouchableHighlight
@@ -116,6 +136,11 @@ class EventListView extends React.Component {
                                 </View>
                             </TouchableHighlight>
                         }
+                        renderSectionHeader={({ section }) => 
+                            <View style={styles.futureOrPastEventWrapper}>
+                                <Text style={styles.futureOrPastEventText}>{section.title}</Text>
+                            </View>
+                        }
                         refreshControl={
                             <RefreshControl
                                 refreshing={false}
@@ -125,6 +150,7 @@ class EventListView extends React.Component {
                                 tintColor={'#fff'}
                             />
                         }
+                        stickySectionHeadersEnabled={false}
                     />
                 </View>
             </View>
@@ -183,10 +209,11 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 20,
         fontFamily: 'Raleway-Regular',
+        fontWeight: 'bold',
         alignSelf: 'center',
         textAlign: 'center',
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
     },
     nextEvent: {
         width: window.width,
@@ -197,12 +224,27 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingLeft: 30,
     },
+    futureOrPastEventWrapper: {
+        width: window.width,
+        borderBottomWidth: 1,
+        borderBottomColor: '#b3d4d6',
+    },
+    futureOrPastEventText: {
+        color: '#fff',
+        fontSize: 20,
+        fontWeight: 'bold',
+        fontFamily: 'Raleway-Regular',
+        alignSelf: 'center',
+        textAlign: 'center',
+        marginTop: 10,
+        marginBottom: 10
+    },
     event: {
         width: window.width,
         borderBottomWidth: 1,
         borderBottomColor: '#b3d4d6',
         paddingVertical: 15,
-        paddingLeft: 30,
+        paddingLeft: 30
     },
     row: {
         flexDirection: 'row'
