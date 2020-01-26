@@ -78,6 +78,13 @@ class MemberListView extends React.Component {
                                         >
                                             <Icon name='ios-call' size={30} style={styles.callIcon} />
                                         </TouchableHighlight>
+                                        <TouchableHighlight
+                                            onPress={() => Linking.openURL('sms:' + item.profile.phone)}
+                                            underlayColor='rgba(255,255,255,0.0)'
+                                            style={styles.callIconButton}
+                                        >
+                                            <Icon name='ios-text' size={30} style={styles.callIcon} />
+                                        </TouchableHighlight>
                                     </View>
                                 </View>
                             }
@@ -140,6 +147,8 @@ const styles = StyleSheet.create({
     memberInfo: {
         alignSelf: 'center',
         flex: 0.6,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
         paddingRight: 30
     },
     memberNameText: {
@@ -151,7 +160,8 @@ const styles = StyleSheet.create({
         color: '#fff'
     },
     callIconButton: {
-        alignItems: 'flex-end'
+        alignItems: 'center',
+        paddingLeft: 30,
     },
     errorMessage: {
         color: '#fff',

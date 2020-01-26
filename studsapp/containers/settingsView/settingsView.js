@@ -31,7 +31,7 @@ class SettingsView extends React.Component {
                     </View>
                 </View>
                 <View style={styles.bottom}>
-                    <Text style={styles.version}>Studs Version 1.0.0</Text>
+                    <Text style={styles.version}>Studs Version 1.0.1</Text>
                 </View>
             </ImageBackground>
         );
