@@ -42,12 +42,14 @@ class CheckInView extends React.Component {
         return this.props.login.data.id;
     }
 
-    getUsersToList = (users) => {
-        const userList = users.map(user => {
+    getUsersToListUnsorted = (users) => {
+        return users.map(user => {
             return this.props.members.data[user.id];
         });
+    };
 
-        return userList.sort((a, b) => {
+    getUsersToListSorted = (users) => {
+        return this.getUsersToListUnsorted(users).sort((a, b) => {
             if (a.profile.lastName.localeCompare(b.profile.lastName) === 0) {
                 return a.profile.firstName.localeCompare(b.profile.firstName);
             }
@@ -120,7 +122,7 @@ class CheckInView extends React.Component {
                                 <Text style={styles.listTitle}>{'Ej incheckade'}</Text>
                                 <View style={styles.list}>
                                     <FlatList
-                                        data={this.getUsersToList(event.notCheckedInUsers)}
+                                        data={this.getUsersToListSorted(event.notCheckedInUsers)}
                                         keyExtractor={item => item.id}
                                         renderItem={({ item }) =>
                                             <View style={styles.listItem}>
@@ -152,7 +154,7 @@ class CheckInView extends React.Component {
                                 <Text style={styles.listTitle}>{'Incheckade'}</Text>
                                 <View style={styles.list}>
                                     <FlatList
-                                        data={this.getUsersToList(event.checkedInUsers)}
+                                        data={this.getUsersToListUnsorted(event.checkedInUsers)}
                                         keyExtractor={item => item.id}
                                         renderItem={({ item }) =>
                                             <View style={styles.listItem}>
