@@ -208,8 +208,7 @@ const styles = StyleSheet.create({
     nextEventText: {
         color: '#fff',
         fontSize: 20,
-        fontFamily: 'Raleway-Regular',
-        fontWeight: 'bold',
+        fontFamily: 'Raleway-Black',
         alignSelf: 'center',
         textAlign: 'center',
         marginTop: 10,
@@ -232,8 +231,7 @@ const styles = StyleSheet.create({
     futureOrPastEventText: {
         color: '#fff',
         fontSize: 20,
-        fontWeight: 'bold',
-        fontFamily: 'Raleway-Regular',
+        fontFamily: 'Raleway-Black',
         alignSelf: 'center',
         textAlign: 'center',
         marginTop: 10,
