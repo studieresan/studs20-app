@@ -4,7 +4,7 @@ import {
     Dimensions,
     View,
     Text,
-    FlatList,
+    SectionList,
     TouchableHighlight,
     Image,
     ActivityIndicator,
@@ -35,8 +35,28 @@ class EventListView extends React.Component {
             return events[key];
         });
 
-        return eventList.sort((a, b) => a.date < b.date);
+        return eventList.sort((a, b) => a.date > b.date);
     };
+
+    getEventsToSectionList = () => {
+        const eventList = this.getEventsToList();
+
+        const date = Date.now();
+        const nextEvent = this.getNextEvent();
+
+        const pastEventList = eventList.filter(event => {
+            return minuteDifference(event.date, date) < 0 && event !== nextEvent;
+        });
+        const futureEventList = eventList.filter(event => {
+            return minuteDifference(event.date, date) >= 0 && event !== nextEvent;
+        });
+
+        const eventSections = [
+            {title: 'Framtida event', data: futureEventList},
+            {title: 'Tidigare event', data: pastEventList},
+        ];
+        return eventSections;
+    }
 
     getNextEvent = () => {
         const events = this.getEventsToList();
@@ -45,11 +65,11 @@ class EventListView extends React.Component {
         let nextEvent = undefined;
         const date = Date.now();
 
-        //Find next event, but include events that were held up to a day before
+        //Find next event, but include events that started up to three hours before
         events.forEach(event => {
             const minutesUntilEvent = minuteDifference(event.date, date);
-            const oneDayInMinutes = 1440;
-            if (Math.abs(minutesUntilEvent) < Math.abs(minimumMinuteDifference) && minutesUntilEvent >= -oneDayInMinutes) {
+            const ThreeHoursInMinutes = 3*60;
+            if (Math.abs(minutesUntilEvent) < Math.abs(minimumMinuteDifference) && minutesUntilEvent >= -ThreeHoursInMinutes) {
                 minimumMinuteDifference = minutesUntilEvent;
                 nextEvent = event;
             }
@@ -95,8 +115,8 @@ class EventListView extends React.Component {
                     </TouchableHighlight>
                 </View>
                 <View style={styles.bottom}>
-                    <FlatList
-                        data={this.getEventsToList()}
+                    <SectionList
+                        sections={this.getEventsToSectionList()}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) =>
                             <TouchableHighlight
@@ -116,6 +136,11 @@ class EventListView extends React.Component {
                                 </View>
                             </TouchableHighlight>
                         }
+                        renderSectionHeader={({ section }) => 
+                            <View style={styles.futureOrPastEventWrapper}>
+                                <Text style={styles.futureOrPastEventText}>{section.title}</Text>
+                            </View>
+                        }
                         refreshControl={
                             <RefreshControl
                                 refreshing={false}
@@ -125,6 +150,7 @@ class EventListView extends React.Component {
                                 tintColor={'#fff'}
                             />
                         }
+                        stickySectionHeadersEnabled={false}
                     />
                 </View>
             </View>
@@ -182,11 +208,11 @@ const styles = StyleSheet.create({
     nextEventText: {
         color: '#fff',
         fontSize: 20,
-        fontFamily: 'Raleway-Regular',
+        fontFamily: 'Raleway-Black',
         alignSelf: 'center',
         textAlign: 'center',
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
     },
     nextEvent: {
         width: window.width,
@@ -197,12 +223,26 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingLeft: 30,
     },
+    futureOrPastEventWrapper: {
+        width: window.width,
+        borderBottomWidth: 1,
+        borderBottomColor: '#b3d4d6',
+    },
+    futureOrPastEventText: {
+        color: '#fff',
+        fontSize: 20,
+        fontFamily: 'Raleway-Black',
+        alignSelf: 'center',
+        textAlign: 'center',
+        marginTop: 10,
+        marginBottom: 10
+    },
     event: {
         width: window.width,
         borderBottomWidth: 1,
         borderBottomColor: '#b3d4d6',
         paddingVertical: 15,
-        paddingLeft: 30,
+        paddingLeft: 30
     },
     row: {
         flexDirection: 'row'
