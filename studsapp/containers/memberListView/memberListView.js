@@ -36,10 +36,10 @@ class MemberListView extends React.Component {
         });
 
         return memberList.sort((a, b) => {
-            if (a.profile.lastName.localeCompare(b.profile.lastName) === 0) {
-                return a.profile.firstName.localeCompare(b.profile.firstName);
+            if (a.profile.firstName.localeCompare(b.profile.firstName) === 0) {
+                return a.profile.lastName.localeCompare(b.profile.lastName);
             }
-            return a.profile.lastName.localeCompare(b.profile.lastName);
+            return a.profile.firstName.localeCompare(b.profile.firstName);
         });
     };
 
