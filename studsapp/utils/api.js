@@ -1,5 +1,5 @@
-import { retrieveData } from 'studsapp/utils/storage';
-import { apiBaseURL, mapboxToken } from 'studsapp/utils/config';
+import {retrieveData} from 'studsapp/utils/storage';
+import {apiBaseURL, mapboxToken} from 'studsapp/utils/config';
 
 const BASE_URL = apiBaseURL;
 const LOGIN = '/login';
@@ -8,17 +8,17 @@ const GRAPHQL = '/graphql';
 const STATUS_OK = 200;
 const STATUS_NOT_OK = 300;
 
-const credentials = { credentials: 'include' };
+const credentials = {credentials: 'include'};
 const authorizationHeader = async () => {
     const token = await retrieveData('token');
     return {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
     };
 };
-const jsonHeader = { 'Content-Type': 'application/json' };
-const graphQLHeader = { 'Content-Type': 'application/graphql' };
+const jsonHeader = {'Content-Type': 'application/json'};
+const graphQLHeader = {'Content-Type': 'application/graphql'};
 
-const checkStatus = (response) => {
+const checkStatus = response => {
     if (response.status >= STATUS_OK && response.status < STATUS_NOT_OK) {
         return response;
     } else {
@@ -27,71 +27,77 @@ const checkStatus = (response) => {
 };
 
 const executePOSTRequest = async (url, body) => {
-    const response = await checkStatus(await fetch(BASE_URL + url, {
-        method: 'POST',
-        ...credentials,
-        headers: {
-            ...authorizationHeader,
-            ...jsonHeader
-        },
-        body: JSON.stringify(body)
-    }));
+    const response = await checkStatus(
+        await fetch(BASE_URL + url, {
+            method: 'POST',
+            ...credentials,
+            headers: {
+                ...authorizationHeader,
+                ...jsonHeader,
+            },
+            body: JSON.stringify(body),
+        }),
+    );
     return response.json();
 };
 
-const executeGETRequest = async (url) => {
-    const response = await checkStatus(await fetch(BASE_URL + url, {
-        method: 'GET',
-        ...credentials,
-        headers: {
-            ...authorizationHeader,
-            ...jsonHeader
-        }
-    }));
+const executeGETRequest = async url => {
+    const response = await checkStatus(
+        await fetch(BASE_URL + url, {
+            method: 'GET',
+            ...credentials,
+            headers: {
+                ...authorizationHeader,
+                ...jsonHeader,
+            },
+        }),
+    );
     return response.json();
 };
 
 const executePUTRequest = async (url, body) => {
-    const response = await checkStatus(await fetch(BASE_URL + url, {
-        method: 'PUT',
-        ...credentials,
-        headers: {
-            ...authorizationHeader,
-            ...jsonHeader
-        },
-        body: JSON.stringify(body)
-    }));
+    const response = await checkStatus(
+        await fetch(BASE_URL + url, {
+            method: 'PUT',
+            ...credentials,
+            headers: {
+                ...authorizationHeader,
+                ...jsonHeader,
+            },
+            body: JSON.stringify(body),
+        }),
+    );
     return response.json();
 };
 
-const executeGraphQLRequest = async (query) => {
+const executeGraphQLRequest = async query => {
     const authorization = await authorizationHeader();
     return fetch(BASE_URL + GRAPHQL, {
         method: 'POST',
         ...credentials,
         headers: {
             ...authorization,
-            ...graphQLHeader
+            ...graphQLHeader,
         },
-        body: query
+        body: query,
     })
         .then(checkStatus)
         .then(response => response.json());
 };
 
-const executeLoginRequest = (body) =>
+const executeLoginRequest = body =>
     fetch(BASE_URL + LOGIN, {
         method: 'POST',
         ...credentials,
         headers: {
-            ...jsonHeader
+            ...jsonHeader,
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
     })
         .then(checkStatus)
         .then(response => response.json());
 
-export const attemptLogin = (body) => {
+export const attemptLogin = body => {
     return executeLoginRequest(body);
 };
 
@@ -113,14 +119,14 @@ export const fetchEvents = async () => {
     let events = result.data.allEvents;
     events = events.map(event => ({
         ...event,
-        date: new Date(event.date)
+        date: new Date(event.date),
     }));
     events = events.map(event => ({
         ...event,
-        companyName: event.company.name
+        companyName: event.company.name,
     }));
     const eventMap = {};
-    events.forEach(event => eventMap[event.id] = event);
+    events.forEach(event => (eventMap[event.id] = event));
     return eventMap;
 };
 
@@ -132,7 +138,7 @@ const EVENT_DETAILS_FIELDS = `
     location
 `;
 
-export const fetchEventDetails = async (eventId) => {
+export const fetchEventDetails = async eventId => {
     const query = `query {
         event (eventId: "${eventId}") {
             ${EVENT_DETAILS_FIELDS}
@@ -140,18 +146,21 @@ export const fetchEventDetails = async (eventId) => {
     }`;
     const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
     const geocodingService = mbxGeocoding({
-        accessToken: mapboxToken
+        accessToken: mapboxToken,
     });
     const result = await executeGraphQLRequest(query);
     const event = result.data.event;
-    const coordinatesResponse = await geocodingService.forwardGeocode({
-        query: event.location,
-        limit: 1,
-    }).send();
-    const coordinates = coordinatesResponse.body.features[0].geometry.coordinates;
+    const coordinatesResponse = await geocodingService
+        .forwardGeocode({
+            query: event.location,
+            limit: 1,
+        })
+        .send();
+    const coordinates =
+        coordinatesResponse.body.features[0].geometry.coordinates;
     return {
         ...event,
-        coordinates: coordinates
+        coordinates: coordinates,
     };
 };
 
@@ -165,7 +174,7 @@ const CHECK_IN_DETAILS = `
     }
 `;
 
-export const fetchCheckInDetails = async (eventId) => {
+export const fetchCheckInDetails = async eventId => {
     const query = `query {
         event (eventId: "${eventId}") {
             ${CHECK_IN_DETAILS}
@@ -175,7 +184,7 @@ export const fetchCheckInDetails = async (eventId) => {
     return result.data.event;
 };
 
-export const postCheckIn = async (eventID) => {
+export const postCheckIn = async eventID => {
     const mutation = `
         mutation {
             checkIn(eventId: "${eventID}")
@@ -183,7 +192,7 @@ export const postCheckIn = async (eventID) => {
     `;
     const result = await executeGraphQLRequest(mutation);
     return result;
-}
+};
 
 const USER_PROFILE_FIELDS = `
   userRole
@@ -205,7 +214,53 @@ export const fetchUsers = () => {
         })
         .then(members => {
             const memberMap = {};
-            members.forEach(member => memberMap[member.id] = member);
+            members.forEach(member => (memberMap[member.id] = member));
             return memberMap;
+        });
+};
+
+const toGraphQLFields = str => {
+    return JSON.stringify(str).replace(/"([^"]*)":/g, '$1:');
+};
+
+export const updateGameState = async gameState => {
+    const mutation = `
+    mutation {
+        updateGameState(fields: ${toGraphQLFields(gameState)}){
+            score,
+            powerUps   
+        }
+    }
+    `;
+    const result = await executeGraphQLRequest(mutation);
+    return result;
+};
+
+export const fetchTopScores = () => {
+    const query = `{
+        topScore {
+            score,
+            user {
+                profile {
+                    firstName,
+                    lastName,
+                }
+            }
+        }
+    }`;
+    return executeGraphQLRequest(query)
+        .then(result => {
+            return result.data.topScore;
+        })
+        .then(scores => {
+            return scores
+                .map(score => ({
+                    score: score.score,
+                    name:
+                        score.user.profile.firstName +
+                        ' ' +
+                        score.user.profile.lastName,
+                }))
+                .reverse();
         });
 };
