@@ -1,20 +1,21 @@
 import React from 'react';
 import {StyleSheet, Text, View, ImageBackground} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {storeData, retrieveData, removeData} from 'studsapp/utils/storage';
 import ImageButton from 'studsapp/generalComponents/imageButton';
+import {storeData, retrieveData, removeData} from 'studsapp/utils/storage';
 import {updateGameState, fetchTopScores} from 'studsapp/utils/api';
+import {
+    GAME_SETTINGS,
+    load,
+    createSaveTimers,
+    getTopScores,
+} from './gameController';
 
 const backgroundSource = 'studsapp/static/images/background.png';
 const borderButtomSource = 'studsapp/static/images/border-button.png';
 
-const GAME_SETTINGS = {
-    saveIntervalSeconds: 15,
-    loading: -1,
-};
-
 class GameView extends React.Component {
-    saveTimeout = null;
+    timers = [];
     constructor(props) {
         super(props);
         this.state = {
@@ -24,49 +25,18 @@ class GameView extends React.Component {
     }
 
     componentDidMount() {
-        this.load();
-        this.saveTimeout = setInterval(
-            this.save,
-            GAME_SETTINGS.saveIntervalSeconds * 1000,
-        );
-        fetchTopScores()
-            .then(result => console.log(result))
-            .catch(e => console.log(e));
+        load().then(preGameState => {
+            this.setState(preGameState);
+        });
+
+        this.timers = createSaveTimers(() => this.state);
+
+        getTopScores();
     }
 
     componentWillUnmount() {
-        clearInterval(this.saveTimeout);
+        this.timers.forEach(timer => clearInterval(timer));
     }
-
-    load = async () => {
-        const score = await retrieveData('score');
-        const powerUps = await retrieveData('powerUps');
-        if (score !== null && powerUps !== null) {
-            this.setState({
-                score: parseInt(score),
-                powerUps: JSON.parse(powerUps),
-            });
-        } else {
-            // TODO: try from backend
-            this.setState({
-                score: 0,
-                powerUps: [0, 0, 0],
-            });
-        }
-    };
-
-    save = async () => {
-        if (
-            (await storeData('score', this.state.score.toString())) &&
-            (await storeData('powerUps', JSON.stringify(this.state.powerUps)))
-        ) {
-            updateGameState(this.state)
-                .then(result => console.log(result))
-                .catch(e => console.error(e));
-        } else {
-            clearInterval(this.saveTimeout);
-        }
-    };
 
     render() {
         return (
