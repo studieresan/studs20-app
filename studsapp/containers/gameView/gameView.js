@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, ImageBackground} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {storeData} from 'studsapp/utils/storage';
+import {storeData, retrieveData} from 'studsapp/utils/storage';
 import ImageButton from 'studsapp/generalComponents/imageButton';
 
 const backgroundSource = 'studsapp/static/images/background.png';
@@ -10,8 +10,36 @@ const borderButtomSource = 'studsapp/static/images/border-button.png';
 class GameView extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            count: -1,
+            powerups: [0, 0, 0],
+        };
+        this.load();
     }
+
+    load = async () => {
+        const count = await retrieveData('count');
+        const powerups = await retrieveData('powerups');
+        if (count !== null && powerups !== null) {
+            this.setState({
+                count,
+                powerups,
+            });
+        } else {
+            this.setState({
+                count: 0,
+            });
+        }
+    };
+
+    save = async () => {
+        if (
+            (await storeData('count', this.state.count)) &&
+            (await storeData('powerups', this.state.powerups))
+        ) {
+            console.log('saved success');
+        }
+    };
 
     render() {
         return (
@@ -33,7 +61,12 @@ class GameView extends React.Component {
                     />
                 </View>
                 <View style={styles.countContainer}>
-                    <Text style={styles.count}>50,372</Text>
+                    {this.state.count === -1 && (
+                        <Text style={styles.count}>Loading..</Text>
+                    )}
+                    {this.state.count !== -1 && (
+                        <Text style={styles.count}>{this.state.count}</Text>
+                    )}
                 </View>
                 <View style={styles.powerups}>
                     <Text style={styles.text}>3xMarko</Text>
@@ -42,8 +75,11 @@ class GameView extends React.Component {
                 </View>
                 <View style={styles.buttonContainer}>
                     <ImageButton
+                        onPress={() =>
+                            this.setState({count: this.state.count + 1})
+                        }
                         source={require(borderButtomSource)}
-                        text={'x1'}
+                        text={'x' + (this.state.powerups[0] + 1)}
                     />
                 </View>
             </ImageBackground>

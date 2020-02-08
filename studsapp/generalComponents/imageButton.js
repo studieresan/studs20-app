@@ -35,10 +35,10 @@ export default class ImageButton extends React.Component {
     };
 
     render() {
-        const {source, text} = this.props;
+        const {source, text, onPress} = this.props;
         return (
             <TouchableWithoutFeedback
-                onPress={() => console.log('PRESS')}
+                onPress={onPress}
                 onPressIn={this.pressInAnimation}
                 onPressOut={this.pressOutAnimation}>
                 <Animated.View
