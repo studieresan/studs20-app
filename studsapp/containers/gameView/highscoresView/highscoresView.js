@@ -7,8 +7,6 @@ import {
     ImageBackground,
     Image,
     FlatList,
-    TouchableHighlight,
-    RefreshControl,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconButton from 'studsapp/generalComponents/iconButton';
@@ -85,18 +83,16 @@ class HighscoresView extends React.Component {
     }
     componentDidMount() {
         getTopScores().then(result => {
-            console.log(result);
             this.setState({highscores: result});
         });
     }
 
     render() {
-        console.log(this.state);
         const leader =
             this.state.highscores.length !== 0
                 ? this.state.highscores[0]
                 : null;
-        const leaderboard = this.state.highscores
+        let leaderboard = this.state.highscores
             .slice(1)
             .map((s, idx) => ({...s, placing: idx + 2}));
         return (
@@ -181,23 +177,6 @@ class HighscoresView extends React.Component {
                         borderTopColor: '#b3d4d6',
                     }}>
                     <FlatList
-                        style={{}}
-                        // data={[
-                        //     {
-                        //         placing: 2,
-                        //         picture:
-                        //             'https://studs20.s3.eu-north-1.amazonaws.com/BWPortraits/BDS69.jpg',
-                        //         name: 'anton',
-                        //         score: '1337',
-                        //     },
-                        //     {
-                        //         placing: 3,
-                        //         picture:
-                        //             'https://cdna.artstation.com/p/assets/images/images/000/282/854/large/hispter_final_FINAL.jpg?1415033893',
-                        //         name: 'Fabienne',
-                        //         score: '1336',
-                        //     },
-                        // ]}
                         data={leaderboard}
                         keyExtractor={item => item.name}
                         renderItem={({item}) => LeaderboardRow(item)}
