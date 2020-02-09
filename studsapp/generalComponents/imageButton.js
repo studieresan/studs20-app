@@ -17,21 +17,11 @@ export default class ImageButton extends React.Component {
     }
 
     pressInAnimation = () => {
-        this.scaleValue.setValue(1);
-        Animated.timing(this.scaleValue, {
-            toValue: 0.8,
-            duration: 150,
-            useNativeDriver: true,
-        }).start();
+        this.scaleValue.setValue(0.9);
     };
 
     pressOutAnimation = () => {
-        this.scaleValue.setValue(0.8);
-        Animated.timing(this.scaleValue, {
-            toValue: 1,
-            duration: 150,
-            useNativeDriver: true,
-        }).start();
+        this.scaleValue.setValue(1);
     };
 
     render() {
