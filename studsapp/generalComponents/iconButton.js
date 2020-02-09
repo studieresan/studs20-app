@@ -7,10 +7,13 @@ export default class IconButton extends React.Component {
         return (
             <TouchableHighlight
                 onPress={this.props.onPress}
-                style={{
-                    marginHorizontal: 10,
-                    borderRadius: 10,
-                }}
+                style={[
+                    {
+                        marginHorizontal: 10,
+                        borderRadius: 10,
+                    },
+                    this.props.style,
+                ]}
                 underlayColor="rgba(0,0,0,0.3)">
                 <Icon
                     style={{paddingHorizontal: 10}}

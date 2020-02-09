@@ -7,9 +7,12 @@ import {
     ImageBackground,
     Image,
     FlatList,
+    TouchableHighlight,
     RefreshControl,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import IconButton from 'studsapp/generalComponents/iconButton';
+import {getTopScores} from 'studsapp/containers/gameView/gameController';
 
 const logoSource = 'studsapp/static/images/logo-small.png';
 const backgroundSource = 'studsapp/static/images/background.png';
@@ -74,7 +77,28 @@ const LeaderboardRow = ({placing, picture, name, score}) => (
 );
 
 class HighscoresView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            highscores: [],
+        };
+    }
+    componentDidMount() {
+        getTopScores().then(result => {
+            console.log(result);
+            this.setState({highscores: result});
+        });
+    }
+
     render() {
+        console.log(this.state);
+        const leader =
+            this.state.highscores.length !== 0
+                ? this.state.highscores[0]
+                : null;
+        const leaderboard = this.state.highscores
+            .slice(1)
+            .map((s, idx) => ({...s, placing: idx + 2}));
         return (
             <ImageBackground
                 source={require(backgroundSource)}
@@ -82,6 +106,16 @@ class HighscoresView extends React.Component {
                 <View style={styles.top}>
                     <Image source={require(logoSource)} style={styles.logo} />
                     <Text style={styles.title}>Leaderboard</Text>
+                    <IconButton
+                        onPress={() => this.props.navigation.goBack()}
+                        icon="ios-arrow-back"
+                        style={{
+                            position: 'absolute',
+                            top: window.height / 16,
+                            left: 3,
+                            alignItems: 'center',
+                        }}
+                    />
                 </View>
                 <View
                     style={{
@@ -113,8 +147,7 @@ class HighscoresView extends React.Component {
                                 marginHorizontal: 20,
                             }}
                             source={{
-                                uri:
-                                    'https://studs20.s3.eu-north-1.amazonaws.com/BWPortraits/BDS69.jpg',
+                                uri: leader && leader.picture,
                             }}
                             defaultSource={require(placeholderSource)}
                         />
@@ -126,7 +159,7 @@ class HighscoresView extends React.Component {
                                 marginTop: 5,
                                 textAlign: 'center',
                             }}>
-                            Anton
+                            {leader && leader.name}
                         </Text>
                     </View>
                     <Text
@@ -138,7 +171,7 @@ class HighscoresView extends React.Component {
                             fontWeight: 'bold',
                             textAlign: 'center',
                         }}>
-                        1337203
+                        {leader && leader.score}
                     </Text>
                 </View>
                 <View
@@ -149,22 +182,23 @@ class HighscoresView extends React.Component {
                     }}>
                     <FlatList
                         style={{}}
-                        data={[
-                            {
-                                placing: 2,
-                                picture:
-                                    'https://studs20.s3.eu-north-1.amazonaws.com/BWPortraits/BDS69.jpg',
-                                name: 'anton',
-                                score: '1337',
-                            },
-                            {
-                                placing: 3,
-                                picture:
-                                    'https://cdna.artstation.com/p/assets/images/images/000/282/854/large/hispter_final_FINAL.jpg?1415033893',
-                                name: 'Fabienne',
-                                score: '1336',
-                            },
-                        ]}
+                        // data={[
+                        //     {
+                        //         placing: 2,
+                        //         picture:
+                        //             'https://studs20.s3.eu-north-1.amazonaws.com/BWPortraits/BDS69.jpg',
+                        //         name: 'anton',
+                        //         score: '1337',
+                        //     },
+                        //     {
+                        //         placing: 3,
+                        //         picture:
+                        //             'https://cdna.artstation.com/p/assets/images/images/000/282/854/large/hispter_final_FINAL.jpg?1415033893',
+                        //         name: 'Fabienne',
+                        //         score: '1336',
+                        //     },
+                        // ]}
+                        data={leaderboard}
                         keyExtractor={item => item.name}
                         renderItem={({item}) => LeaderboardRow(item)}
                     />

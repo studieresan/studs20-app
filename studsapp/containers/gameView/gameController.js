@@ -50,7 +50,4 @@ export const createSaveTimers = stateFunc => {
     ];
 };
 
-export const getTopScores = () =>
-    fetchTopScores()
-        .then(result => console.log(result))
-        .catch(e => console.log(e));
+export const getTopScores = () => fetchTopScores().catch(e => console.log(e));

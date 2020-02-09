@@ -2,12 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View, ImageBackground} from 'react-native';
 import ImageButton from 'studsapp/generalComponents/imageButton';
 import IconButton from 'studsapp/generalComponents/iconButton';
-import {
-    GAME_SETTINGS,
-    load,
-    createSaveTimers,
-    getTopScores,
-} from './gameController';
+import {GAME_SETTINGS, load, createSaveTimers} from './gameController';
 
 const backgroundSource = 'studsapp/static/images/background.png';
 const borderButtomSource = 'studsapp/static/images/border-button.png';
@@ -28,8 +23,6 @@ class GameView extends React.Component {
         });
 
         this.timers = createSaveTimers(() => this.state);
-
-        getTopScores();
     }
 
     componentWillUnmount() {
