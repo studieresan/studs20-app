@@ -10,9 +10,14 @@ import {
     Linking,
     ImageBackground,
     TouchableHighlight,
-    RefreshControl
+    RefreshControl,
 } from 'react-native';
-import { isSuccess, isLoading, isInitial, isError } from 'studsapp/store/constants';
+import {
+    isSuccess,
+    isLoading,
+    isInitial,
+    isError,
+} from 'studsapp/store/constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const imageSource = 'studsapp/static/images/logo-small.png';
@@ -21,11 +26,14 @@ const backgroundSource = 'studsapp/static/images/background.png';
 class MemberListView extends React.Component {
     componentDidMount() {
         this.props.getMembers();
-        this.focusListener = this.props.navigation.addListener('didFocus', () => {
-            if(isError(this.props.members)) {
-                this.props.getMembers();
-            }
-        });
+        this.focusListener = this.props.navigation.addListener(
+            'didFocus',
+            () => {
+                if (isError(this.props.members)) {
+                    this.props.getMembers();
+                }
+            },
+        );
     }
 
     getMembersToList = () => {
@@ -45,49 +53,72 @@ class MemberListView extends React.Component {
 
     render() {
         return (
-            <ImageBackground source={require(backgroundSource)} style={styles.wrapper}>
+            <ImageBackground
+                source={require(backgroundSource)}
+                style={styles.wrapper}>
                 <View style={styles.top}>
                     <Image source={require(imageSource)} style={styles.logo} />
                     <Text style={styles.title}>Medlemmar</Text>
                 </View>
                 <View style={styles.bottom}>
-                    {(isLoading(this.props.members) || isInitial(this.props.members)) &&
-                        <View style={{ padding: 50 }}>
-                            <ActivityIndicator size='large' color='#fff' />
+                    {(isLoading(this.props.members) ||
+                        isInitial(this.props.members)) && (
+                        <View style={{padding: 50}}>
+                            <ActivityIndicator size="large" color="#fff" />
                         </View>
-                    }
-                    {isError(this.props.members) &&
-                        <View style={{ padding: 50 }}>
-                            <Text style={styles.errorMessage}>{this.props.members.error}</Text>
+                    )}
+                    {isError(this.props.members) && (
+                        <View style={{padding: 50}}>
+                            <Text style={styles.errorMessage}>
+                                {this.props.members.error}
+                            </Text>
                         </View>
-                    }
-                    {isSuccess(this.props.members) &&
+                    )}
+                    {isSuccess(this.props.members) && (
                         <FlatList
                             data={this.getMembersToList()}
                             keyExtractor={item => item.id}
-                            renderItem={({ item }) =>
+                            renderItem={({item}) => (
                                 <View style={styles.member}>
                                     <View style={styles.memberName}>
-                                        <Text style={styles.memberNameText}>{item.profile.firstName + ' ' + item.profile.lastName}</Text>
+                                        <Text style={styles.memberNameText}>
+                                            {item.profile.firstName +
+                                                ' ' +
+                                                item.profile.lastName}
+                                        </Text>
                                     </View>
                                     <View style={styles.memberInfo}>
                                         <TouchableHighlight
-                                            onPress={() => Linking.openURL('tel:' + item.profile.phone)}
-                                            underlayColor='rgba(255,255,255,0.0)'
-                                            style={styles.callIconButton}
-                                        >
-                                            <Icon name='ios-call' size={30} style={styles.callIcon} />
+                                            onPress={() =>
+                                                Linking.openURL(
+                                                    'tel:' + item.profile.phone,
+                                                )
+                                            }
+                                            underlayColor="rgba(255,255,255,0.0)"
+                                            style={styles.callIconButton}>
+                                            <Icon
+                                                name="ios-call"
+                                                size={30}
+                                                style={styles.callIcon}
+                                            />
                                         </TouchableHighlight>
                                         <TouchableHighlight
-                                            onPress={() => Linking.openURL('sms:' + item.profile.phone)}
-                                            underlayColor='rgba(255,255,255,0.0)'
-                                            style={styles.callIconButton}
-                                        >
-                                            <Icon name='ios-text' size={30} style={styles.callIcon} />
+                                            onPress={() =>
+                                                Linking.openURL(
+                                                    'sms:' + item.profile.phone,
+                                                )
+                                            }
+                                            underlayColor="rgba(255,255,255,0.0)"
+                                            style={styles.callIconButton}>
+                                            <Icon
+                                                name="ios-text"
+                                                size={30}
+                                                style={styles.callIcon}
+                                            />
                                         </TouchableHighlight>
                                     </View>
                                 </View>
-                            }
+                            )}
                             refreshControl={
                                 <RefreshControl
                                     refreshing={false}
@@ -98,7 +129,7 @@ class MemberListView extends React.Component {
                                 />
                             }
                         />
-                    }
+                    )}
                 </View>
             </ImageBackground>
         );
@@ -115,7 +146,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 30,
         textAlign: 'center',
-        fontFamily: 'Raleway-Black'
+        fontFamily: 'Raleway-Black',
     },
     logo: {
         alignSelf: 'center',
@@ -127,7 +158,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: window.width,
         borderBottomWidth: 1,
-        borderBottomColor: '#b3d4d6'
+        borderBottomColor: '#b3d4d6',
     },
     bottom: {
         flex: 0.75,
@@ -142,22 +173,22 @@ const styles = StyleSheet.create({
     memberName: {
         alignSelf: 'center',
         flex: 0.4,
-        paddingLeft: 15
+        paddingLeft: 15,
     },
     memberInfo: {
         alignSelf: 'center',
         flex: 0.6,
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        paddingRight: 30
+        paddingRight: 30,
     },
     memberNameText: {
         color: '#fff',
         fontSize: 16,
-        fontFamily: 'Raleway-Bold'
+        fontFamily: 'Raleway-Bold',
     },
     callIcon: {
-        color: '#fff'
+        color: '#fff',
     },
     callIconButton: {
         alignItems: 'center',
@@ -168,7 +199,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginVertical: 5,
         textAlign: 'center',
-        fontFamily: 'Raleway-Regular'
+        fontFamily: 'Raleway-Regular',
     },
 });
 

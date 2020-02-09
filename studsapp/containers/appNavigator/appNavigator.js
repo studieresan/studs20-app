@@ -1,4 +1,5 @@
 import React from 'react';
+import {View} from 'react-native';
 import {createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
@@ -6,6 +7,7 @@ import LoginView from 'studsapp/containers/loginView/loginViewContainer';
 import EventListView from 'studsapp/containers/eventListView/eventListViewContainer';
 import EventView from 'studsapp/containers/eventView/eventViewContainer';
 import GameView from 'studsapp/containers/gameView/gameViewContainer';
+import HighscoresView from 'studsapp/containers/gameView/highscoresView/highscoresView';
 import CheckInView from 'studsapp/containers/checkInView/checkInViewContainer';
 import AuthenticationView from 'studsapp/containers/authenticationView/authenticationViewContainer';
 import SettingsView from 'studsapp/containers/settingsView/settingsViewContainer';
@@ -41,11 +43,25 @@ const EventsNavigator = createStackNavigator(
     },
 );
 
+const GameNavigator = createStackNavigator(
+    {
+        Game: GameView,
+        Highscores: HighscoresView,
+        Shop: HighscoresView,
+    },
+    {
+        initialRouteName: 'Game',
+        defaultNavigationOptions: {
+            header: null,
+        },
+    },
+);
+
 const LoggedInNavigator = createBottomTabNavigator(
     {
         Events: EventsNavigator,
         Members: MemberListView,
-        Game: GameView,
+        Game: GameNavigator,
         Settings: SettingsView,
     },
     {

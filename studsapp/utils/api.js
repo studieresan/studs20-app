@@ -243,7 +243,8 @@ export const fetchTopScores = () => {
             user {
                 profile {
                     firstName,
-                    lastName,
+                    picture,
+
                 }
             }
         }
@@ -256,10 +257,8 @@ export const fetchTopScores = () => {
             return scores
                 .map(score => ({
                     score: score.score,
-                    name:
-                        score.user.profile.firstName +
-                        ' ' +
-                        score.user.profile.lastName,
+                    name: score.user.profile.firstName,
+                    picture: score.user.profile.picture,
                 }))
                 .reverse();
         });

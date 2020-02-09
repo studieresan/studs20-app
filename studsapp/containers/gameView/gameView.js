@@ -1,9 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, ImageBackground} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import ImageButton from 'studsapp/generalComponents/imageButton';
-import {storeData, retrieveData, removeData} from 'studsapp/utils/storage';
-import {updateGameState, fetchTopScores} from 'studsapp/utils/api';
+import IconButton from 'studsapp/generalComponents/iconButton';
 import {
     GAME_SETTINGS,
     load,
@@ -44,17 +42,15 @@ class GameView extends React.Component {
                 source={require(backgroundSource)}
                 style={styles.wrapper}>
                 <View style={styles.header}>
-                    <Icon
-                        style={styles.icon}
-                        name={'ios-stats'}
-                        size={35}
-                        color={'white'}
+                    <IconButton
+                        onPress={() =>
+                            this.props.navigation.navigate('Highscores')
+                        }
+                        icon={'ios-stats'}
                     />
-                    <Icon
-                        style={styles.icon}
-                        name={'ios-cart'}
-                        size={35}
-                        color={'white'}
+                    <IconButton
+                        onPress={() => this.props.navigation.navigate('Shop')}
+                        icon={'ios-cart'}
                     />
                 </View>
                 <View style={styles.scoreContainer}>
@@ -130,9 +126,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    icon: {
-        paddingHorizontal: 20,
     },
     text: {
         fontSize: 20,
