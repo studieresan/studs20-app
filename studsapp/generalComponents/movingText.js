@@ -1,7 +1,7 @@
 import React from 'react';
 import {Animated, Easing} from 'react-native';
 
-const topMax = 50;
+const ONE_SECOND_IN_MILLIS = 1000;
 
 export default class MovingText extends React.Component {
     translateValueY = new Animated.Value(0);
@@ -33,32 +33,30 @@ export default class MovingText extends React.Component {
 
         this.setState(
             {
-                top: this.getRandInt(topMax * 2) - topMax - 30,
+                top: this.getRandInt(50 * 2) - 50 - 30,
                 left:
                     this.getRandInt(this.props.scoreWidth * 2) -
                     this.props.scoreWidth,
             },
             () => {
-                const animationTime = 1000;
-
                 this.opacityValue.setValue(1);
                 Animated.timing(this.opacityValue, {
                     toValue: 0,
-                    duration: animationTime,
+                    duration: ONE_SECOND_IN_MILLIS,
                     easing: Easing.cubic,
                     useNativeDriver: true,
                 }).start();
                 this.translateValueY.setValue(0);
                 Animated.timing(this.translateValueY, {
                     toValue: -50,
-                    duration: animationTime,
+                    duration: ONE_SECOND_IN_MILLIS,
                     useNativeDriver: true,
                     easing: Easing.linear,
                 }).start();
                 this.translateValueX.setValue(0);
                 Animated.timing(this.translateValueX, {
                     toValue: 20 * Math.round(Math.random() - 1),
-                    duration: animationTime,
+                    duration: ONE_SECOND_IN_MILLIS,
                     useNativeDriver: true,
                     easing: Easing.cubic,
                 }).start(this.animate);

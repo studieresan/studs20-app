@@ -1,7 +1,12 @@
 import React from 'react';
 import {StyleSheet, Text, View, ImageBackground} from 'react-native';
 import {MovingText, ImageButton, IconButton} from 'studsapp/generalComponents';
-import {GAME_SETTINGS, load, createSaveTimers} from './gameController';
+import {
+    GAME_SETTINGS,
+    load,
+    createSaveTimers,
+    ONE_SECOND_IN_MILLIS,
+} from './gameController';
 const _ = require('lodash');
 
 const backgroundSource = 'studsapp/static/images/background.png';
@@ -18,23 +23,23 @@ class Score extends React.Component {
     }
 
     componentDidMount() {
-        this.interval = setTimeout(this.updateClickRate, 1000);
+        this.updateClickRate(-1);
     }
 
     updateClickRate = old => {
         const diff = this.props.score - old;
-        if (old && diff !== this.state.clickRate) {
+        if (old !== -1 && diff !== this.state.clickRate) {
             this.setState({clickRate: this.props.score - old}, () => {
                 this.interval = setTimeout(
                     this.updateClickRate,
-                    1000,
+                    ONE_SECOND_IN_MILLIS,
                     this.props.score,
                 );
             });
         } else {
             this.interval = setTimeout(
                 this.updateClickRate,
-                1000,
+                ONE_SECOND_IN_MILLIS,
                 this.props.score,
             );
         }

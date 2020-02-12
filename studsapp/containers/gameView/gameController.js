@@ -1,6 +1,8 @@
 import {storeData, retrieveData, removeData} from 'studsapp/utils/storage';
 import {updateGameState, fetchTopScores} from 'studsapp/utils/api';
 
+export const ONE_SECOND_IN_MILLIS = 1000;
+
 export const GAME_SETTINGS = {
     localSaveInterval: 15 * 1000,
     backendSaveInterval: 30 * 1000,
