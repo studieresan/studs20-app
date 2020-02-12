@@ -31,8 +31,8 @@ const localSave = async state => {
     ]).catch(error => console.error(error));
 };
 
-const backendSave = async state => {
-    await updateGameState(state)
+const backendSave = async ({score, powerUps}) => {
+    await updateGameState({score, powerUps})
         .then(result => console.log(result))
         .catch(e => console.error(e));
 };

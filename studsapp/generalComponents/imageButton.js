@@ -47,12 +47,11 @@ export default class ImageButton extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    touchable: {
-        display: 'flex',
-        flexDirection: 'row',
-    },
     wrapper: {
         position: 'relative',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     overlay: {
         position: 'absolute',
@@ -66,8 +65,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     image: {
-        height: 100,
         resizeMode: 'contain',
+        height: 130,
     },
     text: {
         color: 'white',
