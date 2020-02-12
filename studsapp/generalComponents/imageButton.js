@@ -6,22 +6,33 @@ import {
     TouchableWithoutFeedback,
     Image,
     Animated,
-    Dimensions,
+    Easing,
 } from 'react-native';
 
 export default class ImageButton extends React.Component {
-    scaleValue = new Animated.Value(0);
+    scaleValue = new Animated.Value(1);
     constructor(props) {
         super(props);
         this.state = {};
     }
 
     pressInAnimation = () => {
-        this.scaleValue.setValue(0.9);
+        this.scaleValue.setValue(1);
+        Animated.timing(this.scaleValue, {
+            toValue: 0.95,
+            duration: 100 * 1,
+            easing: Easing.linear,
+            useNativeDriver: true,
+        }).start();
     };
 
     pressOutAnimation = () => {
-        this.scaleValue.setValue(1);
+        Animated.timing(this.scaleValue, {
+            toValue: 1,
+            duration: 100 * 1,
+            easing: Easing.linear,
+            useNativeDriver: true,
+        }).start();
     };
 
     render() {
