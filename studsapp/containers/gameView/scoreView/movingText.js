@@ -17,49 +17,44 @@ export default class MovingText extends React.Component {
 
     getRandInt = max => Math.floor(Math.random() * Math.floor(max));
 
-    componentDidUpdate(prevProps) {
-        if (this.props.animate && !prevProps.animate) {
-            setTimeout(
-                () => this.animate({finished: true}),
-                this.getRandInt(this.props.id * 100),
-            );
+    UNSAFE_componentWillUpdate(nextProps) {
+        if (!this.props.animate && nextProps.animate) {
+            this.animate();
         }
     }
 
-    animate = ({finished}) => {
-        if (!finished || !this.props.animate) {
-            return;
-        }
-
+    animate = () => {
         this.setState(
             {
-                top: this.getRandInt(50 * 2) - 50 - 30,
+                top: this.getRandInt(50 * 2) - 50 - 50,
                 left:
                     this.getRandInt(this.props.scoreWidth * 2) -
                     this.props.scoreWidth,
             },
             () => {
                 this.opacityValue.setValue(1);
+                this.translateValueY.setValue(0);
+                this.translateValueX.setValue(0);
                 Animated.timing(this.opacityValue, {
                     toValue: 0,
-                    duration: ONE_SECOND_IN_MILLIS,
+                    duration: ONE_SECOND_IN_MILLIS * 1,
                     easing: Easing.cubic,
                     useNativeDriver: true,
                 }).start();
-                this.translateValueY.setValue(0);
+
                 Animated.timing(this.translateValueY, {
                     toValue: -50,
-                    duration: ONE_SECOND_IN_MILLIS,
+                    duration: ONE_SECOND_IN_MILLIS * 1,
                     useNativeDriver: true,
                     easing: Easing.linear,
                 }).start();
-                this.translateValueX.setValue(0);
+
                 Animated.timing(this.translateValueX, {
                     toValue: 20 * Math.round(Math.random() - 1),
-                    duration: ONE_SECOND_IN_MILLIS,
+                    duration: ONE_SECOND_IN_MILLIS * 1,
                     useNativeDriver: true,
                     easing: Easing.cubic,
-                }).start(this.animate);
+                }).start();
             },
         );
     };

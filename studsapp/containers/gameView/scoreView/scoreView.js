@@ -3,6 +3,8 @@ import {StyleSheet, Text, Animated, Easing} from 'react-native';
 import {GAME_SETTINGS, ONE_SECOND_IN_MILLIS} from '../gameController';
 import MovingText from './movingText';
 
+const NUM_ANIMS = 10;
+
 export default class Score extends React.Component {
     interval = null;
     scaleValue = new Animated.Value(1);
@@ -61,20 +63,18 @@ export default class Score extends React.Component {
     };
 
     componentWillUnmount() {
-        clearInterval(this.interval);
+        clearTimeout(this.interval);
     }
 
     createMovingTexts = () => {
-        return [...Array(14)]
-            .map((i, idx) => idx)
-            .map(i => (
+        return Array(NUM_ANIMS)
+            .fill(0)
+            .map((_, id) => (
                 <MovingText
-                    key={i}
-                    id={i}
+                    key={id}
+                    id={id}
                     scoreWidth={this.state.scoreWidth}
-                    animate={
-                        i === 0 ? this.props.clicking : this.state.clickRate > i
-                    }
+                    animate={this.props.score % NUM_ANIMS === id}
                 />
             ));
     };
