@@ -17,7 +17,7 @@ const backgroundSource = 'studsapp/static/images/background.png';
 const placeholderSource = 'studsapp/static/images/profile-placeholder.png';
 const window = Dimensions.get('window');
 
-const LeaderboardRow = ({placing, picture, name, score}) => (
+const HighScoreRow = ({placing, picture, name, score}) => (
     <View
         style={{
             width: window.width,
@@ -92,7 +92,7 @@ class HighscoresView extends React.Component {
             this.state.highscores.length !== 0
                 ? this.state.highscores[0]
                 : null;
-        let leaderboard = this.state.highscores
+        let highscores = this.state.highscores
             .slice(1)
             .map((s, idx) => ({...s, placing: idx + 2}));
         return (
@@ -101,7 +101,7 @@ class HighscoresView extends React.Component {
                 style={{flex: 1, alignItems: 'center'}}>
                 <View style={styles.top}>
                     <Image source={require(logoSource)} style={styles.logo} />
-                    <Text style={styles.title}>Leaderboard</Text>
+                    <Text style={styles.title}>Highscores</Text>
                     <IconButton
                         onPress={() => this.props.navigation.goBack()}
                         icon="ios-arrow-back"
@@ -177,9 +177,9 @@ class HighscoresView extends React.Component {
                         borderTopColor: '#b3d4d6',
                     }}>
                     <FlatList
-                        data={leaderboard}
+                        data={highscores}
                         keyExtractor={item => item.name}
-                        renderItem={({item}) => LeaderboardRow(item)}
+                        renderItem={({item}) => HighScoreRow(item)}
                     />
                 </View>
             </ImageBackground>
