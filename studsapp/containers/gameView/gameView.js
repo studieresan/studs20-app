@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, ImageBackground} from 'react-native';
-import {MovingText, ImageButton, IconButton} from 'studsapp/generalComponents';
+import {ImageButton, IconButton} from 'studsapp/generalComponents';
+import Score from './scoreView/scoreView';
 import {
     GAME_SETTINGS,
     load,
@@ -12,85 +13,6 @@ const _ = require('lodash');
 const backgroundSource = 'studsapp/static/images/background.png';
 const borderButtomSource = 'studsapp/static/images/border-button.png';
 
-class Score extends React.Component {
-    interval = null;
-    constructor(props) {
-        super(props);
-        this.state = {
-            clickRate: 0,
-            scoreWidth: 10,
-        };
-    }
-
-    componentDidMount() {
-        this.updateClickRate(-1);
-    }
-
-    updateClickRate = old => {
-        const diff = this.props.score - old;
-        if (old !== -1 && diff !== this.state.clickRate) {
-            this.setState({clickRate: this.props.score - old}, () => {
-                this.interval = setTimeout(
-                    this.updateClickRate,
-                    ONE_SECOND_IN_MILLIS,
-                    this.props.score,
-                );
-            });
-        } else {
-            this.interval = setTimeout(
-                this.updateClickRate,
-                ONE_SECOND_IN_MILLIS,
-                this.props.score,
-            );
-        }
-    };
-
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
-
-    createMovingTexts = () => {
-        return [...Array(14)]
-            .map((i, idx) => idx)
-            .map(i => (
-                <MovingText
-                    key={i}
-                    id={i}
-                    scoreWidth={this.state.scoreWidth}
-                    animate={
-                        i === 0 ? this.props.clicking : this.state.clickRate > i
-                    }
-                />
-            ));
-    };
-
-    render() {
-        const movingTexts = this.createMovingTexts();
-        return [
-            movingTexts,
-            this.props.score === GAME_SETTINGS.loading && (
-                <Text key="loading" style={styles.score}>
-                    Loading..
-                </Text>
-            ),
-            this.props.score !== GAME_SETTINGS.loading && (
-                <Text
-                    key="score"
-                    style={styles.score}
-                    onLayout={event => {
-                        this.setState({
-                            scoreWidth: Math.round(
-                                event.nativeEvent.layout.width,
-                            ),
-                        });
-                    }}>
-                    {this.props.score}
-                </Text>
-            ),
-        ];
-    }
-}
-
 class GameView extends React.Component {
     timers = [];
     constructor(props) {
@@ -101,7 +23,7 @@ class GameView extends React.Component {
             clicking: false,
         };
 
-        this.stopClick = _.debounce(this.stopClick, 1000);
+        this.stopClick = _.debounce(this.stopClick, ONE_SECOND_IN_MILLIS);
     }
 
     componentDidMount() {
@@ -182,6 +104,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
+        zIndex: 100,
     },
     scoreContainer: {
         flex: 0.3,
@@ -190,10 +113,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-    },
-    score: {
-        fontSize: 50,
-        color: 'white',
     },
     powerUps: {
         flex: 0.2,

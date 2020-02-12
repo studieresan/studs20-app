@@ -4,8 +4,8 @@ import {updateGameState, fetchTopScores} from 'studsapp/utils/api';
 export const ONE_SECOND_IN_MILLIS = 1000;
 
 export const GAME_SETTINGS = {
-    localSaveInterval: 15 * 1000,
-    backendSaveInterval: 30 * 1000,
+    localSaveInterval: 15 * ONE_SECOND_IN_MILLIS,
+    backendSaveInterval: 30 * ONE_SECOND_IN_MILLIS,
     loading: -1,
 };
 
