@@ -9,7 +9,7 @@ import {
     FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import IconButton from 'studsapp/generalComponents/iconButton';
+import {IconButton} from 'studsapp/generalComponents';
 import {getTopScores} from 'studsapp/containers/gameView/gameController';
 
 const logoSource = 'studsapp/static/images/logo-small.png';
@@ -79,12 +79,13 @@ class HighscoresView extends React.Component {
         super(props);
         this.state = {
             highscores: [],
+            offline: false,
         };
     }
     componentDidMount() {
-        getTopScores().then(result => {
-            this.setState({highscores: result});
-        });
+        getTopScores()
+            .then(result => this.setState({highscores: result, offline: false}))
+            .catch(() => this.setState({offline: true}));
     }
 
     render() {
@@ -92,9 +93,10 @@ class HighscoresView extends React.Component {
             this.state.highscores.length !== 0
                 ? this.state.highscores[0]
                 : null;
-        let highscores = this.state.highscores
+        const highscores = this.state.highscores
             .slice(1)
             .map((s, idx) => ({...s, placing: idx + 2}));
+
         return (
             <ImageBackground
                 source={require(backgroundSource)}
@@ -129,58 +131,88 @@ class HighscoresView extends React.Component {
                         shadowRadius: 6,
                         elevation: 10,
                     }}>
-                    <Icon
-                        style={{flex: 1, textAlign: 'center'}}
-                        name={'md-trophy'}
-                        size={45}
-                        color={'gold'}></Icon>
-                    <View style={{flex: 1}}>
-                        <Image
-                            style={{
-                                height: 65,
-                                width: 65,
-                                borderRadius: 100,
-                                marginHorizontal: 20,
-                            }}
-                            source={{
-                                uri: leader && leader.picture,
-                            }}
-                            defaultSource={require(placeholderSource)}
-                        />
+                    {this.state.offline && (
+                        <Icon
+                            style={{flex: 1, textAlign: 'center'}}
+                            name={'ios-thunderstorm'}
+                            size={80}
+                            color={'white'}></Icon>
+                    )}
+                    {!this.state.offline && [
+                        <Icon
+                            style={{flex: 1, textAlign: 'center'}}
+                            name={'md-trophy'}
+                            size={45}
+                            color={'gold'}></Icon>,
+                        <View style={{flex: 1}}>
+                            <Image
+                                style={{
+                                    height: 65,
+                                    width: 65,
+                                    borderRadius: 100,
+                                    marginHorizontal: 20,
+                                }}
+                                source={{
+                                    uri: leader && leader.picture,
+                                }}
+                                defaultSource={require(placeholderSource)}
+                            />
+                            <Text
+                                style={{
+                                    color: 'white',
+                                    fontFamily: 'Raleway',
+                                    fontSize: 14,
+                                    marginTop: 5,
+                                    textAlign: 'center',
+                                }}>
+                                {leader && leader.name}
+                            </Text>
+                        </View>,
                         <Text
                             style={{
+                                flex: 1,
                                 color: 'white',
                                 fontFamily: 'Raleway',
-                                fontSize: 14,
-                                marginTop: 5,
+                                fontSize: 19,
+                                fontWeight: 'bold',
                                 textAlign: 'center',
                             }}>
-                            {leader && leader.name}
-                        </Text>
-                    </View>
-                    <Text
-                        style={{
-                            flex: 1,
-                            color: 'white',
-                            fontFamily: 'Raleway',
-                            fontSize: 19,
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                        }}>
-                        {leader && leader.score}
-                    </Text>
+                            {leader && leader.score}
+                        </Text>,
+                    ]}
                 </View>
                 <View
                     style={{
                         flex: 0.55,
+                        width: window.width,
                         borderTopWidth: 1,
                         borderTopColor: '#b3d4d6',
                     }}>
-                    <FlatList
-                        data={highscores}
-                        keyExtractor={item => item.name}
-                        renderItem={({item}) => HighScoreRow(item)}
-                    />
+                    {this.state.offline && (
+                        <View
+                            style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                            }}>
+                            <Text style={styles.title}>Whoops!</Text>
+                            <Text
+                                style={{
+                                    color: '#fff',
+                                    textAlign: 'center',
+                                    fontFamily: 'Raleway-Black',
+                                    marginTop: 10,
+                                }}>
+                                Kan inte se highscores om du e offline...
+                            </Text>
+                        </View>
+                    )}
+                    {!this.state.offline && (
+                        <FlatList
+                            data={highscores}
+                            keyExtractor={item => item.name}
+                            renderItem={({item}) => HighScoreRow(item)}
+                        />
+                    )}
                 </View>
             </ImageBackground>
         );
