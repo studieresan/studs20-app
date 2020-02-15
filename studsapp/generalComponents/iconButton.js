@@ -9,14 +9,13 @@ export default class IconButton extends React.Component {
                 onPress={this.props.onPress}
                 style={[
                     {
-                        marginHorizontal: 10,
                         borderRadius: 10,
                     },
                     this.props.style,
                 ]}
                 underlayColor="rgba(0,0,0,0.3)">
                 <Icon
-                    style={[{paddingHorizontal: 10}, this.props.iconStyle]}
+                    style={[{}, this.props.iconStyle]}
                     name={this.props.icon}
                     size={this.props.size ? this.props.size : 35}
                     color={'white'}

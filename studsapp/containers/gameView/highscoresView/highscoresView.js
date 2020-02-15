@@ -186,8 +186,9 @@ const styles = StyleSheet.create({
     back: {
         position: 'absolute',
         top: window.height / 16,
-        left: 3,
-        alignItems: 'center',
+        left: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
     },
     firstPlaceCard: {
         width: window.width * 0.9,

@@ -59,10 +59,12 @@ class GameView extends React.Component {
                         onPress={() =>
                             this.props.navigation.navigate('Highscores')
                         }
+                        style={styles.iconButton}
                         icon={'ios-stats'}
                     />
                     <IconButton
                         onPress={() => this.props.navigation.navigate('Shop')}
+                        style={styles.iconButton}
                         icon={'ios-cart'}
                     />
                 </View>
@@ -132,6 +134,11 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         color: 'white',
+    },
+    iconButton: {
+        marginHorizontal: 10,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
     },
 });
 
