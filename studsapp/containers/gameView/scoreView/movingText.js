@@ -7,6 +7,7 @@ export default class MovingText extends React.Component {
     translateValueY = new Animated.Value(0);
     opacityValue = new Animated.Value(0);
     translateValueX = new Animated.Value(0);
+    firstRender = true;
     constructor(props) {
         super(props);
         this.state = {
@@ -18,9 +19,10 @@ export default class MovingText extends React.Component {
     getRandInt = max => Math.floor(Math.random() * Math.floor(max));
 
     UNSAFE_componentWillUpdate(nextProps) {
-        if (!this.props.animate && nextProps.animate) {
+        if (!this.props.animate && nextProps.animate && !this.firstRender) {
             this.animate();
         }
+        this.firstRender = false;
     }
 
     animate = () => {
