@@ -62,7 +62,7 @@ class SettingsView extends React.Component {
                             icon="ios-exit"
                             onPress={() => this.logOut()}
                             size={28}
-                            iconStyle={{paddingRight: 0}}
+                            style={{paddingHorizontal: 10}}
                         />
                     </View>
                 </View>
