@@ -1,0 +1,1 @@
+export const SET_OFFLINE_MODE = 'SET_OFFLINE_MODE';

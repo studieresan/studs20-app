@@ -16,9 +16,9 @@ export default class IconButton extends React.Component {
                 ]}
                 underlayColor="rgba(0,0,0,0.3)">
                 <Icon
-                    style={{paddingHorizontal: 10}}
+                    style={[{paddingHorizontal: 10}, this.props.iconStyle]}
                     name={this.props.icon}
-                    size={35}
+                    size={this.props.size ? this.props.size : 35}
                     color={'white'}
                 />
             </TouchableHighlight>
