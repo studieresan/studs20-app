@@ -26,30 +26,21 @@ export const load = async () => {
     }
 };
 
-const localSave = async state => {
-    await Promise.all([
+const localSave = state =>
+    Promise.all([
         storeData('score', state.score.toString()),
         storeData('powerUps', JSON.stringify(state.powerUps)),
     ]).catch(error => console.error(error));
-};
 
-const backendSave = async ({score, powerUps}) => {
-    await updateGameState({score, powerUps})
-        .then(result => console.log(result))
-        .catch(e => console.error(e));
-};
+const backendSave = ({score, powerUps}) =>
+    updateGameState({score, powerUps}).catch(() => {});
 
-export const createSaveTimers = stateFunc => {
-    return [
-        setInterval(
-            () => localSave(stateFunc()),
-            GAME_SETTINGS.localSaveInterval,
-        ),
-        setInterval(
-            () => backendSave(stateFunc()),
-            GAME_SETTINGS.backendSaveInterval,
-        ),
-    ];
-};
+export const createSaveTimers = stateFunc => [
+    setInterval(() => localSave(stateFunc()), GAME_SETTINGS.localSaveInterval),
+    setInterval(
+        () => backendSave(stateFunc()),
+        GAME_SETTINGS.backendSaveInterval,
+    ),
+];
 
 export const getTopScores = () => fetchTopScores();

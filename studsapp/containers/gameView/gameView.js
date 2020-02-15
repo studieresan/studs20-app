@@ -14,6 +14,7 @@ const backgroundSource = 'studsapp/static/images/background.png';
 const borderButtomSource = 'studsapp/static/images/border-button.png';
 
 class GameView extends React.Component {
+    subs = [];
     timers = [];
     constructor(props) {
         super(props);
@@ -27,20 +28,24 @@ class GameView extends React.Component {
     }
 
     componentDidMount() {
-        load().then(preGameState => {
-            this.setState(preGameState);
-        });
+        load().then(prevGameState => this.setState(prevGameState));
 
-        this.timers = createSaveTimers(() => this.state);
+        this.subs = [
+            this.props.navigation.addListener('didFocus', () => {
+                this.timers = createSaveTimers(() => this.state);
+            }),
+
+            this.props.navigation.addListener('willBlur', () =>
+                this.timers.forEach(timer => clearInterval(timer)),
+            ),
+        ];
     }
 
     componentWillUnmount() {
-        this.timers.forEach(timer => clearInterval(timer));
+        this.subs.forEach(sub => sub.remove());
     }
 
-    click = () => {
-        this.setState({score: this.state.score + 1, clicking: true});
-    };
+    click = () => this.setState({score: this.state.score + 1, clicking: true});
 
     stopClick = () => this.setState({clicking: false});
 

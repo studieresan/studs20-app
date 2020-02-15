@@ -105,7 +105,7 @@ class HighscoresView extends React.Component {
                         <View style={styles.offlineTextWrapper}>
                             <Text style={styles.title}>Whoops!</Text>
                             <Text style={[styles.title, {fontSize: 14}]}>
-                                Kan inte se highscores om du e offline...
+                                Kan inte se highscores om du är offline...
                             </Text>
                         </View>
                     )}
