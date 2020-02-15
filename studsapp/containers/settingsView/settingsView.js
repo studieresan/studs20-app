@@ -36,11 +36,11 @@ class SettingsView extends React.Component {
                             size={25}
                             color="white"
                         />
-                        <Text style={styles.categoryText}>Game</Text>
+                        <Text style={styles.categoryText}>Spel</Text>
                     </View>
 
                     <View style={styles.settingRowWrapper}>
-                        <Text style={styles.settingText}>Offline mode</Text>
+                        <Text style={styles.settingText}>Offline läge</Text>
                         <Switch
                             value={this.props.offlineMode}
                             onValueChange={v => this.props.setOfflineMode(v)}
@@ -48,12 +48,8 @@ class SettingsView extends React.Component {
                     </View>
 
                     <View style={styles.categoryTitleWrapper}>
-                        <Icon
-                            name="logo-game-controller-b"
-                            size={25}
-                            color="white"
-                        />
-                        <Text style={styles.categoryText}>Account</Text>
+                        <Icon name="md-person" size={25} color="white" />
+                        <Text style={styles.categoryText}>Konto</Text>
                     </View>
 
                     <View style={styles.settingRowWrapper}>
@@ -85,7 +81,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         textAlign: 'center',
         fontFamily: 'Raleway-Black',
-        marginTop: 10,
     },
     logo: {
         alignSelf: 'center',

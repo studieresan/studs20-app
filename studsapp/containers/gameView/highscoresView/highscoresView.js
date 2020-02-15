@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         textAlign: 'center',
         fontFamily: 'Raleway-Black',
-        marginTop: 10,
     },
     logo: {
         alignSelf: 'center',
