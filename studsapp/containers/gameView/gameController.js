@@ -14,7 +14,6 @@ const isOfflineMode = () => getStore().getState().global.settings.offlineMode;
 
 export const load = async () => {
     const offlineMode = isOfflineMode();
-    console.log(offlineMode);
     const score = await retrieveData('score');
     const powerUps = await retrieveData('powerUps');
     if (score !== null && powerUps !== null) {
