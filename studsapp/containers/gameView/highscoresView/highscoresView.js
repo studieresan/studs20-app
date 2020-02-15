@@ -18,59 +18,18 @@ const placeholderSource = 'studsapp/static/images/profile-placeholder.png';
 const window = Dimensions.get('window');
 
 const HighScoreRow = ({placing, picture, name, score}) => (
-    <View
-        style={{
-            width: window.width,
-            borderBottomWidth: 1,
-            borderBottomColor: '#b3d4d6',
-            paddingVertical: 8,
-            flexDirection: 'row',
-        }}>
-        <View style={{flex: 0.5, flexDirection: 'row'}}>
-            <Text
-                style={{
-                    color: 'white',
-                    fontFamily: 'Raleway-Bold',
-                    fontSize: 20,
-                    paddingLeft: (window.width * 0.15) / 2,
-                    textAlign: 'center',
-                    textAlignVertical: 'center',
-                }}>
-                {placing}
-            </Text>
+    <View style={styles.rowWrapper}>
+        <View style={styles.placingAndImageWrapper}>
+            <Text style={styles.placingText}>{placing}</Text>
 
             <Image
-                style={{
-                    height: 48,
-                    width: 48,
-                    borderRadius: 100,
-                    marginHorizontal: 20,
-                }}
+                style={styles.image}
                 source={{uri: picture}}
                 defaultSource={require(placeholderSource)}
             />
-            <Text
-                style={{
-                    color: 'white',
-                    fontFamily: 'Raleway',
-                    fontSize: 16,
-                    textAlignVertical: 'center',
-                }}>
-                {name}
-            </Text>
+            <Text style={styles.nameText}>{name}</Text>
         </View>
-        <Text
-            style={{
-                color: 'white',
-                fontSize: 17,
-                fontFamily: 'Raleway',
-                textAlignVertical: 'center',
-                textAlign: 'right',
-                paddingRight: (window.width * 0.15) / 2,
-                flex: 0.5,
-            }}>
-            {score}
-        </Text>
+        <Text style={styles.scoreText}>{score}</Text>
     </View>
 );
 
@@ -100,37 +59,17 @@ class HighscoresView extends React.Component {
         return (
             <ImageBackground
                 source={require(backgroundSource)}
-                style={{flex: 1, alignItems: 'center'}}>
+                style={styles.imageBackground}>
                 <View style={styles.top}>
                     <Image source={require(logoSource)} style={styles.logo} />
                     <Text style={styles.title}>Highscores</Text>
                     <IconButton
                         onPress={() => this.props.navigation.goBack()}
                         icon="ios-arrow-back"
-                        style={{
-                            position: 'absolute',
-                            top: window.height / 16,
-                            left: 3,
-                            alignItems: 'center',
-                        }}
+                        style={styles.back}
                     />
                 </View>
-                <View
-                    style={{
-                        width: window.width * 0.9,
-                        flex: 0.2,
-                        backgroundColor: '#f96c6b',
-                        marginVertical: 10,
-                        borderRadius: 12,
-                        flexDirection: 'row',
-                        justifyContent: 'space-evenly',
-                        alignItems: 'center',
-                        shadowColor: '#f96c6b',
-                        shadowOffset: {width: 0, height: 5},
-                        shadowOpacity: 0.34,
-                        shadowRadius: 6,
-                        elevation: 10,
-                    }}>
+                <View style={styles.firstPlaceCard}>
                     {this.state.offline && (
                         <Icon
                             style={{flex: 1, textAlign: 'center'}}
@@ -146,62 +85,26 @@ class HighscoresView extends React.Component {
                             color={'gold'}></Icon>,
                         <View style={{flex: 1}}>
                             <Image
-                                style={{
-                                    height: 65,
-                                    width: 65,
-                                    borderRadius: 100,
-                                    marginHorizontal: 20,
-                                }}
+                                style={styles.firstPlaceImage}
                                 source={{
                                     uri: leader && leader.picture,
                                 }}
                                 defaultSource={require(placeholderSource)}
                             />
-                            <Text
-                                style={{
-                                    color: 'white',
-                                    fontFamily: 'Raleway',
-                                    fontSize: 14,
-                                    marginTop: 5,
-                                    textAlign: 'center',
-                                }}>
+                            <Text style={styles.firstPlaceName}>
                                 {leader && leader.name}
                             </Text>
                         </View>,
-                        <Text
-                            style={{
-                                flex: 1,
-                                color: 'white',
-                                fontFamily: 'Raleway',
-                                fontSize: 19,
-                                fontWeight: 'bold',
-                                textAlign: 'center',
-                            }}>
+                        <Text style={styles.firstPlaceScore}>
                             {leader && leader.score}
                         </Text>,
                     ]}
                 </View>
-                <View
-                    style={{
-                        flex: 0.55,
-                        width: window.width,
-                        borderTopWidth: 1,
-                        borderTopColor: '#b3d4d6',
-                    }}>
+                <View style={styles.bottom}>
                     {this.state.offline && (
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                            }}>
+                        <View style={styles.offlineTextWrapper}>
                             <Text style={styles.title}>Whoops!</Text>
-                            <Text
-                                style={{
-                                    color: '#fff',
-                                    textAlign: 'center',
-                                    fontFamily: 'Raleway-Black',
-                                    marginTop: 10,
-                                }}>
+                            <Text style={[styles.title, {fontSize: 14}]}>
                                 Kan inte se highscores om du e offline...
                             </Text>
                         </View>
@@ -220,6 +123,7 @@ class HighscoresView extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    imageBackground: {flex: 1, alignItems: 'center'},
     title: {
         color: '#fff',
         fontSize: 30,
@@ -241,6 +145,95 @@ const styles = StyleSheet.create({
     },
     bottom: {
         flex: 0.75,
+    },
+    rowWrapper: {
+        width: window.width,
+        borderBottomWidth: 1,
+        borderBottomColor: '#b3d4d6',
+        paddingVertical: 8,
+        flexDirection: 'row',
+    },
+    placingAndImageWrapper: {flex: 0.5, flexDirection: 'row'},
+    placingText: {
+        color: 'white',
+        fontFamily: 'Raleway-Bold',
+        fontSize: 20,
+        paddingLeft: (window.width * 0.15) / 2,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+    },
+    image: {
+        height: 48,
+        width: 48,
+        borderRadius: 100,
+        marginHorizontal: 20,
+    },
+    nameText: {
+        color: 'white',
+        fontFamily: 'Raleway',
+        fontSize: 16,
+        textAlignVertical: 'center',
+    },
+    scoreText: {
+        color: 'white',
+        fontSize: 17,
+        fontFamily: 'Raleway',
+        textAlignVertical: 'center',
+        textAlign: 'right',
+        paddingRight: (window.width * 0.15) / 2,
+        flex: 0.5,
+    },
+    back: {
+        position: 'absolute',
+        top: window.height / 16,
+        left: 3,
+        alignItems: 'center',
+    },
+    firstPlaceCard: {
+        width: window.width * 0.9,
+        flex: 0.2,
+        backgroundColor: '#f96c6b',
+        marginVertical: 10,
+        borderRadius: 12,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        shadowColor: '#f96c6b',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: 0.34,
+        shadowRadius: 6,
+        elevation: 10,
+    },
+    firstPlaceImage: {
+        height: 65,
+        width: 65,
+        borderRadius: 100,
+        marginHorizontal: 20,
+    },
+    firstPlaceName: {
+        color: 'white',
+        fontFamily: 'Raleway',
+        fontSize: 14,
+        marginTop: 5,
+        textAlign: 'center',
+    },
+    firstPlaceScore: {
+        flex: 1,
+        color: 'white',
+        fontFamily: 'Raleway',
+        fontSize: 19,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    bottom: {
+        flex: 0.55,
+        width: window.width,
+        borderTopWidth: 1,
+        borderTopColor: '#b3d4d6',
+    },
+    offlineTextWrapper: {
+        flex: 1,
+        justifyContent: 'center',
     },
 });
 
