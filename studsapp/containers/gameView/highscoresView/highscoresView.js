@@ -14,18 +14,17 @@ import {getTopScores} from 'studsapp/containers/gameView/gameController';
 
 const logoSource = 'studsapp/static/images/logo-small.png';
 const backgroundSource = 'studsapp/static/images/background.png';
-const placeholderSource = 'studsapp/static/images/profile-placeholder.png';
+const placeholderSource = require('studsapp/static/images/profile-placeholder.png');
 const window = Dimensions.get('window');
 
 const HighScoreRow = ({placing, picture, name, score}) => (
     <View style={styles.rowWrapper}>
         <View style={styles.placingAndImageWrapper}>
             <Text style={styles.placingText}>{placing}</Text>
-
             <Image
                 style={styles.image}
                 source={{uri: picture}}
-                defaultSource={require(placeholderSource)}
+                defaultSource={placeholderSource}
             />
             <Text style={styles.nameText}>{name}</Text>
         </View>
@@ -44,7 +43,7 @@ class HighscoresView extends React.Component {
     componentDidMount() {
         getTopScores()
             .then(result => this.setState({highscores: result, offline: false}))
-            .catch(() => this.setState({offline: true}));
+            .catch(e => this.setState({offline: true}));
     }
 
     render() {
@@ -87,10 +86,14 @@ class HighscoresView extends React.Component {
                             <View style={{flex: 1, alignItems: 'center'}}>
                                 <Image
                                     style={styles.firstPlaceImage}
-                                    source={{
-                                        uri: leader && leader.picture,
-                                    }}
-                                    defaultSource={require(placeholderSource)}
+                                    source={
+                                        leader
+                                            ? {
+                                                  uri: leader.picture,
+                                              }
+                                            : placeholderSource
+                                    }
+                                    defaultSource={placeholderSource}
                                 />
                                 <Text style={styles.firstPlaceName}>
                                     {leader && leader.name}
