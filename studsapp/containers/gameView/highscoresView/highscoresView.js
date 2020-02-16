@@ -171,14 +171,14 @@ const styles = StyleSheet.create({
     },
     nameText: {
         color: 'white',
-        fontFamily: 'Raleway',
+        fontFamily: 'Raleway-Regular',
         fontSize: 16,
         textAlignVertical: 'center',
     },
     scoreText: {
         color: 'white',
         fontSize: 17,
-        fontFamily: 'Raleway',
+        fontFamily: 'Raleway-Regular',
         textAlignVertical: 'center',
         textAlign: 'right',
         paddingRight: (window.width * 0.15) / 2,
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     },
     firstPlaceName: {
         color: 'white',
-        fontFamily: 'Raleway',
+        fontFamily: 'Raleway-Regular',
         fontSize: 14,
         marginTop: 5,
         textAlign: 'center',
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     firstPlaceScore: {
         flex: 1,
         color: 'white',
-        fontFamily: 'Raleway',
+        fontFamily: 'Raleway-Regular',
         fontSize: 19,
         fontWeight: 'bold',
         textAlign: 'center',
