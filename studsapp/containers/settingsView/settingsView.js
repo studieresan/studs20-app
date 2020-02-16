@@ -40,7 +40,7 @@ class SettingsView extends React.Component {
                     </View>
 
                     <View style={styles.settingRowWrapper}>
-                        <Text style={styles.settingText}>Offline läge</Text>
+                        <Text style={styles.settingText}>Offline-läge</Text>
                         <Switch
                             value={this.props.offlineMode}
                             onValueChange={v => this.props.setOfflineMode(v)}
@@ -63,7 +63,7 @@ class SettingsView extends React.Component {
                     </View>
                 </View>
                 <View style={styles.bottom}>
-                    <Text style={styles.version}>Studs Version 1.0.1</Text>
+                    <Text style={styles.version}>Studs Version 1.1.0</Text>
                 </View>
             </ImageBackground>
         );
