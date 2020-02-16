@@ -69,43 +69,48 @@ class HighscoresView extends React.Component {
                         style={styles.back}
                     />
                 </View>
-                <View style={styles.firstPlaceCard}>
-                    {this.state.offline && (
-                        <Icon
-                            style={{flex: 1, textAlign: 'center'}}
-                            name={'ios-thunderstorm'}
-                            size={80}
-                            color={'white'}></Icon>
-                    )}
-                    {!this.state.offline && [
-                        <Icon
-                            style={{flex: 1, textAlign: 'center'}}
-                            name={'md-trophy'}
-                            size={45}
-                            color={'gold'}></Icon>,
-                        <View style={{flex: 1}}>
-                            <Image
-                                style={styles.firstPlaceImage}
-                                source={{
-                                    uri: leader && leader.picture,
-                                }}
-                                defaultSource={require(placeholderSource)}
-                            />
-                            <Text style={styles.firstPlaceName}>
-                                {leader && leader.name}
-                            </Text>
-                        </View>,
-                        <Text style={styles.firstPlaceScore}>
-                            {leader && leader.score}
-                        </Text>,
-                    ]}
+                <View style={{flex: 0.2, justifyContent: 'center'}}>
+                    <View style={styles.firstPlaceCard}>
+                        {this.state.offline && (
+                            <Icon
+                                style={styles.firstPlaceIcon}
+                                name={'ios-thunderstorm'}
+                                size={80}
+                                color={'white'}></Icon>
+                        )}
+                        {!this.state.offline && [
+                            <Icon
+                                style={styles.firstPlaceIcon}
+                                name={'md-trophy'}
+                                size={45}
+                                color={'gold'}></Icon>,
+                            <View style={{flex: 1, alignItems: 'center'}}>
+                                <Image
+                                    style={styles.firstPlaceImage}
+                                    source={{
+                                        uri: leader && leader.picture,
+                                    }}
+                                    defaultSource={require(placeholderSource)}
+                                />
+                                <Text style={styles.firstPlaceName}>
+                                    {leader && leader.name}
+                                </Text>
+                            </View>,
+                            <Text style={styles.firstPlaceScore}>
+                                {leader && leader.score}
+                            </Text>,
+                        ]}
+                    </View>
                 </View>
                 <View style={styles.bottom}>
                     {this.state.offline && (
                         <View style={styles.offlineTextWrapper}>
                             <Text style={styles.title}>Whoops!</Text>
                             <Text style={[styles.title, {fontSize: 14}]}>
-                                Kan inte se highscores om du är offline...
+                                Du kan inte se highscores utan internet
+                            </Text>
+                            <Text style={[styles.title, {fontSize: 14}]}>
+                                eller om du är i offline-läge...
                             </Text>
                         </View>
                     )}
@@ -141,9 +146,6 @@ const styles = StyleSheet.create({
         width: window.width,
         borderBottomWidth: 1,
         borderBottomColor: '#b3d4d6',
-    },
-    bottom: {
-        flex: 0.75,
     },
     rowWrapper: {
         width: window.width,
@@ -191,9 +193,8 @@ const styles = StyleSheet.create({
     },
     firstPlaceCard: {
         width: window.width * 0.9,
-        flex: 0.2,
+        flex: 0.85,
         backgroundColor: '#f96c6b',
-        marginVertical: 10,
         borderRadius: 12,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
@@ -225,6 +226,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    firstPlaceIcon: {flex: 1, textAlign: 'center'},
     bottom: {
         flex: 0.55,
         width: window.width,
