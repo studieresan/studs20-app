@@ -1,17 +1,18 @@
 import React from 'react';
-import {Animated, Easing} from 'react-native';
+import {Animated, Easing, Dimensions} from 'react-native';
 
 const ONE_SECOND_IN_MILLIS = 1000;
+const window = Dimensions.get('window');
 
 export default class MovingText extends React.Component {
     translateValueY = new Animated.Value(0);
     opacityValue = new Animated.Value(0);
     translateValueX = new Animated.Value(0);
     firstRender = true;
+    textWidth = 10;
     constructor(props) {
         super(props);
         this.state = {
-            top: 0,
             left: 0,
         };
     }
@@ -28,10 +29,10 @@ export default class MovingText extends React.Component {
     animate = () => {
         this.setState(
             {
-                top: this.getRandInt(50 * 2) - 50 - 50,
                 left:
-                    this.getRandInt(this.props.scoreWidth * 2) -
-                    this.props.scoreWidth,
+                    (window.width - this.props.scoreWidth) / 2 +
+                    this.getRandInt(this.props.scoreWidth) -
+                    this.textWidth / 2,
             },
             () => {
                 this.opacityValue.setValue(1);
@@ -64,15 +65,15 @@ export default class MovingText extends React.Component {
     render() {
         return (
             <Animated.Text
+                onLayout={event => {
+                    this.textWidth = event.nativeEvent.layout.width;
+                }}
                 style={[
-                    {top: this.state.top, left: this.state.left},
+                    {left: this.state.left},
                     {
                         position: 'absolute',
-                        bottom: 0,
-                        right: 0,
+                        top: '38%',
                         color: 'white',
-                        textAlign: 'center',
-                        textAlignVertical: 'center',
                         opacity: this.opacityValue,
                         transform: [
                             {translateY: this.translateValueY},

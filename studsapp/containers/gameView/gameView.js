@@ -100,7 +100,6 @@ class GameView extends React.Component {
     }
 }
 
-// const window = Dimensions.get('window');
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,

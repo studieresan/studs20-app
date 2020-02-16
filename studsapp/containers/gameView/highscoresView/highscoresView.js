@@ -157,14 +157,17 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         flexDirection: 'row',
     },
-    placingAndImageWrapper: {flex: 0.5, flexDirection: 'row'},
+    placingAndImageWrapper: {
+        flex: 0.5,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     placingText: {
         color: 'white',
         fontFamily: 'Raleway-Bold',
         fontSize: 20,
         paddingLeft: (window.width * 0.15) / 2,
         textAlign: 'center',
-        textAlignVertical: 'center',
     },
     image: {
         height: 48,
@@ -176,13 +179,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'Raleway-Regular',
         fontSize: 16,
-        textAlignVertical: 'center',
     },
     scoreText: {
         color: 'white',
         fontSize: 17,
         fontFamily: 'Raleway-Regular',
-        textAlignVertical: 'center',
         textAlign: 'right',
         paddingRight: (window.width * 0.15) / 2,
         flex: 0.5,
