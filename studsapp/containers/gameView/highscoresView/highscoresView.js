@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#b3d4d6',
         paddingVertical: 8,
         flexDirection: 'row',
+        alignItems: 'center',
     },
     placingAndImageWrapper: {
         flex: 0.5,
