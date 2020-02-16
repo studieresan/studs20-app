@@ -8,6 +8,7 @@ import EventListView from 'studsapp/containers/eventListView/eventListViewContai
 import EventView from 'studsapp/containers/eventView/eventViewContainer';
 import GameView from 'studsapp/containers/gameView/gameViewContainer';
 import HighscoresView from 'studsapp/containers/gameView/highscoresView/highscoresView';
+import ShopView from 'studsapp/containers/gameView/shopView/shopView';
 import CheckInView from 'studsapp/containers/checkInView/checkInViewContainer';
 import AuthenticationView from 'studsapp/containers/authenticationView/authenticationViewContainer';
 import SettingsView from 'studsapp/containers/settingsView/settingsViewContainer';
@@ -47,7 +48,7 @@ const GameNavigator = createStackNavigator(
     {
         Game: GameView,
         Highscores: HighscoresView,
-        Shop: HighscoresView,
+        Shop: ShopView,
     },
     {
         initialRouteName: 'Game',
