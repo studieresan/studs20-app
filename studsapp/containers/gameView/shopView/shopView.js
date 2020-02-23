@@ -7,41 +7,55 @@ import {
     ImageBackground,
     Image,
     FlatList,
+    TouchableHighlight
 } from 'react-native';
 import {IconButton} from 'studsapp/generalComponents';
-import { mapboxToken } from '../../../utils/config';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {powerUpInfo} from 'studsapp/containers/gameView/gameController';
 
 const logoSource = require('studsapp/static/images/logo-small.png');
 const backgroundSource = 'studsapp/static/images/background.png';
 const window = Dimensions.get('window');
 
-const ShopRow = ({picture, name, description, cost}) => {
+const ShopRow = ({picture, name, description, cost}, amount) => {
     return (
     <View style={styles.rowWrapper}>
-        <Image
-            style={styles.image}
-            source={picture}
-        />
-        <View style={styles.powerupInfo}>
-            <Text style={styles.nameText}>{name}</Text>
-            <Text style={styles.descriptionText}>{description}</Text>
+        <View style={styles.imageWrapper}>
+            <Image
+                style={styles.image}
+                source={picture}
+            />
         </View>
-        <Text style={styles.costText}>{cost}</Text>
+        <View style={styles.powerupInfo}>
+            <View style={styles.powerupHeader}>
+                <Text style={styles.nameText}>{name}</Text>
+                <Text style={styles.nameText}>{'x' + amount}</Text>
+            </View>
+            <Text style={styles.descriptionText}>{description}</Text>
+            <View style={styles.costInfo}>
+                <Icon
+                    name="ios-cash"
+                    size={25}
+                    color={'#fff'}
+                />
+                <Text style={styles.costText}>{cost}</Text>
+                <View style={styles.buyButtonWrapper}>
+                    <TouchableHighlight 
+                        style={styles.buyButton}
+                        underlayColor="rgba(255,255,255,0.3)"
+                        onPress={() => {alert('CALL THE POPO!')}}
+                    >
+                        <Text style={styles.buyText}>Köp</Text>
+                    </TouchableHighlight>
+                </View>
+            </View>
+        </View>
     </View>
 )};
 
 class ShopView extends React.Component {
-    getPowerups = () => {
-        return [
-            {picture: logoSource, name: 'Marko', description: 'Ökar mängden tippies per tapp.', cost: 5}, 
-            {picture: logoSource, name: 'Fredrik', description: 'Ger dig tillgång till tippie-streaks, som ökar mängden tippies vid många tapps.', cost: 10}, 
-            {picture: logoSource, name: 'Anton', description: 'Tippies samlas in även utan att behöva tappa.', cost: 1}, 
-            {picture: logoSource, name: 'Bank', description: 'Ger dig tillgång till banken, som samlar tippies åt dig.', cost: 1}, 
-            {picture: logoSource, name: 'Stonks', description: 'Ökar hastigheten som banken samlar tippies.', cost: 1}
-        ];
-    }
-
     render() {
+        console.log(powerUpInfo);
         return (
             <ImageBackground
                 source={require(backgroundSource)}
@@ -57,9 +71,13 @@ class ShopView extends React.Component {
                 </View>
                 <View style={styles.bottom}>
                     <FlatList
-                        data={this.getPowerups()}
+                        data={powerUpInfo}
                         keyExtractor={item => item.name}
-                        renderItem={({item}) => ShopRow(item)}
+                        renderItem={({item, index}) => {
+                            console.log(this.props.navigation.getParam('powerUps'));
+                            return ShopRow(item, this.props.navigation.getParam('powerUps')[index]);
+                        }}
+                        showsVerticalScrollIndicator={false}
                     />
                 </View>
             </ImageBackground>
@@ -88,50 +106,79 @@ const styles = StyleSheet.create({
         borderBottomColor: '#b3d4d6',
     },
     bottom: {
-        flex: 0.75,
+        flex: 0.75
     },
     rowWrapper: {
-        width: window.width,
-        borderBottomWidth: 1,
-        borderBottomColor: '#b3d4d6',
+        width: 0.9*window.width,
+        backgroundColor: '#b3d4d6',
+        borderRadius: 10,
+        marginTop: 10,
         paddingVertical: 8,
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        shadowColor: '#b3d4d6',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: 0.34,
+        shadowRadius: 6,
+        elevation: 10,
+    },
+    imageWrapper: {
+        flex: 0.4,
+        justifyContent: 'center',
         alignItems: 'center'
     },
-    powerupInfo: {
-        flex: 0.6,
-        flexDirection: 'column',
-
-    },
     image: {
-        height: 48,
-        width: 48,
-        borderRadius: 100,
-        marginHorizontal: 20,
-        flex: 0.15,
+        resizeMode: 'contain',
+        height: 120,
+        width: 120
+    },
+    powerupInfo: {
+        flex: 0.6
+    },
+    powerupHeader: {
+        flex: 0.25,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingRight: 5
     },
     nameText: {
         color: 'white',
         fontFamily: 'Raleway-Black',
-        fontSize: 16,
-        textAlignVertical: 'center',
-        textAlign: 'center'
+        fontSize: 22
     },
     descriptionText: {
+        flex: 0.5,
         color: 'white',
         fontFamily: 'Raleway-Regular',
-        textAlign: 'center',
-        textAlignVertical: 'center'
+    },
+    costInfo: {
+        flex: 0.25,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'flex-end'
     },
     costText: {
         color: 'white',
+        fontSize: 20,
+        marginLeft: 5,
+        fontFamily: 'Raleway-Black',
+        textAlign: 'center',
+    },
+    buyButtonWrapper: {
+        flex: 1,
+        alignItems: 'flex-end',
+        paddingRight: 5
+    },
+    buyButton: {
+        backgroundColor: '#387677',
+        borderRadius: 5,
+        paddingVertical: 5,
+        paddingHorizontal: 15
+    },
+    buyText: {
         fontSize: 17,
         fontFamily: 'Raleway-Black',
-        textAlignVertical: 'center',
-        textAlign: 'right',
-        paddingRight: (window.width * 0.15) / 2,
-        flex: 0.25,
+        textAlign: 'center',
+        color: 'white'
     },
     back: {
         position: 'absolute',

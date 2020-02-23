@@ -25,16 +25,17 @@ export const load = async () => {
         // TODO: try from backend only if online!
         return {
             score: 0,
-            powerUps: [0, 0, 0],
+            powerUps: [0, 0, 0, 0, 0],
         };
     }
 };
 
-const localSave = state =>
+const localSave = state => {
+    console.log(state)
     Promise.all([
         storeData('score', state.score.toString()),
         storeData('powerUps', JSON.stringify(state.powerUps)),
-    ]).catch(error => console.error(error));
+    ]).catch(error => console.error(error)); }
 
 const backendSave = ({score, powerUps}) =>
     !isOfflineMode() && updateGameState({score, powerUps}).catch(() => {});
@@ -49,3 +50,12 @@ export const createSaveTimers = stateFunc => [
 
 export const getTopScores = () =>
     isOfflineMode() ? Promise.reject() : fetchTopScores();
+
+const logoSource = require('studsapp/static/images/logo-small.png');
+export const powerUpInfo = [
+    {picture: logoSource, name: 'Marko', description: 'Pizza pizza yummy tumy', cost: 5}, 
+    {picture: logoSource, name: 'Fredrik', description: 'Pizza pizza yummy tumy', cost: 10}, 
+    {picture: logoSource, name: 'Anton', description: 'Pizza pizza yummy tumy', cost: 1}, 
+    {picture: logoSource, name: 'Bank', description: 'Pizza pizza yummy tumy', cost: 1}, 
+    {picture: logoSource, name: 'Stonks', description: 'Pizza pizza yummy tumy', cost: 1}
+];

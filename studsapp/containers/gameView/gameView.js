@@ -20,7 +20,7 @@ class GameView extends React.Component {
         super(props);
         this.state = {
             score: GAME_SETTINGS.loading,
-            powerUps: [0, 0, 0],
+            powerUps: [0, 0, 0, 0, 0],
             clicking: false,
         };
 
@@ -28,7 +28,7 @@ class GameView extends React.Component {
     }
 
     componentDidMount() {
-        load().then(prevGameState => this.setState(prevGameState));
+        load().then(prevGameState => this.setState(prevGameState, () => console.log(this.state)));
 
         this.subs = [
             this.props.navigation.addListener('didFocus', () => {
@@ -63,7 +63,10 @@ class GameView extends React.Component {
                         icon={'ios-stats'}
                     />
                     <IconButton
-                        onPress={() => this.props.navigation.navigate('Shop')}
+                        onPress={() => this.props.navigation.navigate('Shop', {
+                            score: this.state.score,
+                            powerUps: this.state.powerUps,
+                        })}
                         style={styles.iconButton}
                         icon={'ios-cart'}
                     />
