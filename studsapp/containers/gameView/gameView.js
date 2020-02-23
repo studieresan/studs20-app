@@ -35,13 +35,18 @@ class GameView extends React.Component {
                 this.timers = createSaveTimers(() => this.state);
             }),
 
-            this.props.navigation.addListener('willBlur', () =>
-                this.timers.forEach(timer => clearInterval(timer)),
-            ),
+            this.props.navigation.addListener('willBlur', () => {
+                this.timers.forEach(timer => clearInterval(timer));
+            }),
         ];
+
+        if (this.timers.length === 0) {
+            this.timers = createSaveTimers(() => this.state);
+        }
     }
 
     componentWillUnmount() {
+        this.timers.forEach(timer => clearInterval(timer));
         this.subs.forEach(sub => sub.remove());
     }
 
@@ -103,7 +108,6 @@ class GameView extends React.Component {
     }
 }
 
-// const window = Dimensions.get('window');
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,

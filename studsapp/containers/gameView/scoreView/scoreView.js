@@ -9,11 +9,11 @@ export default class Score extends React.Component {
     interval = null;
     scaleValue = new Animated.Value(1);
     twirlValue = new Animated.Value(0);
+    scoreWidth = 10;
     constructor(props) {
         super(props);
         this.state = {
             clickRate: 0,
-            scoreWidth: 10,
         };
     }
 
@@ -73,7 +73,7 @@ export default class Score extends React.Component {
                 <MovingText
                     key={id}
                     id={id}
-                    scoreWidth={this.state.scoreWidth}
+                    scoreWidth={this.scoreWidth}
                     animate={this.props.score % NUM_ANIMS === id}
                 />
             ));
@@ -106,11 +106,9 @@ export default class Score extends React.Component {
                         },
                     ]}
                     onLayout={event => {
-                        this.setState({
-                            scoreWidth: Math.round(
-                                event.nativeEvent.layout.width,
-                            ),
-                        });
+                        this.scoreWidth = Math.round(
+                            event.nativeEvent.layout.width,
+                        );
                     }}>
                     {this.props.score}
                 </Animated.Text>
