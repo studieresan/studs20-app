@@ -17,45 +17,57 @@ const logoSource = require('studsapp/static/images/logo-small.png');
 const backgroundSource = 'studsapp/static/images/background.png';
 const window = Dimensions.get('window');
 
-const ShopRow = ({picture, name, description, cost}, amount) => {
+const ShopRow = ({picture, name, description, cost}, index, powerups) => {
     return (
-    <View style={styles.rowWrapper}>
-        <View style={styles.imageWrapper}>
-            <Image
-                style={styles.image}
-                source={picture}
-            />
-        </View>
-        <View style={styles.powerupInfo}>
-            <View style={styles.powerupHeader}>
-                <Text style={styles.nameText}>{name}</Text>
-                <Text style={styles.nameText}>{'x' + amount}</Text>
-            </View>
-            <Text style={styles.descriptionText}>{description}</Text>
-            <View style={styles.costInfo}>
-                <Icon
-                    name="ios-cash"
-                    size={25}
-                    color={'#fff'}
-                />
-                <Text style={styles.costText}>{cost}</Text>
-                <View style={styles.buyButtonWrapper}>
-                    <TouchableHighlight 
-                        style={styles.buyButton}
-                        underlayColor="rgba(255,255,255,0.3)"
-                        onPress={() => {alert('CALL THE POPO!')}}
-                    >
-                        <Text style={styles.buyText}>Köp</Text>
-                    </TouchableHighlight>
+    <View style={{flex: 1}}>
+        {(index == 0 || (index > 0 && powerups[index-1] > 0)) &&
+            <View style={styles.rowWrapper}>
+                <View style={styles.imageWrapper}>
+                    <Image
+                        style={styles.image}
+                        source={picture}
+                    />
+                </View>
+                <View style={styles.powerupInfo}>
+                    <View style={styles.powerupHeader}>
+                        <Text style={styles.nameText}>{name}</Text>
+                        <Text style={styles.nameText}>{'x' + powerups[index]}</Text>
+                    </View>
+                    <Text style={styles.descriptionText}>{description}</Text>
+                    <View style={styles.costInfo}>
+                        <Icon
+                            name="ios-cash"
+                            size={25}
+                            color={'#fff'}
+                        />
+                        <Text style={styles.costText}>{cost}</Text>
+                        <View style={styles.buyButtonWrapper}>
+                            <TouchableHighlight 
+                                style={styles.buyButton}
+                                underlayColor="rgba(255,255,255,0.3)"
+                                onPress={() => {alert('CALL THE POPO!')}}
+                            >
+                                <Text style={styles.buyText}>Köp</Text>
+                            </TouchableHighlight>
+                        </View>
+                    </View>
                 </View>
             </View>
-        </View>
+        }
+        {(index > 0 && powerups[index-1] == 0) &&
+            <View style={styles.rowLockWrapper}>
+                <Icon 
+                    name="ios-lock"
+                    size={40}
+                    color={'#fff'}
+                />
+            </View>
+        }
     </View>
 )};
 
 class ShopView extends React.Component {
     render() {
-        console.log(powerUpInfo);
         return (
             <ImageBackground
                 source={require(backgroundSource)}
@@ -73,11 +85,9 @@ class ShopView extends React.Component {
                     <FlatList
                         data={powerUpInfo}
                         keyExtractor={item => item.name}
-                        renderItem={({item, index}) => {
-                            console.log(this.props.navigation.getParam('powerUps'));
-                            return ShopRow(item, this.props.navigation.getParam('powerUps')[index]);
-                        }}
+                        renderItem={({item, index}) => ShopRow(item, index, this.props.navigation.getParam('powerUps'))}
                         showsVerticalScrollIndicator={false}
+                        ListFooterComponent={<View style={{marginBottom: 10}}/>}
                     />
                 </View>
             </ImageBackground>
@@ -115,6 +125,22 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingVertical: 8,
         flexDirection: 'row',
+        shadowColor: '#b3d4d6',
+        shadowOffset: {width: 0, height: 5},
+        shadowOpacity: 0.34,
+        shadowRadius: 6,
+        elevation: 10,
+    },
+    rowLockWrapper: {
+        width: 0.9*window.width,
+        height: 120,
+        backgroundColor: '#b3d4d6',
+        borderRadius: 10,
+        marginTop: 10,
+        paddingVertical: 8,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         shadowColor: '#b3d4d6',
         shadowOffset: {width: 0, height: 5},
         shadowOpacity: 0.34,

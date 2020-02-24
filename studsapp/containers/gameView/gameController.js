@@ -30,12 +30,11 @@ export const load = async () => {
     }
 };
 
-const localSave = state => {
-    console.log(state)
+const localSave = state => 
     Promise.all([
         storeData('score', state.score.toString()),
         storeData('powerUps', JSON.stringify(state.powerUps)),
-    ]).catch(error => console.error(error)); }
+    ]).catch(error => console.error(error)); 
 
 const backendSave = ({score, powerUps}) =>
     !isOfflineMode() && updateGameState({score, powerUps}).catch(() => {});

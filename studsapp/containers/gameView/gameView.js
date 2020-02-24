@@ -28,7 +28,7 @@ class GameView extends React.Component {
     }
 
     componentDidMount() {
-        load().then(prevGameState => this.setState(prevGameState, () => console.log(this.state)));
+        load().then(prevGameState => this.setState(prevGameState));
 
         this.subs = [
             this.props.navigation.addListener('didFocus', () => {
