@@ -27,6 +27,18 @@ class GameView extends React.Component {
         this.stopClick = _.debounce(this.stopClick, ONE_SECOND_IN_MILLIS);
     }
 
+    purchasePowerup = (index, cost) => {
+        if(cost <= this.state.score) {
+            this.setState(previousState => {
+                previousState.powerUps[index]++;
+                return ({
+                    powerUps: previousState.powerUps,
+                    score: previousState.score - cost
+                })
+            })
+        }
+    }
+
     componentDidMount() {
         load().then(prevGameState => this.setState(prevGameState));
 
@@ -71,6 +83,7 @@ class GameView extends React.Component {
                         onPress={() => this.props.navigation.navigate('Shop', {
                             score: this.state.score,
                             powerUps: this.state.powerUps,
+                            purchasePowerup: this.purchasePowerup
                         })}
                         style={styles.iconButton}
                         icon={'ios-cart'}

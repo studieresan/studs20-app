@@ -17,10 +17,10 @@ const logoSource = require('studsapp/static/images/logo-small.png');
 const backgroundSource = 'studsapp/static/images/background.png';
 const window = Dimensions.get('window');
 
-const ShopRow = ({picture, name, description, cost}, index, powerups) => {
+const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purchasePowerup) => {
     return (
     <View style={{flex: 1}}>
-        {(index == 0 || (index > 0 && powerups[index-1] > 0)) &&
+        {(index == 0 || (index > 0 && powerupAmount[index-1] > 0)) &&
             <View style={styles.rowWrapper}>
                 <View style={styles.imageWrapper}>
                     <Image
@@ -31,7 +31,7 @@ const ShopRow = ({picture, name, description, cost}, index, powerups) => {
                 <View style={styles.powerupInfo}>
                     <View style={styles.powerupHeader}>
                         <Text style={styles.nameText}>{name}</Text>
-                        <Text style={styles.nameText}>{'x' + powerups[index]}</Text>
+                        <Text style={styles.nameText}>{'x' + powerupAmount[index]}</Text>
                     </View>
                     <Text style={styles.descriptionText}>{description}</Text>
                     <View style={styles.costInfo}>
@@ -40,12 +40,12 @@ const ShopRow = ({picture, name, description, cost}, index, powerups) => {
                             size={25}
                             color={'#fff'}
                         />
-                        <Text style={styles.costText}>{cost}</Text>
+                        <Text style={styles.costText}>{k*powerupAmount[index] + m}</Text>
                         <View style={styles.buyButtonWrapper}>
                             <TouchableHighlight 
                                 style={styles.buyButton}
                                 underlayColor="rgba(255,255,255,0.3)"
-                                onPress={() => {alert('CALL THE POPO!')}}
+                                onPress={() => {purchasePowerup(index, k*powerupAmount[index]+m)}}
                             >
                                 <Text style={styles.buyText}>Köp</Text>
                             </TouchableHighlight>
@@ -54,7 +54,7 @@ const ShopRow = ({picture, name, description, cost}, index, powerups) => {
                 </View>
             </View>
         }
-        {(index > 0 && powerups[index-1] == 0) &&
+        {(index > 0 && powerupAmount[index-1] == 0) &&
             <View style={styles.rowLockWrapper}>
                 <Icon 
                     name="ios-lock"
@@ -85,7 +85,12 @@ class ShopView extends React.Component {
                     <FlatList
                         data={powerUpInfo}
                         keyExtractor={item => item.name}
-                        renderItem={({item, index}) => ShopRow(item, index, this.props.navigation.getParam('powerUps'))}
+                        renderItem={({item, index}) => ShopRow(
+                            item, 
+                            index, 
+                            this.props.navigation.getParam('powerUps'), 
+                            this.props.navigation.getParam('purchasePowerup')
+                        )}
                         showsVerticalScrollIndicator={false}
                         ListFooterComponent={<View style={{marginBottom: 10}}/>}
                     />

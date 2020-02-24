@@ -52,9 +52,9 @@ export const getTopScores = () =>
 
 const logoSource = require('studsapp/static/images/logo-small.png');
 export const powerUpInfo = [
-    {picture: logoSource, name: 'Marko', description: 'Pizza pizza yummy tumy', cost: 5}, 
-    {picture: logoSource, name: 'Fredrik', description: 'Pizza pizza yummy tumy', cost: 10}, 
-    {picture: logoSource, name: 'Anton', description: 'Pizza pizza yummy tumy', cost: 1}, 
-    {picture: logoSource, name: 'Bank', description: 'Pizza pizza yummy tumy', cost: 1}, 
-    {picture: logoSource, name: 'Stonks', description: 'Pizza pizza yummy tumy', cost: 1}
+    {picture: logoSource, name: 'Marko', description: 'Pizza pizza yummy tumy', k: 5, m: 5}, 
+    {picture: logoSource, name: 'Fredrik', description: 'Pizza pizza yummy tumy', k: 10, m: 10}, 
+    {picture: logoSource, name: 'Anton', description: 'Pizza pizza yummy tumy', k: 20, m: 20}, 
+    {picture: logoSource, name: 'Bank', description: 'Pizza pizza yummy tumy', k: 40, m: 40}, 
+    {picture: logoSource, name: 'Stonks', description: 'Pizza pizza yummy tumy', k: 80, m: 80}
 ];
