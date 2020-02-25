@@ -17,7 +17,7 @@ const logoSource = require('studsapp/static/images/logo-small.png');
 const backgroundSource = 'studsapp/static/images/background.png';
 const window = Dimensions.get('window');
 
-const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purchasePowerup) => {
+const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purchasePowerup, rerenderFunction) => {
     return (
     <View style={{flex: 1}}>
         {(index == 0 || (index > 0 && powerupAmount[index-1] > 0)) &&
@@ -45,7 +45,10 @@ const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purch
                             <TouchableHighlight 
                                 style={styles.buyButton}
                                 underlayColor="rgba(255,255,255,0.3)"
-                                onPress={() => {purchasePowerup(index, k*powerupAmount[index]+m)}}
+                                onPress={() => {
+                                    purchasePowerup(index, k*powerupAmount[index]+m);
+                                    rerenderFunction();
+                                }}
                             >
                                 <Text style={styles.buyText}>Köp</Text>
                             </TouchableHighlight>
@@ -89,7 +92,10 @@ class ShopView extends React.Component {
                             item, 
                             index, 
                             this.props.navigation.getParam('powerUps'), 
-                            this.props.navigation.getParam('purchasePowerup')
+                            this.props.navigation.getParam('purchasePowerup'),
+                            () => {
+                                this.forceUpdate();
+                            }
                         )}
                         showsVerticalScrollIndicator={false}
                         ListFooterComponent={<View style={{marginBottom: 10}}/>}
@@ -138,7 +144,7 @@ const styles = StyleSheet.create({
     },
     rowLockWrapper: {
         width: 0.9*window.width,
-        height: 120,
+        height: 136,
         backgroundColor: '#b3d4d6',
         borderRadius: 10,
         marginTop: 10,
