@@ -81,7 +81,7 @@ export default class MovingText extends React.Component {
                         ],
                     },
                 ]}>
-                +1
+                {'+' + this.props.multiplier}
             </Animated.Text>
         );
     }

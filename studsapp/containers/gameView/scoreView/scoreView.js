@@ -75,6 +75,7 @@ export default class Score extends React.Component {
                     id={id}
                     scoreWidth={this.scoreWidth}
                     animate={this.props.score % NUM_ANIMS === id}
+                    multiplier={this.props.powerUps[0] + 1}
                 />
             ));
     };

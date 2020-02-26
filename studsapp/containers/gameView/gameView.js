@@ -62,7 +62,7 @@ class GameView extends React.Component {
         this.subs.forEach(sub => sub.remove());
     }
 
-    click = () => this.setState({score: this.state.score + 1, clicking: true});
+    click = () => this.setState({score: this.state.score + 1 * (this.state.powerUps[0] + 1), clicking: true});
 
     stopClick = () => this.setState({clicking: false});
 
