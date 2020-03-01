@@ -17,7 +17,7 @@ const logoSource = require('studsapp/static/images/logo-small.png');
 const backgroundSource = 'studsapp/static/images/background.png';
 const window = Dimensions.get('window');
 
-const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purchasePowerup) => {
+const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purchasePowerup, score) => {
     return (
     <View style={{flex: 1}}>
         {(index == 0 || (index > 0 && powerupAmount[index-1] > 0)) &&
@@ -43,8 +43,15 @@ const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purch
                         <Text style={styles.costText}>{k*powerupAmount[index] + m}</Text>
                         <View style={styles.buyButtonWrapper}>
                             <TouchableHighlight 
-                                style={styles.buyButton}
-                                underlayColor="rgba(255,255,255,0.3)"
+                                style={[
+                                    styles.buyButton,
+                                    k*powerupAmount[index] + m > score && styles.buyButtonLocked
+                                ]}
+                                underlayColor={
+                                    k*powerupAmount[index] + m <= score ?
+                                    "rgba(255,255,255,0.3)" :
+                                    "#f96c6b"
+                                }
                                 onPress={() => purchasePowerup(index, k*powerupAmount[index]+m)}
                             >
                                 <Text style={styles.buyText}>Köp</Text>
@@ -112,7 +119,8 @@ class ShopView extends React.Component {
                             item, 
                             index, 
                             this.state.powerUps, 
-                            this.purchasePowerup
+                            this.purchasePowerup,
+                            this.state.score
                         )}
                         showsVerticalScrollIndicator={false}
                         ListFooterComponent={<View style={{marginBottom: 10}}/>}
@@ -233,6 +241,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingVertical: 5,
         paddingHorizontal: 15
+    },
+    buyButtonLocked: {
+        backgroundColor: '#f96c6b'
     },
     buyText: {
         fontSize: 17,
