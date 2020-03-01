@@ -22,9 +22,10 @@ export default class Score extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
+        const multiplier = this.props.powerUps[0] + 1;
         if (
             prevProps.score !== this.props.score &&
-            this.props.score % 10 === 0
+            Math.floor(this.props.score / multiplier) % 10 === 0
         ) {
             Animated.sequence([
                 Animated.timing(this.scaleValue, {
@@ -67,6 +68,7 @@ export default class Score extends React.Component {
     }
 
     createMovingTexts = () => {
+        const multiplier = this.props.powerUps[0] + 1;
         return Array(NUM_ANIMS)
             .fill(0)
             .map((_, id) => (
@@ -74,8 +76,8 @@ export default class Score extends React.Component {
                     key={id}
                     id={id}
                     scoreWidth={this.scoreWidth}
-                    animate={this.props.score % NUM_ANIMS === id}
-                    multiplier={this.props.powerUps[0] + 1}
+                    animate={Math.floor(this.props.score / multiplier) % NUM_ANIMS === id}
+                    multiplier={multiplier}
                 />
             ));
     };
