@@ -17,7 +17,7 @@ const logoSource = require('studsapp/static/images/logo-small.png');
 const backgroundSource = 'studsapp/static/images/background.png';
 const window = Dimensions.get('window');
 
-const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purchasePowerup, rerenderFunction) => {
+const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purchasePowerup) => {
     return (
     <View style={{flex: 1}}>
         {(index == 0 || (index > 0 && powerupAmount[index-1] > 0)) &&
@@ -45,10 +45,7 @@ const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purch
                             <TouchableHighlight 
                                 style={styles.buyButton}
                                 underlayColor="rgba(255,255,255,0.3)"
-                                onPress={() => {
-                                    purchasePowerup(index, k*powerupAmount[index]+m);
-                                    rerenderFunction();
-                                }}
+                                onPress={() => purchasePowerup(index, k*powerupAmount[index]+m)}
                             >
                                 <Text style={styles.buyText}>Köp</Text>
                             </TouchableHighlight>
@@ -70,6 +67,21 @@ const ShopRow = ({picture, name, description, k, m}, index, powerupAmount, purch
 )};
 
 class ShopView extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            score: this.props.navigation.getParam('score'),
+            powerUps: this.props.navigation.getParam('powerUps')
+        }
+    }
+
+    purchasePowerup = (index, cost) => {
+        if(cost <= this.state.score) {
+            this.props.navigation.getParam('purchasePowerup')(index, cost, (newState) => this.setState(newState));
+        }
+    }
+
     render() {
         return (
             <ImageBackground
@@ -85,17 +97,22 @@ class ShopView extends React.Component {
                     />
                 </View>
                 <View style={styles.bottom}>
+                    <View style={styles.tapAmount}>
+                        <Icon
+                            name="ios-cash"
+                            size={25}
+                            color={'#fff'}
+                        />
+                        <Text style={styles.costText}>{this.state.score}</Text>
+                    </View>
                     <FlatList
                         data={powerUpInfo}
                         keyExtractor={item => item.name}
                         renderItem={({item, index}) => ShopRow(
                             item, 
                             index, 
-                            this.props.navigation.getParam('powerUps'), 
-                            this.props.navigation.getParam('purchasePowerup'),
-                            () => {
-                                this.forceUpdate();
-                            }
+                            this.state.powerUps, 
+                            this.purchasePowerup
                         )}
                         showsVerticalScrollIndicator={false}
                         ListFooterComponent={<View style={{marginBottom: 10}}/>}
@@ -128,6 +145,12 @@ const styles = StyleSheet.create({
     },
     bottom: {
         flex: 0.75
+    },
+    tapAmount: {
+        position: 'absolute',
+        left: 0,
+        top: -30,
+        flexDirection: 'row'
     },
     rowWrapper: {
         width: 0.9*window.width,

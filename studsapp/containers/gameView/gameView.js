@@ -27,15 +27,16 @@ class GameView extends React.Component {
         this.stopClick = _.debounce(this.stopClick, ONE_SECOND_IN_MILLIS);
     }
 
-    purchasePowerup = (index, cost) => {
+    purchasePowerup = (index, cost, callback) => {
         if(cost <= this.state.score) {
-            this.setState(previousState => {
-                previousState.powerUps[index]++;
-                return ({
-                    powerUps: previousState.powerUps,
-                    score: previousState.score - cost
-                })
-            })
+            const newPowerUps = [...this.state.powerUps];
+            newPowerUps[index]++;
+            this.setState({
+                    powerUps: newPowerUps,
+                    score: this.state.score - cost
+                },
+                () => callback({...this.state})
+            );
         }
     }
 
