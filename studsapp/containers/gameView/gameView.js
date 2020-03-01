@@ -7,7 +7,7 @@ import {
     load,
     createSaveTimers,
     ONE_SECOND_IN_MILLIS,
-    localSave
+    localSave,
 } from './gameController';
 const _ = require('lodash');
 
@@ -24,35 +24,38 @@ class GameView extends React.Component {
             powerUps: [0, 0, 0, 0, 0],
             clicking: false,
             streakCounter: 0,
-            streak: 1
+            streak: 1,
         };
 
         this.stopClick = _.debounce(this.stopClick, ONE_SECOND_IN_MILLIS);
     }
 
     purchasePowerup = (index, cost, callback) => {
-        if(cost <= this.state.score) {
+        if (cost <= this.state.score) {
             const newPowerUps = [...this.state.powerUps];
             newPowerUps[index]++;
-            this.setState({
+            this.setState(
+                {
                     powerUps: newPowerUps,
-                    score: this.state.score - cost
+                    score: this.state.score - cost,
                 },
-                () => callback({...this.state})
+                () => callback({...this.state}),
             );
         }
-    }
+    };
 
     componentDidMount() {
         load().then(prevGameState => this.setState(prevGameState));
 
         this.subs = [
             this.props.navigation.addListener('didFocus', () => {
+                this.timers.forEach(timer => clearInterval(timer));
                 this.timers = createSaveTimers(() => this.state);
             }),
 
             this.props.navigation.addListener('willBlur', () => {
                 this.timers.forEach(timer => clearInterval(timer));
+                this.timers = [];
             }),
         ];
 
@@ -67,30 +70,33 @@ class GameView extends React.Component {
     }
 
     click = () => {
-        const newStreakCounter = (this.state.streakCounter + 1) % GAME_SETTINGS.clicksPerStreakIncrease;
+        const newStreakCounter =
+            (this.state.streakCounter + 1) %
+            GAME_SETTINGS.clicksPerStreakIncrease;
         let newStreak = 1;
-        if(this.state.powerUps[1] > 0) {
+        if (this.state.powerUps[1] > 0) {
             newStreak = Math.min(
-                GAME_SETTINGS.maxStreak * this.state.powerUps[1], 
-                this.state.streak + (!newStreakCounter) * this.state.powerUps[1]
+                GAME_SETTINGS.maxStreak * this.state.powerUps[1],
+                this.state.streak + !newStreakCounter * this.state.powerUps[1],
             );
-            if(this.state.streak == 1 && (!newStreakCounter)) {
+            if (this.state.streak == 1 && !newStreakCounter) {
                 newStreak--;
             }
         }
         this.setState({
-            score: this.state.score + newStreak * (this.state.powerUps[0] + 1), 
+            score: this.state.score + newStreak * (this.state.powerUps[0] + 1),
             clicking: true,
             streakCounter: newStreakCounter,
-            streak: newStreak
-        })
+            streak: newStreak,
+        });
     };
 
-    stopClick = () => this.setState({
-        clicking: false,
-        streakCounter: 0,
-        streak: 1
-    });
+    stopClick = () =>
+        this.setState({
+            clicking: false,
+            streakCounter: 0,
+            streak: 1,
+        });
 
     render() {
         return (
@@ -102,8 +108,7 @@ class GameView extends React.Component {
                         onPress={() => {
                             this.props.navigation.navigate('Highscores');
                             localSave(this.state);
-                        }
-                        }
+                        }}
                         style={styles.iconButton}
                         icon={'ios-stats'}
                     />
@@ -112,7 +117,7 @@ class GameView extends React.Component {
                             this.props.navigation.navigate('Shop', {
                                 score: this.state.score,
                                 powerUps: this.state.powerUps,
-                                purchasePowerup: this.purchasePowerup
+                                purchasePowerup: this.purchasePowerup,
                             });
                             localSave(this.state);
                         }}
@@ -125,17 +130,28 @@ class GameView extends React.Component {
                 </View>
 
                 <View style={styles.powerUps}>
-                    {this.state.score !== GAME_SETTINGS.loading && [
-                        <Text style={styles.text}>
-                            {this.state.powerUps[0]}xMarko
-                        </Text>,
+                    <View>
                         <Text style={styles.text}>
                             {this.state.powerUps[1]}xFredde
-                        </Text>,
-                        <Text style={styles.text}>
-                            {this.state.powerUps[2]}xAnton
-                        </Text>,
-                    ]}
+                        </Text>
+                    </View>
+
+                    {this.state.score !== GAME_SETTINGS.loading && (
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-evenly',
+                            }}>
+                            {[
+                                <Text style={styles.text}>
+                                    {this.state.powerUps[0]}xMarko
+                                </Text>,
+                                <Text style={styles.text}>
+                                    {this.state.powerUps[2]}xAnton
+                                </Text>,
+                            ]}
+                        </View>
+                    )}
                 </View>
                 <View style={styles.buttonContainer}>
                     <ImageButton
@@ -165,17 +181,16 @@ const styles = StyleSheet.create({
         zIndex: 100,
     },
     scoreContainer: {
-        flex: 0.3,
+        flex: 0.15,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         position: 'relative',
     },
     powerUps: {
-        flex: 0.2,
+        flex: 0.35,
         display: 'flex',
-        flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
     },
