@@ -77,7 +77,9 @@ export default class Score extends React.Component {
                     key={id}
                     id={id}
                     scoreWidth={this.scoreWidth}
-                    animate={Math.floor(this.props.score / score) % NUM_ANIMS === id}
+                    animate={
+                        Math.floor(this.props.score / score) % NUM_ANIMS === id
+                    }
                     score={score}
                 />
             ));
@@ -125,5 +127,6 @@ const styles = StyleSheet.create({
     score: {
         fontSize: 50,
         color: 'white',
+        fontFamily: 'Raleway-Regular',
     },
 });

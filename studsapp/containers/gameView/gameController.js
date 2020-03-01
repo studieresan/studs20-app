@@ -8,8 +8,8 @@ export const GAME_SETTINGS = {
     localSaveInterval: 15 * ONE_SECOND_IN_MILLIS,
     backendSaveInterval: 30 * ONE_SECOND_IN_MILLIS,
     loading: -1,
-    clicksPerStreakIncrease: 50,
-    maxStreak: 10
+    clicksPerStreakIncrease: 80,
+    maxStreak: 5,
 };
 
 const isOfflineMode = () => getStore().getState().global.settings.offlineMode;
@@ -32,11 +32,11 @@ export const load = async () => {
     }
 };
 
-export const localSave = state => 
+export const localSave = state =>
     Promise.all([
         storeData('score', state.score.toString()),
         storeData('powerUps', JSON.stringify(state.powerUps)),
-    ]).catch(error => console.error(error)); 
+    ]).catch(error => console.error(error));
 
 const backendSave = ({score, powerUps}) =>
     !isOfflineMode() && updateGameState({score, powerUps}).catch(() => {});
@@ -54,9 +54,39 @@ export const getTopScores = () =>
 
 const logoSource = require('studsapp/static/images/logo-small.png');
 export const powerUpInfo = [
-    {picture: logoSource, name: 'Marko', description: 'Pizza pizza yummy tumy', k: 5, m: 5}, 
-    {picture: logoSource, name: 'Fredrik', description: 'Pizza pizza yummy tumy', k: 10, m: 10}, 
-    {picture: logoSource, name: 'Anton', description: 'Pizza pizza yummy tumy', k: 20, m: 20}, 
-    {picture: logoSource, name: 'Bank', description: 'Pizza pizza yummy tumy', k: 40, m: 40}, 
-    {picture: logoSource, name: 'Stonks', description: 'Pizza pizza yummy tumy', k: 80, m: 80}
+    {
+        picture: logoSource,
+        name: 'Marko',
+        description: 'Pizza pizza yummy tumy',
+        k: 5,
+        m: 5,
+    },
+    {
+        picture: logoSource,
+        name: 'Fredrik',
+        description: 'Pizza pizza yummy tumy',
+        k: 10,
+        m: 10,
+    },
+    {
+        picture: logoSource,
+        name: 'Anton',
+        description: 'Pizza pizza yummy tumy',
+        k: 20,
+        m: 20,
+    },
+    {
+        picture: logoSource,
+        name: 'Bank',
+        description: 'Pizza pizza yummy tumy',
+        k: 40,
+        m: 40,
+    },
+    {
+        picture: logoSource,
+        name: 'Stonks',
+        description: 'Pizza pizza yummy tumy',
+        k: 80,
+        m: 80,
+    },
 ];

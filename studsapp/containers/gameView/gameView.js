@@ -1,7 +1,15 @@
 import React from 'react';
-import {StyleSheet, Text, View, ImageBackground} from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    ImageBackground,
+    Dimensions,
+    Animated,
+} from 'react-native';
 import {ImageButton, IconButton} from 'studsapp/generalComponents';
 import Score from './scoreView/scoreView';
+import Streak from './streakView/streakView';
 import {
     GAME_SETTINGS,
     load,
@@ -10,6 +18,8 @@ import {
     localSave,
 } from './gameController';
 const _ = require('lodash');
+
+const window = Dimensions.get('window');
 
 const backgroundSource = 'studsapp/static/images/background.png';
 const borderButtomSource = 'studsapp/static/images/border-button.png';
@@ -79,7 +89,11 @@ class GameView extends React.Component {
                 GAME_SETTINGS.maxStreak * this.state.powerUps[1],
                 this.state.streak + !newStreakCounter * this.state.powerUps[1],
             );
-            if (this.state.streak == 1 && !newStreakCounter) {
+            if (
+                this.state.streak == 1 &&
+                !newStreakCounter &&
+                this.state.powerUps[1] > 1
+            ) {
                 newStreak--;
             }
         }
@@ -130,11 +144,13 @@ class GameView extends React.Component {
                 </View>
 
                 <View style={styles.powerUps}>
-                    <View>
-                        <Text style={styles.text}>
-                            {this.state.powerUps[1]}xFredde
-                        </Text>
-                    </View>
+                    {this.state.powerUps[1] > 0 && (
+                        <Streak
+                            streak={this.state.streak}
+                            streakCounter={this.state.streakCounter}
+                            fredrikAmount={this.state.powerUps[1]}
+                        />
+                    )}
 
                     {this.state.score !== GAME_SETTINGS.loading && (
                         <View
@@ -200,6 +216,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         color: 'white',
+        fontFamily: 'Raleway-Regular',
     },
     iconButton: {
         marginHorizontal: 10,
