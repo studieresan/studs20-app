@@ -8,6 +8,8 @@ export const GAME_SETTINGS = {
     localSaveInterval: 15 * ONE_SECOND_IN_MILLIS,
     backendSaveInterval: 30 * ONE_SECOND_IN_MILLIS,
     loading: -1,
+    clicksPerStreakIncrease: 50,
+    maxStreak: 10
 };
 
 const isOfflineMode = () => getStore().getState().global.settings.offlineMode;

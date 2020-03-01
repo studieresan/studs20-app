@@ -23,6 +23,8 @@ class GameView extends React.Component {
             score: GAME_SETTINGS.loading,
             powerUps: [0, 0, 0, 0, 0],
             clicking: false,
+            streakCounter: 0,
+            streak: 1
         };
 
         this.stopClick = _.debounce(this.stopClick, ONE_SECOND_IN_MILLIS);
@@ -64,9 +66,31 @@ class GameView extends React.Component {
         this.subs.forEach(sub => sub.remove());
     }
 
-    click = () => this.setState({score: this.state.score + 1 * (this.state.powerUps[0] + 1), clicking: true});
+    click = () => {
+        const newStreakCounter = (this.state.streakCounter + 1) % GAME_SETTINGS.clicksPerStreakIncrease;
+        let newStreak = 1;
+        if(this.state.powerUps[1] > 0) {
+            newStreak = Math.min(
+                GAME_SETTINGS.maxStreak * this.state.powerUps[1], 
+                this.state.streak + (!newStreakCounter) * this.state.powerUps[1]
+            );
+            if(this.state.streak == 1 && (!newStreakCounter)) {
+                newStreak--;
+            }
+        }
+        this.setState({
+            score: this.state.score + newStreak * (this.state.powerUps[0] + 1), 
+            clicking: true,
+            streakCounter: newStreakCounter,
+            streak: newStreak
+        })
+    };
 
-    stopClick = () => this.setState({clicking: false});
+    stopClick = () => this.setState({
+        clicking: false,
+        streakCounter: 0,
+        streak: 1
+    });
 
     render() {
         return (

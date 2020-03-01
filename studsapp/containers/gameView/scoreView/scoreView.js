@@ -68,7 +68,8 @@ export default class Score extends React.Component {
     }
 
     createMovingTexts = () => {
-        const multiplier = this.props.powerUps[0] + 1;
+        const baseScore = this.props.powerUps[0] + 1;
+        const score = this.props.streak * baseScore;
         return Array(NUM_ANIMS)
             .fill(0)
             .map((_, id) => (
@@ -76,8 +77,8 @@ export default class Score extends React.Component {
                     key={id}
                     id={id}
                     scoreWidth={this.scoreWidth}
-                    animate={Math.floor(this.props.score / multiplier) % NUM_ANIMS === id}
-                    multiplier={multiplier}
+                    animate={Math.floor(this.props.score / score) % NUM_ANIMS === id}
+                    score={score}
                 />
             ));
     };
