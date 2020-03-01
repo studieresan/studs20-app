@@ -30,7 +30,7 @@ export const load = async () => {
     }
 };
 
-const localSave = state => 
+export const localSave = state => 
     Promise.all([
         storeData('score', state.score.toString()),
         storeData('powerUps', JSON.stringify(state.powerUps)),

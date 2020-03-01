@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {IconButton} from 'studsapp/generalComponents';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {powerUpInfo} from 'studsapp/containers/gameView/gameController';
+import {powerUpInfo, localSave} from 'studsapp/containers/gameView/gameController';
 
 const logoSource = require('studsapp/static/images/logo-small.png');
 const backgroundSource = 'studsapp/static/images/background.png';
@@ -85,7 +85,10 @@ class ShopView extends React.Component {
 
     purchasePowerup = (index, cost) => {
         if(cost <= this.state.score) {
-            this.props.navigation.getParam('purchasePowerup')(index, cost, (newState) => this.setState(newState));
+            this.props.navigation.getParam('purchasePowerup')(index, cost, (newState) => {
+                this.setState(newState);
+                localSave(newState);
+            });
         }
     }
 

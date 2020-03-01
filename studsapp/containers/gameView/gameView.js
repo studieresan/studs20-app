@@ -7,6 +7,7 @@ import {
     load,
     createSaveTimers,
     ONE_SECOND_IN_MILLIS,
+    localSave
 } from './gameController';
 const _ = require('lodash');
 
@@ -74,18 +75,23 @@ class GameView extends React.Component {
                 style={styles.wrapper}>
                 <View style={styles.header}>
                     <IconButton
-                        onPress={() =>
-                            this.props.navigation.navigate('Highscores')
+                        onPress={() => {
+                            this.props.navigation.navigate('Highscores');
+                            localSave(this.state);
+                        }
                         }
                         style={styles.iconButton}
                         icon={'ios-stats'}
                     />
                     <IconButton
-                        onPress={() => this.props.navigation.navigate('Shop', {
-                            score: this.state.score,
-                            powerUps: this.state.powerUps,
-                            purchasePowerup: this.purchasePowerup
-                        })}
+                        onPress={() => {
+                            this.props.navigation.navigate('Shop', {
+                                score: this.state.score,
+                                powerUps: this.state.powerUps,
+                                purchasePowerup: this.purchasePowerup
+                            });
+                            localSave(this.state);
+                        }}
                         style={styles.iconButton}
                         icon={'ios-cart'}
                     />
